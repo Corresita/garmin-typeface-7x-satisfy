@@ -102,7 +102,7 @@ def archivo(size, weight):
 DIGITS = "0123456789"
 UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-build("time",  [(archivo(46, 800), DIGITS + ":", 1.0, 5)], "time")
+build("time",  [(archivo(46, 800), DIGITS + ":", 1.0, 0)], "time")
 build("label", [(archivo(18, 800), UPPER + " ", 1.0, 0)], "label")
 build("bold",  [(ImageFont.truetype("CourierPrime-Bold.ttf", 21), DIGITS + ":-", 0.88, 2)], "bold")
 build("text",  [(ImageFont.truetype("CourierPrime-Regular.ttf", 19), UPPER + DIGITS + ".:%-+/ ", 1.0, 2)], "text")

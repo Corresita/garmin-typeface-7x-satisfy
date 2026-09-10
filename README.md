@@ -10,7 +10,7 @@ SATISFY × COROS APEX 4 exclusive watch faces and recreating that feel on Garmin
 ## Features
 
 - Archivo time and label, Courier Prime typewriter text, all bitmap-rendered for crisp 1-bit MIP output
-- Data rows, SATISFY style: RUN (today's distance), HEART RATE, RECOVERY (Body Battery), KCAL
+- Data rows, SATISFY style: RUN (this week's running distance), HEART RATE, RECOVERY (Body Battery), KCAL
 - Weekday date (THU.09.10 style), battery with bolt icon
 - Segmented battery bar along the top arc (5 hollow segments, filled from the left, 20% each)
 - Dot-grid halftone band with a hill line (a marker slides along it from sunrise to sunset)
@@ -26,7 +26,8 @@ SATISFY × COROS APEX 4 exclusive watch faces and recreating that feel on Garmin
 4. `Monkey C: Build for Device` → copy the generated `.prg` to `GARMIN/Apps/`
    on the watch in USB mass-storage mode
 
-Supported targets: `fenix7xpro`, `fenix7xpronowifi`, `fenix7x` (all 280×280).
+Supported targets: `fenix7xpro`, `fenix7xpronowifi`, `fenix7x` (all 280×280, Connect IQ 4.2+
+for the complication data).
 Other resolutions need the layout constants adjusted.
 
 ## Customization
@@ -53,12 +54,14 @@ Two helper scripts (Python 3 + Pillow, `pip install Pillow`):
 
 ## Data notes
 
-- RUN is today's total distance from the activity monitor; HEART RATE is the live
-  sensor value if available, otherwise the newest history sample
+- RUN is this week's running distance (Complications API). Garmin does not expose a per-day
+  running distance to watch faces, and the daily total distance includes walking
+- HEART RATE is the live sensor value if available, otherwise the newest history sample
 - RECOVERY shows Garmin Body Battery (0-100). COROS-style recovery / training load
   numbers are not exposed to third-party watch faces by Garmin, so this is the closest match
-- Sun times come from the weather observation point, or the watch's last GPS fix if there is no
-  weather data. With neither, the row shows `--:--` and the marker follows the clock (06:00-18:00)
+- Sun times come from the watch's own sunrise/sunset complications; if those are unavailable,
+  from the weather observation point or the last GPS fix. With nothing, the row shows `--:--`
+  and the marker follows the clock (06:00-18:00)
 - Optional red ticks at the right end of the top scale: `SHOW_RED_TICKS` in the view (off by default)
 
 ## License

@@ -9,6 +9,7 @@ import Toybox.Time.Gregorian;
 import Toybox.Math;
 using Toybox.Weather;
 using Toybox.SensorHistory;
+using Toybox.Complications;
 
 class TypeFaceView extends WatchUi.WatchFace {
 
@@ -112,10 +113,12 @@ class TypeFaceView extends WatchUi.WatchFace {
         // ---- data rows ----
         var info = ActivityMonitor.getInfo();
 
+        // RUN: this week's running distance. Garmin does not expose a per-day running
+        // distance to watch faces; the daily total from ActivityMonitor includes walking.
         var runStr = "--";
-        var dist = info.distance;
-        if (dist != null) {
-            runStr = (dist / 100000.0).format("%.1f") + "KM";
+        var wr = complication(Complications.COMPLICATION_TYPE_WEEKLY_RUN_DISTANCE);
+        if (wr instanceof Lang.Number || wr instanceof Lang.Float) {
+            runStr = ((wr as Numeric).toFloat() / 1000.0).format("%.1f") + "KM";
         }
 
         var hrStr = "--";
@@ -144,6 +147,18 @@ class TypeFaceView extends WatchUi.WatchFace {
     }
 
     // ---- data helpers ----
+
+    // value of a native complication, or null if unsupported / not available
+    function complication(type as Complications.Type) as Complications.Value? {
+        if (!(Toybox has :Complications)) {
+            return null;
+        }
+        try {
+            return Complications.getComplication(new Complications.Id(type)).value;
+        } catch (e) {
+            return null;
+        }
+    }
 
     // live HR if a sensor is running, otherwise the newest history sample
     function currentHeartRate() as Number? {
@@ -253,7 +268,10 @@ class TypeFaceView extends WatchUi.WatchFace {
         if (frac < 0.0) { frac = 0.0; }
         if (frac > 1.0) { frac = 1.0; }
 
-        // position: weather observation point, else the watch's last GPS fix
+        // 1) sunrise / sunset computed by the watch itself (seconds since local midnight)
+        var riseS = complication(Complications.COMPLICATION_TYPE_SUNRISE);
+        var setS = complication(Complications.COMPLICATION_TYPE_SUNSET);
+        // 2) otherwise from the weather observation point or the watch's last GPS fix
         var pos = (cc != null) ? cc.observationLocationPosition : null;
         if (pos == null) {
             var ai = Activity.getActivityInfo();
@@ -261,7 +279,19 @@ class TypeFaceView extends WatchUi.WatchFace {
                 pos = ai.currentLocation;
             }
         }
-        if (pos != null && (Weather has :getSunrise) && (Weather has :getSunset)) {
+        if (riseS instanceof Lang.Number && setS instanceof Lang.Number) {
+            var nowS = g.hour * 3600 + g.min * 60 + g.sec;
+            var evS = riseS;
+            if (nowS < riseS) {
+                frac = 0.0;
+            } else if (nowS < setS) {
+                evS = setS;
+                frac = (setS > riseS) ? (nowS - riseS).toFloat() / (setS - riseS) : 0.5;
+            } else {
+                frac = 1.0;
+            }
+            sunStr = (evS / 3600).format("%02d") + ":" + ((evS % 3600) / 60).format("%02d");
+        } else if (pos != null && (Weather has :getSunrise) && (Weather has :getSunset)) {
             var rise = Weather.getSunrise(pos, now);
             var set = Weather.getSunset(pos, now);
             var ev = rise;
