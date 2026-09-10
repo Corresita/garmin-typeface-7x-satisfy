@@ -55,18 +55,18 @@ BATT_Y  = 22
 BATT_X  = 133
 DATE_X  = 48
 DATE_Y  = 56
-TIME_Y  = 71
-TIME_X  = 34
+TIME_Y  = 76
+TIME_X  = 28
 COL2_X  = 176
 SAT_X   = 178
-SAT_Y   = 97
-ROW_Y   = [122, 143, 164, 185]
-LABEL_X = 40
-BAND_Y  = 211
+SAT_Y   = 104
+ROW_Y   = [125, 146, 167, 188]
+LABEL_X = 34
+BAND_Y  = 214
 
 # band + hill line with sun marker
 img.paste(band, (0, BAND_Y), band)
-HILL_DX, MARK_X0, MARK_X1, FRAC = 18, 60, 200, 0.75
+HILL_DX, MARK_X0, MARK_X1, FRAC = 19, 60, 200, 0.75
 def hill(x):
     x -= HILL_DX
     return 273 - 24 * math.exp(-((x - 112) / 58.0) ** 2) - 12 * math.exp(-((x - 268) / 46.0) ** 2)
@@ -83,7 +83,7 @@ d.line([ix - 10, iy + 1, ix + 10, iy + 1], fill=(0, 0, 0, 255), width=2)
 draw_text(img, fbold, bx + 24, by - 2, "18:13")
 
 # top scale: hollow segments filled from the left by battery (mirrors drawScale in TypeFaceView.mc)
-SEG_COUNT, SEG_LEN, SEG_GAP, SEG_R_OUT, SEG_R_IN = 5, 12.0, 3.5, 131, 126
+SEG_COUNT, SEG_LEN, SEG_END, SEG_GAP, SEG_R_OUT, SEG_R_IN = 5, 12.0, 14.0, 3.5, 131, 126
 BATT = 33
 def bbox(r):
     return [CX - r, CY - r, CX + r, CY + r]
@@ -91,12 +91,14 @@ def radial(a, r0, r1, fill, w):
     c, sn = math.cos(math.radians(a)), math.sin(math.radians(a))
     d.line([(CX + r0 * c, CY - r0 * sn), (CX + r1 * c, CY - r1 * sn)], fill=fill, width=w)
 filled = min(SEG_COUNT, BATT // 20)
-total = SEG_COUNT * SEG_LEN + (SEG_COUNT - 1) * SEG_GAP
-left = 90.0 + total / 2
+total = (SEG_COUNT - 2) * SEG_LEN + 2 * SEG_END + (SEG_COUNT - 1) * SEG_GAP
+a1 = 90.0 + total / 2
 BLACK = (0, 0, 0, 255)
 for i in range(SEG_COUNT):
-    a1 = left - i * (SEG_LEN + SEG_GAP)
-    a0 = a1 - SEG_LEN
+    ln = SEG_END if i in (0, SEG_COUNT - 1) else SEG_LEN
+    if i > 0:
+        a1 -= SEG_GAP
+    a0 = a1 - ln
     if i < filled:   # PIL arc draws inward from bbox, Garmin centers the pen on r
         d.arc(bbox(SEG_R_OUT + 1), 360 - a1, 360 - a0, fill=BLACK, width=SEG_R_OUT - SEG_R_IN + 1)
     else:
@@ -104,6 +106,7 @@ for i in range(SEG_COUNT):
         d.arc(bbox(SEG_R_IN + 1), 360 - a1, 360 - a0, fill=BLACK, width=1)
         radial(a0, SEG_R_IN, SEG_R_OUT, BLACK, 1)
         radial(a1, SEG_R_IN, SEG_R_OUT, BLACK, 1)
+    a1 = a0
 
 # battery: digits + outlined bolt
 draw_text(img, fbold, BATT_X, BATT_Y, "33")

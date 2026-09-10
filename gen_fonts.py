@@ -91,9 +91,9 @@ def build(name, specs, out_prefix):
     return line_h
 
 # Fonts measured from typeface-7x_figma.svg:
-#   time / label   Archivo wght 800 (46 px / 18 px)
+#   time / label   Archivo wght 800 (49 px / 18 px)
 #   battery, sun time  Courier Prime Bold 21 px condensed 0.88
-#   rows               Courier Prime Regular 19 px;  date 20 px
+#   rows, date         Courier Prime Regular 20 px
 def archivo(size, weight):
     f = ImageFont.truetype("Archivo.ttf", size)
     f.set_variation_by_axes([weight, 100])
@@ -102,8 +102,8 @@ def archivo(size, weight):
 DIGITS = "0123456789"
 UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-build("time",  [(archivo(46, 800), DIGITS + ":", 1.0, 0)], "time")
+build("time",  [(archivo(49, 800), DIGITS + ":", 1.0, 0)], "time")
 build("label", [(archivo(18, 800), UPPER + " ", 1.0, 0)], "label")
 build("bold",  [(ImageFont.truetype("CourierPrime-Bold.ttf", 21), DIGITS + ":-", 0.88, 2)], "bold")
-build("text",  [(ImageFont.truetype("CourierPrime-Regular.ttf", 19), UPPER + DIGITS + ".:%-+/ ", 1.0, 2)], "text")
+build("text",  [(ImageFont.truetype("CourierPrime-Regular.ttf", 20), UPPER + DIGITS + ".:%-+/ ", 1.0, 2)], "text")
 build("date",  [(ImageFont.truetype("CourierPrime-Regular.ttf", 20), UPPER + DIGITS + ". ", 1.0, 2)], "date")

@@ -17,20 +17,20 @@ class TypeFaceView extends WatchUi.WatchFace {
     const LABEL   = "SATISFY";   // right-column label
     const CX      = 140;
     const CY      = 140;
-    const LABEL_X = 40;          // left column (labels / date / time)
+    const LABEL_X = 34;          // left column (data rows)
     const COL2_X  = 176;         // right value column
     const SAT_X   = 178;         // right label
     const BATT_Y  = 22;
     const BATT_X  = 133;         // battery digits
     const DATE_X  = 48;
     const DATE_Y  = 56;
-    const TIME_Y  = 71;
-    const TIME_X  = 34;
-    const SAT_Y   = 97;          // bottom-aligned with the time
-    const BAND_Y  = 211;         // dotted band top
+    const TIME_Y  = 76;
+    const TIME_X  = 28;
+    const SAT_Y   = 104;         // bottom-aligned with the time
+    const BAND_Y  = 214;         // dotted band top
     // hill line across the band; a marker dot slides along it from sunrise (x = MARK_X0)
     // to sunset (x = MARK_X1)
-    const HILL_DX = 18;          // hill shape shifted right, per the mockup
+    const HILL_DX = 19;          // hill shape shifted right, per the mockup
     const MARK_X0 = 60;
     const MARK_X1 = 200;
     const SUN_BOX_X = 91;        // white box behind the sun time
@@ -42,12 +42,13 @@ class TypeFaceView extends WatchUi.WatchFace {
     // top scale: a row of hollow segments along the arc, filled from the left
     // by battery level (each segment = 20%)
     const SEG_COUNT = 5;
-    const SEG_LEN   = 12.0;      // degrees per segment
+    const SEG_LEN   = 12.0;      // degrees per inner segment (the two end segments are longer)
+    const SEG_END   = 14.0;
     const SEG_GAP   = 3.5;       // degrees between segments
     const SEG_R_OUT = 131;
     const SEG_R_IN  = 126;
 
-    var ROW_Y as Array<Number> = [122, 143, 164, 185];
+    var ROW_Y as Array<Number> = [125, 146, 167, 188];
     // outlined lightning bolt, absolute coordinates from the mockup
     var BOLT as Array<[Numeric, Numeric]> = [[128, 26], [124, 26], [122, 35], [126, 35], [124, 41], [130, 32], [126, 32]];
     var RED_TICKS as Array<Float> = [42.0, 39.0, 36.0];
@@ -160,7 +161,10 @@ class TypeFaceView extends WatchUi.WatchFace {
         }
     }
 
-    // live HR if a sensor is running, otherwise the newest history sample
+    // live HR if a sensor is running, otherwise the newest history sample,
+    // but only if that sample is recent (the watch may be off the wrist)
+    const HR_MAX_AGE = 300;   // seconds
+
     function currentHeartRate() as Number? {
         var ai = Activity.getActivityInfo();
         if (ai != null) {
@@ -172,13 +176,24 @@ class TypeFaceView extends WatchUi.WatchFace {
         var it = ActivityMonitor.getHeartRateHistory(1, true);
         var s = it.next();
         if (s != null && s.heartRate != ActivityMonitor.INVALID_HR_SAMPLE) {
-            return s.heartRate;
+            var when = s.when;
+            if (when != null && Time.now().subtract(when).value() <= HR_MAX_AGE) {
+                return s.heartRate;
+            }
         }
         return null;
     }
 
-    // Garmin's closest thing to COROS "recovery": Body Battery (0-100)
+    // Garmin's closest thing to COROS "recovery": Body Battery (0-100).
+    // The complication holds the watch's current value; sensor history is the fallback.
     function bodyBattery() as Number? {
+        var bb = complication(Complications.COMPLICATION_TYPE_BODY_BATTERY);
+        if (bb instanceof Lang.Number) {
+            return bb;
+        }
+        if (bb instanceof Lang.Float) {
+            return bb.toNumber();
+        }
         if ((Toybox has :SensorHistory) && (Toybox.SensorHistory has :getBodyBatteryHistory)) {
             var it = Toybox.SensorHistory.getBodyBatteryHistory(
                 {:period => 1, :order => SensorHistory.ORDER_NEWEST_FIRST});
@@ -198,12 +213,13 @@ class TypeFaceView extends WatchUi.WatchFace {
     function drawScale(dc as Dc, batt as Float) as Void {
         var filled = (batt / 20).toNumber();
         if (filled > SEG_COUNT) { filled = SEG_COUNT; }
-        var total = SEG_COUNT * SEG_LEN + (SEG_COUNT - 1) * SEG_GAP;
-        var left = 90.0 + total / 2;          // angle of the left end
+        var total = (SEG_COUNT - 2) * SEG_LEN + 2 * SEG_END + (SEG_COUNT - 1) * SEG_GAP;
+        var a1 = 90.0 + total / 2;            // angle of the left end
         var rMid = (SEG_R_OUT + SEG_R_IN) / 2;
         for (var i = 0; i < SEG_COUNT; i++) {
-            var a1 = left - i * (SEG_LEN + SEG_GAP);
-            var a0 = a1 - SEG_LEN;
+            var len = (i == 0 || i == SEG_COUNT - 1) ? SEG_END : SEG_LEN;
+            if (i > 0) { a1 -= SEG_GAP; }
+            var a0 = a1 - len;
             if (i < filled) {
                 dc.setPenWidth(SEG_R_OUT - SEG_R_IN + 1);
                 dc.drawArc(CX, CY, rMid, Graphics.ARC_COUNTER_CLOCKWISE, a0, a1);
@@ -214,6 +230,7 @@ class TypeFaceView extends WatchUi.WatchFace {
                 drawRadial(dc, a0, SEG_R_IN, SEG_R_OUT);
                 drawRadial(dc, a1, SEG_R_IN, SEG_R_OUT);
             }
+            a1 = a0;
         }
         if (SHOW_RED_TICKS) {
             dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);

@@ -56,9 +56,11 @@ Two helper scripts (Python 3 + Pillow, `pip install Pillow`):
 
 - RUN is this week's running distance (Complications API). Garmin does not expose a per-day
   running distance to watch faces, and the daily total distance includes walking
-- HEART RATE is the live sensor value if available, otherwise the newest history sample
-- RECOVERY shows Garmin Body Battery (0-100). COROS-style recovery / training load
-  numbers are not exposed to third-party watch faces by Garmin, so this is the closest match
+- HEART RATE is the live sensor value if available, otherwise the newest history sample if it is
+  less than 5 minutes old (so an unworn watch shows `--`)
+- RECOVERY shows Garmin Body Battery (0-100) from the complication, sensor history as fallback.
+  COROS-style recovery percentages are not exposed by Garmin; Body Battery is the closest match
+  (recovery *time* in hours is also available if you prefer that)
 - Sun times come from the watch's own sunrise/sunset complications; if those are unavailable,
   from the weather observation point or the last GPS fix. With nothing, the row shows `--:--`
   and the marker follows the clock (06:00-18:00)
