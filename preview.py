@@ -111,8 +111,8 @@ BOLT = [(128, 26), (124, 26), (122, 35), (126, 35), (124, 41), (130, 32), (126, 
 d.line(BOLT + [BOLT[0]], fill=(0, 0, 0, 255), width=1)
 
 # date, time, label
-draw_text(img, fdate, DATE_X, DATE_Y, "THU.09.10")
-draw_text(img, ftime, TIME_X, TIME_Y, "12:17")
+draw_text(img, fdate, DATE_X, DATE_Y, "MON.09.10")
+draw_text(img, ftime, TIME_X, TIME_Y, "18:13")
 draw_text(img, flabel, SAT_X, SAT_Y, "SATISFY")
 
 # rows

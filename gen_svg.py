@@ -90,8 +90,8 @@ BOLT = [(128, 26), (124, 26), (122, 35), (126, 35), (124, 41), (130, 32), (126, 
 L.append('  <polygon id="bolt" points="' + " ".join(f"{x},{y}" for x, y in BOLT) + '" fill="none" stroke="#000" stroke-width="1"/>')
 
 # date / time / label / rows
-L.append(text("date", DATE_X, DATE_Y + DATE_BASE, "THU.09.10", 20, 1.0))
-L.append(text("time", TIME_X, TIME_Y + TIME_BASE, "12:17", 46, TIME_SX, family="Archivo", weight=800))
+L.append(text("date", DATE_X, DATE_Y + DATE_BASE, "MON.09.10", 20, 1.0))
+L.append(text("time", TIME_X, TIME_Y + TIME_BASE, "18:13", 46, TIME_SX, family="Archivo", weight=800))
 L.append(text("label", SAT_X, SAT_Y + LABEL_BASE, "SATISFY", 18, 1.0, family="Archivo", weight=800))
 for i, (k, v) in enumerate([("RUN", "0.2KM"), ("HEART RATE", "69BPM"), ("RECOVERY", "79%"), ("KCAL", "863")]):
     L.append(text(f"row {i+1} label", LABEL_X, ROW_Y[i] + TEXT_BASE, k, 19, TEXT_SX))

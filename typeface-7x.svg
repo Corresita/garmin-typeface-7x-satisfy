@@ -17,8 +17,8 @@
   <path id="segment 5" d="M195.36,21.27 A131,131 0 0 1 218.84,35.38 L215.83,39.37 A126,126 0 0 0 193.25,25.81 Z" fill="none" stroke="#000" stroke-width="1"/>
   <text id="battery" transform="translate(133,39) scale(0.8461538461538461,1)" font-family="Courier Prime" font-weight="700" font-size="21" text-anchor="start" fill="#000">33</text>
   <polygon id="bolt" points="128,26 124,26 122,35 126,35 124,41 130,32 126,32" fill="none" stroke="#000" stroke-width="1"/>
-  <text id="date" transform="translate(48,72) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">THU.09.10</text>
-  <text id="time" transform="translate(34,113) scale(1.0,1)" font-family="Archivo" font-weight="800" font-size="46" text-anchor="start" fill="#000">12:17</text>
+  <text id="date" transform="translate(48,72) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">MON.09.10</text>
+  <text id="time" transform="translate(34,113) scale(1.0,1)" font-family="Archivo" font-weight="800" font-size="46" text-anchor="start" fill="#000">18:13</text>
   <text id="label" transform="translate(178,113) scale(1.0,1)" font-family="Archivo" font-weight="800" font-size="18" text-anchor="start" fill="#000">SATISFY</text>
   <text id="row 1 label" transform="translate(40,137) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="19" text-anchor="start" fill="#000">RUN</text>
   <text id="row 1 value" transform="translate(176,137) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="19" text-anchor="start" fill="#000">0.2KM</text>
