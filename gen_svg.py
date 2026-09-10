@@ -10,20 +10,20 @@ match the device. Layout constants mirror TypeFaceView.mc / preview.py.
 import math
 
 CX = CY = 140
-BATT_Y, DATE_Y, TIME_Y, SAT_Y = 22, 56, 71, 97
+BATT_Y, DATE_Y, TIME_Y, SAT_Y = 22, 56, 76, 104
 BATT_X, DATE_X = 133, 48
-LABEL_X, COL2_X, SAT_X, TIME_X = 40, 176, 178, 34
-ROW_Y = [122, 143, 164, 185]
-BAND_Y = 211
-SEG_COUNT, SEG_LEN, SEG_GAP, SEG_R_OUT, SEG_R_IN = 5, 12.0, 3.5, 131, 126
+LABEL_X, COL2_X, SAT_X, TIME_X = 34, 176, 178, 28
+ROW_Y = [125, 146, 167, 188]
+BAND_Y = 214
+SEG_COUNT, SEG_LEN, SEG_END, SEG_GAP, SEG_R_OUT, SEG_R_IN = 5, 12.0, 14.0, 3.5, 131, 126
 BATT = 33
 
 # from the .fnt files: text glyphs sit at yoffset 4, cap height 13, xadvance 11 (TTF 13);
 # time glyphs at yoffset 10, cap height 41, xadvance 24 (TTF 37). Baseline = draw y + yoffset + cap.
-TEXT_BASE = 4 + 11    # Courier Prime Regular 19 (rows)
+TEXT_BASE = 5 + 11    # Courier Prime Regular 20 (rows)
 DATE_BASE = 5 + 11    # Courier Prime Regular 20
 BOLD_BASE = 4 + 13    # Courier Prime Bold 21, condensed 0.88 (battery, sun time)
-TIME_BASE = 9 + 33    # Archivo 800, 46
+TIME_BASE = 10 + 35   # Archivo 800, 49
 LABEL_BASE = 4 + 12   # Archivo 800, 18
 TEXT_SX = 1.0
 BOLD_SX = 11 / 13
@@ -57,7 +57,7 @@ L.append('  <pattern id="dots" width="4" height="4" patternUnits="userSpaceOnUse
          '<rect width="2" height="2" fill="#000"/></pattern>')
 L.append(f'  <rect id="halftone band" x="0" y="{BAND_Y}" width="280" height="72" fill="url(#dots)"/>')
 # hill line + sun marker
-HILL_DX, MARK_X0, MARK_X1, FRAC = 18, 60, 200, 0.75
+HILL_DX, MARK_X0, MARK_X1, FRAC = 19, 60, 200, 0.75
 def hill(x):
     x -= HILL_DX
     return 273 - 24 * math.exp(-((x - 112) / 58.0) ** 2) - 12 * math.exp(-((x - 268) / 46.0) ** 2)
@@ -76,13 +76,17 @@ L.append(text("sun time", bx + 24, by - 2 + BOLD_BASE, "18:13", 21, BOLD_SX, wei
 
 # top segmented bar
 filled = min(SEG_COUNT, BATT // 20)
-total = SEG_COUNT * SEG_LEN + (SEG_COUNT - 1) * SEG_GAP
-left = 90.0 + total / 2
+total = (SEG_COUNT - 2) * SEG_LEN + 2 * SEG_END + (SEG_COUNT - 1) * SEG_GAP
+a1 = 90.0 + total / 2
 for i in range(SEG_COUNT):
-    a1 = left - i * (SEG_LEN + SEG_GAP); a0 = a1 - SEG_LEN
+    ln = SEG_END if i in (0, SEG_COUNT - 1) else SEG_LEN
+    if i > 0:
+        a1 -= SEG_GAP
+    a0 = a1 - ln
     fill = "#000" if i < filled else "none"
     L.append(f'  <path id="segment {i+1}" d="{seg_path(a1, a0, SEG_R_OUT, SEG_R_IN)}" '
              f'fill="{fill}" stroke="#000" stroke-width="1"/>')
+    a1 = a0
 
 # battery: digits + outlined bolt
 L.append(text("battery", BATT_X, BATT_Y + BOLD_BASE, str(BATT), 21, BOLD_SX, weight=700))
@@ -91,11 +95,11 @@ L.append('  <polygon id="bolt" points="' + " ".join(f"{x},{y}" for x, y in BOLT)
 
 # date / time / label / rows
 L.append(text("date", DATE_X, DATE_Y + DATE_BASE, "MON.09.10", 20, 1.0))
-L.append(text("time", TIME_X, TIME_Y + TIME_BASE, "18:13", 46, TIME_SX, family="Archivo", weight=800))
+L.append(text("time", TIME_X, TIME_Y + TIME_BASE, "18:13", 49, TIME_SX, family="Archivo", weight=800))
 L.append(text("label", SAT_X, SAT_Y + LABEL_BASE, "SATISFY", 18, 1.0, family="Archivo", weight=800))
 for i, (k, v) in enumerate([("RUN", "0.2KM"), ("HEART RATE", "69BPM"), ("RECOVERY", "79%"), ("KCAL", "863")]):
-    L.append(text(f"row {i+1} label", LABEL_X, ROW_Y[i] + TEXT_BASE, k, 19, TEXT_SX))
-    L.append(text(f"row {i+1} value", COL2_X, ROW_Y[i] + TEXT_BASE, v, 19, TEXT_SX))
+    L.append(text(f"row {i+1} label", LABEL_X, ROW_Y[i] + TEXT_BASE, k, 20, TEXT_SX))
+    L.append(text(f"row {i+1} value", COL2_X, ROW_Y[i] + TEXT_BASE, v, 20, TEXT_SX))
 
 L += ['  </g>', '</svg>']
 open("typeface-7x.svg", "w").write("\n".join(L) + "\n")
