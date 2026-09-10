@@ -10,7 +10,7 @@ match the device. Layout constants mirror TypeFaceView.mc / preview.py.
 import math
 
 CX = CY = 140
-BATT_Y, DATE_Y, TIME_Y, SAT_Y = 18, 42, 58, 86
+BATT_Y, DATE_Y, TIME_Y, SAT_Y = 18, 48, 60, 105
 LABEL_X, COL2_X = 40, 182
 ROW_Y = [124, 145, 166, 187]
 BAND_Y = 208
@@ -51,18 +51,23 @@ L = ['<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280" viewBox="
 L.append('  <pattern id="dots" width="2" height="2" patternUnits="userSpaceOnUse">'
          '<rect width="1" height="1" fill="#000"/></pattern>')
 L.append(f'  <rect id="halftone band" x="0" y="{BAND_Y}" width="280" height="72" fill="url(#dots)"/>')
-def hill(x):
-    return 272 - 24 * math.exp(-((x - 112) / 58.0) ** 2) - 12 * math.exp(-((x - 268) / 46.0) ** 2)
-pts = " ".join(f"{x},{hill(x):.2f}" for x in range(0, 281, 4))
-L.append(f'  <polygon id="hill fill" points="0,281 {pts} 280,281" fill="#fff"/>')
-L.append(f'  <polyline id="hill line" points="{pts}" fill="none" stroke="#000" stroke-width="2"/>')
+# sun path arc + marker
+ARC_CX, ARC_CY, ARC_R, ARC_A0, ARC_A1 = 146, 384, 131, 62.0, 118.0
+FRAC = 0.75
+(x1, y1), (x0, y0) = pt(ARC_A1, ARC_R), pt(ARC_A0, ARC_R)
+x1, y1 = ARC_CX + ARC_R * math.cos(math.radians(ARC_A1)), ARC_CY - ARC_R * math.sin(math.radians(ARC_A1))
+x0, y0 = ARC_CX + ARC_R * math.cos(math.radians(ARC_A0)), ARC_CY - ARC_R * math.sin(math.radians(ARC_A0))
+L.append(f'  <path id="sun path" d="M{x1:.2f},{y1:.2f} A{ARC_R},{ARC_R} 0 0 1 {x0:.2f},{y0:.2f}" fill="none" stroke="#000" stroke-width="2"/>')
+ma = math.radians(ARC_A1 - FRAC * (ARC_A1 - ARC_A0))
+L.append(f'  <circle id="sun marker" cx="{ARC_CX + ARC_R * math.cos(ma):.2f}" cy="{ARC_CY - ARC_R * math.sin(ma):.2f}" r="4" fill="#fff" stroke="#000" stroke-width="1"/>')
 
 # sun row knockout + icon + time
-scx, scy = 140, BAND_Y + 12
-L.append(f'  <rect id="sun knockout" x="{scx-52}" y="{scy-14}" width="104" height="27" fill="#fff"/>')
-L.append(f'  <path id="sun icon" d="M{scx-46},{scy+6} A8,8 0 0 1 {scx-30},{scy+6}" fill="none" stroke="#000" stroke-width="2"/>')
-L.append(f'  <line id="sun horizon" x1="{scx-48}" y1="{scy+7}" x2="{scx-28}" y2="{scy+7}" stroke="#000" stroke-width="2"/>')
-L.append(text("sun time", scx - 24, scy - 15 + TEXT_BASE, "18:13", 21, TEXT_SX))
+bx, by, bw, bh = 94, 212, 84, 24
+L.append(f'  <rect id="sun knockout" x="{bx}" y="{by}" width="{bw}" height="{bh}" fill="#fff"/>')
+ix, iy = bx + 12, by + 18
+L.append(f'  <path id="sun icon" d="M{ix-8},{iy} A8,8 0 0 1 {ix+8},{iy}" fill="none" stroke="#000" stroke-width="2"/>')
+L.append(f'  <line id="sun horizon" x1="{ix-10}" y1="{iy+1}" x2="{ix+10}" y2="{iy+1}" stroke="#000" stroke-width="2"/>')
+L.append(text("sun time", bx + 29, by + 2 + TEXT_BASE, "18:13", 21, TEXT_SX))
 
 # top segmented bar
 filled = min(SEG_COUNT, BATT // 20)

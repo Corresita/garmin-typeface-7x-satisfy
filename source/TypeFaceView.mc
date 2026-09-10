@@ -19,10 +19,20 @@ class TypeFaceView extends WatchUi.WatchFace {
     const LABEL_X = 40;          // left column (labels / date / time)
     const COL2_X  = 182;         // right value column
     const BATT_Y  = 18;
-    const DATE_Y  = 42;
-    const TIME_Y  = 58;
-    const SAT_Y   = 86;
+    const DATE_Y  = 48;
+    const TIME_Y  = 60;
+    const SAT_Y   = 105;         // bottom-aligned with the time
     const BAND_Y  = 208;         // dotted band top
+    // sun path: circular arc across the band, a marker dot moves along it during the day
+    const ARC_CX  = 146;
+    const ARC_CY  = 384;
+    const ARC_R   = 131;
+    const ARC_A0  = 62.0;        // right end (degrees, 90 = top of the arc)
+    const ARC_A1  = 118.0;       // left end
+    const SUN_BOX_X = 94;        // white box behind the sun time
+    const SUN_BOX_Y = 212;
+    const SUN_BOX_W = 84;
+    const SUN_BOX_H = 24;
     const SHOW_RED_TICKS = false; // three red ticks at the right end of the scale
 
     // top scale: a row of hollow segments along the arc, filled from the left
@@ -60,9 +70,8 @@ class TypeFaceView extends WatchUi.WatchFace {
         // ---- weather (for sun times) ----
         var cc = (Toybox has :Weather) ? Weather.getCurrentConditions() : null;
 
-        // ---- bottom: dotted band, hill silhouette, sun time ----
+        // ---- bottom: dotted band, sun path, sun time ----
         dc.drawBitmap(0, BAND_Y, bandBmp);
-        drawHill(dc);
         drawSun(dc, cc);
 
         // ---- battery + top scale ----
@@ -199,59 +208,62 @@ class TypeFaceView extends WatchUi.WatchFace {
         dc.drawLine(CX + r0 * c, CY - r0 * sn, CX + r1 * c, CY - r1 * sn);
     }
 
-    // white hill silhouette knocked out of the dot band
-    function drawHill(dc as Dc) as Void {
-        var pts = [] as Array<[Numeric, Numeric]>;
-        pts.add([0, 281]);
-        for (var i = 0; i < 71; i++) {
-            var x = i * 4;
-            pts.add([x, hillY(x)]);
-        }
-        pts.add([280, 281]);
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.fillPolygon(pts);
+    // sun path arc with a marker at `frac` (0 = sunrise end, 1 = sunset end)
+    function drawSunPath(dc as Dc, frac as Float) as Void {
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(2);
-        for (var x = 0; x < 278; x += 2) {
-            dc.drawLine(x, hillY(x), x + 2, hillY(x + 2));
-        }
+        dc.drawArc(ARC_CX, ARC_CY, ARC_R, Graphics.ARC_COUNTER_CLOCKWISE, ARC_A0, ARC_A1);
+        var a = ARC_A1 - frac * (ARC_A1 - ARC_A0);
+        var rad = Math.toRadians(a);
+        var mx = ARC_CX + ARC_R * Math.cos(rad);
+        var my = ARC_CY - ARC_R * Math.sin(rad);
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(mx, my, 4);
+        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(1);
+        dc.drawCircle(mx, my, 4);
     }
 
-    function hillY(x as Number) as Number {
-        var a = (x - 112) / 58.0;
-        var b = (x - 268) / 46.0;
-        var y = 272.0 - 24.0 * Math.pow(2.718281828, -(a * a))
-                      - 12.0 * Math.pow(2.718281828, -(b * b));
-        return y.toNumber();
-    }
-
-    // next sun event: sunrise before dawn, sunset during the day
+    // sun row: next sun event (sunrise before dawn, sunset during the day) and the path marker
     function drawSun(dc as Dc, cc as Weather.CurrentConditions?) as Void {
         var sunStr = "--:--";
+        var frac = 0.75;   // marker position when there is no weather data
         var pos = (cc != null) ? cc.observationLocationPosition : null;
         if (pos != null && (Weather has :getSunrise) && (Weather has :getSunset)) {
             var now = Time.now();
-            var ev = Weather.getSunrise(pos, now);
-            if (ev != null && ev.lessThan(now)) {
-                var ss = Weather.getSunset(pos, now);
-                if (ss != null) { ev = ss; }
+            var rise = Weather.getSunrise(pos, now);
+            var set = Weather.getSunset(pos, now);
+            var ev = rise;
+            if (rise != null && set != null) {
+                if (now.lessThan(rise)) {
+                    frac = 0.0;
+                } else if (now.lessThan(set)) {
+                    ev = set;
+                    var day = set.subtract(rise).value().toFloat();
+                    frac = (day > 0) ? now.subtract(rise).value().toFloat() / day : 0.5;
+                } else {
+                    ev = Weather.getSunrise(pos, now.add(new Time.Duration(Gregorian.SECONDS_PER_DAY)));
+                    frac = 1.0;
+                }
             }
             if (ev != null) {
                 var gi = Gregorian.info(ev, Time.FORMAT_SHORT);
                 sunStr = gi.hour.format("%02d") + ":" + gi.min.format("%02d");
             }
         }
-        var scy = BAND_Y + 12;
+        drawSunPath(dc, frac);
+
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.fillRectangle(CX - 52, scy - 14, 104, 27);
+        dc.fillRectangle(SUN_BOX_X, SUN_BOX_Y, SUN_BOX_W, SUN_BOX_H);
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(2);
-        // sun icon: half circle + horizon line
-        dc.drawArc(CX - 38, scy + 6, 8, Graphics.ARC_COUNTER_CLOCKWISE, 0, 180);
-        dc.drawLine(CX - 48, scy + 7, CX - 28, scy + 7);
+        // sun icon: half dome on a horizon line
+        var ix = SUN_BOX_X + 12;
+        var iy = SUN_BOX_Y + 18;
+        dc.drawArc(ix, iy, 8, Graphics.ARC_COUNTER_CLOCKWISE, 0, 180);
+        dc.drawLine(ix - 10, iy + 1, ix + 10, iy + 1);
         dc.setPenWidth(1);
-        dc.drawText(CX - 24, scy - 15, fText, sunStr, Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(SUN_BOX_X + 29, SUN_BOX_Y + 2, fText, sunStr, Graphics.TEXT_JUSTIFY_LEFT);
     }
 
     function drawBolt(dc as Dc, x as Number, y as Number) as Void {

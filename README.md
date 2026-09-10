@@ -13,7 +13,8 @@ SATISFY × COROS APEX 4 exclusive watch faces and recreating that feel on Garmin
 - Data rows, SATISFY style: RUN (today's distance), HEART RATE, RECOVERY (Body Battery), KCAL
 - Weekday date (THU.09.10 style), battery with bolt icon
 - Segmented battery bar along the top arc (5 hollow segments, filled from the left, 20% each)
-- Dot-grid halftone band with hill silhouette and next sun event (sunrise / sunset) at the bottom
+- Dot-grid halftone band with a sun-path arc (marker moves from sunrise to sunset) and the
+  next sun event time at the bottom
 
 ## Build & install
 

@@ -49,28 +49,32 @@ d = ImageDraw.Draw(img)
 
 # ---- v2 layout constants ----
 BATT_Y  = 18
-DATE_Y  = 42
-TIME_Y  = 58
+DATE_Y  = 48
+TIME_Y  = 60
 COL2_X  = 182
-SAT_Y   = 86
+SAT_Y   = 105
 ROW_Y   = [124, 145, 166, 187]
 LABEL_X = 40
 BAND_Y  = 208
 
-# band + hill silhouette
+# band + sun path arc with marker
 img.paste(band, (0, BAND_Y), band)
-def hill(x):
-    return 272 - 24 * math.exp(-((x - 112) / 58.0) ** 2) - 12 * math.exp(-((x - 268) / 46.0) ** 2)
-poly = [(0, 281)] + [(x, hill(x)) for x in range(0, 281, 4)] + [(280, 281)]
-d.polygon(poly, fill=(255, 255, 255, 255))
-d.line([(x, hill(x)) for x in range(0, 281, 2)], fill=(0, 0, 0, 255), width=2)
+ARC_CX, ARC_CY, ARC_R, ARC_A0, ARC_A1 = 146, 384, 131, 62.0, 118.0
+SUN_BOX = (94, 212, 84, 24)
+FRAC = 0.75
+d.arc([ARC_CX - ARC_R, ARC_CY - ARC_R, ARC_CX + ARC_R, ARC_CY + ARC_R],
+      360 - ARC_A1, 360 - ARC_A0, fill=(0, 0, 0, 255), width=2)
+a = math.radians(ARC_A1 - FRAC * (ARC_A1 - ARC_A0))
+mx, my = ARC_CX + ARC_R * math.cos(a), ARC_CY - ARC_R * math.sin(a)
+d.ellipse([mx - 4, my - 4, mx + 4, my + 4], fill=(255, 255, 255, 255), outline=(0, 0, 0, 255), width=1)
 
-# sunrise, centered on band with knockout
-scx, scy = 140, BAND_Y + 12
-d.rectangle([scx - 52, scy - 14, scx + 52, scy + 12], fill=(255, 255, 255, 255))
-d.arc([scx - 46, scy - 6, scx - 30, scy + 8], 180, 360, fill=(0, 0, 0, 255), width=2)
-d.line([scx - 48, scy + 7, scx - 28, scy + 7], fill=(0, 0, 0, 255), width=2)
-draw_text(img, ftext, scx - 24, scy - 15, "18:13")
+# sun time box + icon + text
+bx, by, bw, bh = SUN_BOX
+d.rectangle([bx, by, bx + bw - 1, by + bh - 1], fill=(255, 255, 255, 255))
+ix, iy = bx + 12, by + 18
+d.arc([ix - 8, iy - 8, ix + 8, iy + 8], 180, 360, fill=(0, 0, 0, 255), width=2)
+d.line([ix - 10, iy + 1, ix + 10, iy + 1], fill=(0, 0, 0, 255), width=2)
+draw_text(img, ftext, bx + 29, by + 2, "18:13")
 
 # top scale: hollow segments filled from the left by battery (mirrors drawScale in TypeFaceView.mc)
 SEG_COUNT, SEG_LEN, SEG_GAP, SEG_R_OUT, SEG_R_IN = 5, 14.0, 4.0, 132, 125
