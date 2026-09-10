@@ -23,11 +23,11 @@ BATT = 33
 TEXT_BASE = 5 + 11    # Courier Prime Regular 20 (rows)
 DATE_BASE = 5 + 11    # Courier Prime Regular 20
 BOLD_BASE = 4 + 13    # Courier Prime Bold 21, condensed 0.88 (battery, sun time)
-TIME_BASE = 13 + 42   # Public Sans 900, 56, condensed 0.84
+TIME_BASE = 13 + 42   # Public Sans 900, 56, condensed 0.89
 LABEL_BASE = 4 + 12   # Archivo 800, 18
 TEXT_SX = 1.0
 BOLD_SX = 11 / 13
-TIME_SX = 0.84
+TIME_SX = 0.89
 
 def pt(a, r):
     return CX + r * math.cos(math.radians(a)), CY - r * math.sin(math.radians(a))

@@ -61,7 +61,7 @@ def raster_glyph(font, ch, condense, slash_w=0, closed_four=False, threshold=110
             fill=255, width=slash_w)
     return img, adv
 
-def build(name, specs, out_prefix, tabular=False):
+def build(name, specs, out_prefix, tabular=False, tracking=0):
     """specs: list of (font, chars, condense, slash_zero_width[, closed_four[, threshold]]).
     threshold: grey level above which a pixel is ink (lower = slightly heavier strokes).
     Shared metrics from first font."""
@@ -95,6 +95,10 @@ def build(name, specs, out_prefix, tabular=False):
                 adv = adv_max
             fixed.append((ch, g, w, h, xo, yo, adv))
         glyphs = fixed
+    if tracking:
+        # tighten letter spacing: shrink every cell, keep glyphs centred in it
+        glyphs = [(ch, g, w, h, xo - (-tracking) // 2 if g is not None else xo, yo, adv + tracking)
+                  for ch, g, w, h, xo, yo, adv in glyphs]
     line_h = max_h + 6
     base = line_h - 2
     # row packing
@@ -137,7 +141,7 @@ def build(name, specs, out_prefix, tabular=False):
     return line_h
 
 # Fonts measured from typeface-7x_figma.svg:
-#   time           Public Sans wght 900, 56 px, condensed 0.84, tabular digits
+#   time           Public Sans wght 900, 56 px, condensed 0.89, tabular digits, tracking -2
 #   label          Archivo wght 800, 18 px
 #   battery, sun time  Courier Prime Bold 21 px condensed 0.88
 #   rows, date         Courier Prime Regular 20 px
@@ -151,7 +155,7 @@ UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 public_sans = ImageFont.truetype("PublicSans.ttf", 56)
 public_sans.set_variation_by_axes([900])
-build("time",  [(public_sans, DIGITS + ":", 0.84, 0, False, 70)], "time", tabular=True)  # threshold 70: ~3% heavier
+build("time",  [(public_sans, DIGITS + ":", 0.89, 0, False, 70)], "time", tabular=True, tracking=-2)  # threshold 70: ~3% heavier
 build("label", [(archivo(18, 800), UPPER + " ", 1.0, 0)], "label")
 build("bold",  [(ImageFont.truetype("CourierPrime-Bold.ttf", 21), DIGITS + ":-", 0.88, 2)], "bold")
 build("text",  [(ImageFont.truetype("CourierPrime-Regular.ttf", 20), UPPER + DIGITS + ".:%-+/ ", 1.0, 2)], "text")
