@@ -48,19 +48,21 @@ img = Image.new("RGBA", (W, H), (255, 255, 255, 255))
 d = ImageDraw.Draw(img)
 
 # ---- v2 layout constants ----
-BATT_Y  = 18
-DATE_Y  = 48
-TIME_Y  = 60
-COL2_X  = 182
-SAT_Y   = 105
-ROW_Y   = [124, 145, 166, 187]
+BATT_Y  = 22
+BATT_X  = 133
+DATE_X  = 48
+DATE_Y  = 57
+TIME_Y  = 66
+COL2_X  = 177
+SAT_Y   = 100
+ROW_Y   = [122, 143, 164, 185]
 LABEL_X = 40
 BAND_Y  = 208
 
 # band + sun path arc with marker
 img.paste(band, (0, BAND_Y), band)
 ARC_CX, ARC_CY, ARC_R, ARC_A0, ARC_A1 = 146, 384, 131, 62.0, 118.0
-SUN_BOX = (94, 212, 84, 24)
+SUN_BOX = (88, 206, 104, 27)
 FRAC = 0.75
 d.arc([ARC_CX - ARC_R, ARC_CY - ARC_R, ARC_CX + ARC_R, ARC_CY + ARC_R],
       360 - ARC_A1, 360 - ARC_A0, fill=(0, 0, 0, 255), width=2)
@@ -71,13 +73,13 @@ d.ellipse([mx - 4, my - 4, mx + 4, my + 4], fill=(255, 255, 255, 255), outline=(
 # sun time box + icon + text
 bx, by, bw, bh = SUN_BOX
 d.rectangle([bx, by, bx + bw - 1, by + bh - 1], fill=(255, 255, 255, 255))
-ix, iy = bx + 12, by + 18
+ix, iy = bx + 14, by + 20
 d.arc([ix - 8, iy - 8, ix + 8, iy + 8], 180, 360, fill=(0, 0, 0, 255), width=2)
 d.line([ix - 10, iy + 1, ix + 10, iy + 1], fill=(0, 0, 0, 255), width=2)
-draw_text(img, ftext, bx + 29, by + 2, "18:13")
+draw_text(img, ftext, bx + 28, by - 1, "18:13")
 
 # top scale: hollow segments filled from the left by battery (mirrors drawScale in TypeFaceView.mc)
-SEG_COUNT, SEG_LEN, SEG_GAP, SEG_R_OUT, SEG_R_IN = 5, 14.0, 4.0, 132, 125
+SEG_COUNT, SEG_LEN, SEG_GAP, SEG_R_OUT, SEG_R_IN = 5, 12.0, 3.5, 131, 126
 BATT = 33
 def bbox(r):
     return [CX - r, CY - r, CX + r, CY + r]
@@ -99,15 +101,14 @@ for i in range(SEG_COUNT):
         radial(a0, SEG_R_IN, SEG_R_OUT, BLACK, 1)
         radial(a1, SEG_R_IN, SEG_R_OUT, BLACK, 1)
 
-# battery
-draw_text(img, ftext, CX + 8, BATT_Y, "33")
-bx, by = CX - 4, BATT_Y + 15
-d.polygon([(bx, by - 10), (bx - 7, by + 2), (bx - 2, by + 2), (bx - 4, by + 10),
-           (bx + 4, by - 2), (bx - 1, by - 2)], fill=(0, 0, 0, 255))
+# battery: digits + outlined bolt
+draw_text(img, ftext, BATT_X, BATT_Y, "33")
+BOLT = [(128, 26), (124, 26), (122, 35), (126, 35), (124, 41), (130, 32), (126, 32)]
+d.line(BOLT + [BOLT[0]], fill=(0, 0, 0, 255), width=1)
 
 # date, time, label
-draw_text(img, ftext, LABEL_X, DATE_Y, "THU.09.10")
-draw_text(img, ftime, LABEL_X - 3, TIME_Y, "12:17")
+draw_text(img, ftext, DATE_X, DATE_Y, "THU.09.10")
+draw_text(img, ftime, LABEL_X - 4, TIME_Y, "12:17")
 draw_text(img, ftext, COL2_X, SAT_Y, "SATISFY")
 
 # rows

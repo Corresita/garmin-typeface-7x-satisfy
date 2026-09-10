@@ -17,11 +17,13 @@ class TypeFaceView extends WatchUi.WatchFace {
     const CX      = 140;
     const CY      = 140;
     const LABEL_X = 40;          // left column (labels / date / time)
-    const COL2_X  = 182;         // right value column
-    const BATT_Y  = 18;
-    const DATE_Y  = 48;
-    const TIME_Y  = 60;
-    const SAT_Y   = 105;         // bottom-aligned with the time
+    const COL2_X  = 177;         // right value column
+    const BATT_Y  = 22;
+    const BATT_X  = 133;         // battery digits
+    const DATE_X  = 48;
+    const DATE_Y  = 57;
+    const TIME_Y  = 66;
+    const SAT_Y   = 100;         // bottom-aligned with the time
     const BAND_Y  = 208;         // dotted band top
     // sun path: circular arc across the band, a marker dot moves along it during the day
     const ARC_CX  = 146;
@@ -29,21 +31,23 @@ class TypeFaceView extends WatchUi.WatchFace {
     const ARC_R   = 131;
     const ARC_A0  = 62.0;        // right end (degrees, 90 = top of the arc)
     const ARC_A1  = 118.0;       // left end
-    const SUN_BOX_X = 94;        // white box behind the sun time
-    const SUN_BOX_Y = 212;
-    const SUN_BOX_W = 84;
-    const SUN_BOX_H = 24;
+    const SUN_BOX_X = 88;        // white box behind the sun time
+    const SUN_BOX_Y = 206;
+    const SUN_BOX_W = 104;
+    const SUN_BOX_H = 27;
     const SHOW_RED_TICKS = false; // three red ticks at the right end of the scale
 
     // top scale: a row of hollow segments along the arc, filled from the left
     // by battery level (each segment = 20%)
     const SEG_COUNT = 5;
-    const SEG_LEN   = 14.0;      // degrees per segment
-    const SEG_GAP   = 4.0;       // degrees between segments
-    const SEG_R_OUT = 132;
-    const SEG_R_IN  = 125;
+    const SEG_LEN   = 12.0;      // degrees per segment
+    const SEG_GAP   = 3.5;       // degrees between segments
+    const SEG_R_OUT = 131;
+    const SEG_R_IN  = 126;
 
-    var ROW_Y as Array<Number> = [124, 145, 166, 187];
+    var ROW_Y as Array<Number> = [122, 143, 164, 185];
+    // outlined lightning bolt, absolute coordinates from the mockup
+    var BOLT as Array<[Numeric, Numeric]> = [[128, 26], [124, 26], [122, 35], [126, 35], [124, 41], [130, 32], [126, 32]];
     var RED_TICKS as Array<Float> = [42.0, 39.0, 36.0];
     var WEEK as Array<String> = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
     var LABELS as Array<String> = ["RUN", "HEART RATE", "RECOVERY", "KCAL"];
@@ -77,14 +81,14 @@ class TypeFaceView extends WatchUi.WatchFace {
         // ---- battery + top scale ----
         var batt = System.getSystemStats().battery;
         drawScale(dc, batt);
-        dc.drawText(CX + 8, BATT_Y, fText, batt.format("%d"), Graphics.TEXT_JUSTIFY_LEFT);
-        drawBolt(dc, CX - 4, BATT_Y + 15);
+        dc.drawText(BATT_X, BATT_Y, fText, batt.format("%d"), Graphics.TEXT_JUSTIFY_LEFT);
+        drawBolt(dc);
 
         // ---- date ----
         var g = Gregorian.info(Time.now(), Time.FORMAT_SHORT);
         var dateStr = WEEK[(g.day_of_week as Number) - 1] + "." +
             (g.month as Number).format("%02d") + "." + (g.day as Number).format("%02d");
-        dc.drawText(LABEL_X, DATE_Y, fText, dateStr, Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(DATE_X, DATE_Y, fText, dateStr, Graphics.TEXT_JUSTIFY_LEFT);
 
         // ---- time ----
         var hh = g.hour;
@@ -93,7 +97,7 @@ class TypeFaceView extends WatchUi.WatchFace {
             if (hh == 0) { hh = 12; }
         }
         var timeStr = hh.format("%02d") + ":" + g.min.format("%02d");
-        dc.drawText(LABEL_X - 3, TIME_Y, fTime, timeStr, Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(LABEL_X - 4, TIME_Y, fTime, timeStr, Graphics.TEXT_JUSTIFY_LEFT);
 
         // ---- right label ----
         dc.drawText(COL2_X, SAT_Y, fText, LABEL, Graphics.TEXT_JUSTIFY_LEFT);
@@ -258,18 +262,21 @@ class TypeFaceView extends WatchUi.WatchFace {
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(2);
         // sun icon: half dome on a horizon line
-        var ix = SUN_BOX_X + 12;
-        var iy = SUN_BOX_Y + 18;
+        var ix = SUN_BOX_X + 14;
+        var iy = SUN_BOX_Y + 20;
         dc.drawArc(ix, iy, 8, Graphics.ARC_COUNTER_CLOCKWISE, 0, 180);
         dc.drawLine(ix - 10, iy + 1, ix + 10, iy + 1);
         dc.setPenWidth(1);
-        dc.drawText(SUN_BOX_X + 29, SUN_BOX_Y + 2, fText, sunStr, Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(SUN_BOX_X + 28, SUN_BOX_Y - 1, fText, sunStr, Graphics.TEXT_JUSTIFY_LEFT);
     }
 
-    function drawBolt(dc as Dc, x as Number, y as Number) as Void {
-        dc.fillPolygon([
-            [x, y - 10], [x - 7, y + 2], [x - 2, y + 2],
-            [x - 4, y + 10], [x + 4, y - 2], [x - 1, y - 2]
-        ]);
+    function drawBolt(dc as Dc) as Void {
+        dc.setPenWidth(1);
+        var n = BOLT.size();
+        for (var i = 0; i < n; i++) {
+            var a = BOLT[i];
+            var b = BOLT[(i + 1) % n];
+            dc.drawLine(a[0], a[1], b[0], b[1]);
+        }
     }
 }

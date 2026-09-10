@@ -84,8 +84,8 @@ def build(name, specs, out_prefix):
     return line_h
 
 # time: tall digits, condensed hard so 5 glyphs fit left of the value column
-time_font = ImageFont.truetype("CourierPrime-Bold.ttf", 78)
+time_font = ImageFont.truetype("CourierPrime-Bold.ttf", 64)
 text_font = ImageFont.truetype("CourierPrime-Bold.ttf", 21)
 
-build("time", [(time_font, "0123456789:", 0.58)], "time")
+build("time", [(time_font, "0123456789:", 0.66)], "time")
 build("text", [(text_font, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:%-+/ ", 0.88)], "text")
