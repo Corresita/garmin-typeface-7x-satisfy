@@ -48,7 +48,7 @@ img = Image.new("RGBA", (W, H), (255, 255, 255, 255))
 d = ImageDraw.Draw(img)
 
 # ---- v2 layout constants ----
-BATT_Y  = 22
+BATT_Y  = 18
 DATE_Y  = 42
 TIME_Y  = 62
 COL2_X  = 176
@@ -75,17 +75,17 @@ draw_text(img, ftext, scx - 24, scy - 15, "18:13")
 # top scale (mirrors DASHES in TypeFaceView.mc; Garmin deg -> PIL deg is 360-a)
 DASH_R = 128
 dashes = [
-    (136.0, 5.0, 4),
-    (120.5, 3.0, 2), (116.0, 3.0, 2), (111.5, 3.0, 2),
-    (93.0, 15.0, 4),
-    (86.0, 4.0, 3), (81.0, 3.5, 3),
-    (62.0, 16.0, 4),
-    (53.0, 4.0, 3), (48.0, 3.0, 3),
+    (138.0, 5.0, 4),
+    (129.0, 3.0, 2), (123.5, 3.0, 2), (118.0, 3.0, 2),
+    (98.0, 15.0, 4),
+    (90.0, 4.0, 3), (83.0, 4.0, 3),
+    (63.0, 16.0, 4),
+    (55.0, 4.0, 3), (48.0, 4.0, 3),
 ]
 for a0, ln, pw in dashes:
     d.arc([CX - DASH_R, CY - DASH_R, CX + DASH_R, CY + DASH_R],
           360 - (a0 + ln), 360 - a0, fill=(0, 0, 0, 255), width=pw)
-for a in (39.0, 41.5, 44.0):  # red ticks, right end
+for a in (44.0, 41.0, 38.0):  # red ticks, right end
     c, sn = math.cos(math.radians(a)), math.sin(math.radians(a))
     d.line([(CX + (DASH_R - 4) * c, CY - (DASH_R - 4) * sn),
             (CX + (DASH_R + 4) * c, CY - (DASH_R + 4) * sn)], fill=(200, 0, 0, 255), width=2)
@@ -93,7 +93,7 @@ for a in (39.0, 41.5, 44.0):  # red ticks, right end
 # battery
 draw_text(img, ftext, CX + 8, BATT_Y, "33")
 bx, by = CX - 4, BATT_Y + 15
-d.polygon([(bx, by - 12), (bx - 7, by + 2), (bx - 2, by + 2), (bx - 4, by + 12),
+d.polygon([(bx, by - 10), (bx - 7, by + 2), (bx - 2, by + 2), (bx - 4, by + 10),
            (bx + 4, by - 2), (bx - 1, by - 2)], fill=(0, 0, 0, 255))
 
 # date, time, label

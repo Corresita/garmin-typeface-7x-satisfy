@@ -18,7 +18,7 @@ class TypeFaceView extends WatchUi.WatchFace {
     const CY      = 140;
     const LABEL_X = 40;          // left column (labels / date / time)
     const COL2_X  = 176;         // right value column
-    const BATT_Y  = 22;
+    const BATT_Y  = 18;
     const DATE_Y  = 42;
     const TIME_Y  = 62;
     const SAT_Y   = 86;
@@ -33,14 +33,14 @@ class TypeFaceView extends WatchUi.WatchFace {
     // top scale, left to right: [startDeg, lenDeg, penWidth]
     // (Garmin arc degrees: 90 = 12 o'clock, counter-clockwise positive)
     var DASHES = [
-        [136.0, 5.0, 4],                                   // short heavy dash, left end
-        [120.5, 3.0, 2], [116.0, 3.0, 2], [111.5, 3.0, 2], // three tiny dashes
-        [93.0, 15.0, 4],                                   // long dash
-        [86.0, 4.0, 3], [81.0, 3.5, 3],                    // two short dashes
-        [62.0, 16.0, 4],                                   // long dash
-        [53.0, 4.0, 3], [48.0, 3.0, 3],                    // two short dashes
+        [138.0, 5.0, 4],                                   // short heavy dash, left end
+        [129.0, 3.0, 2], [123.5, 3.0, 2], [118.0, 3.0, 2], // three tiny dashes
+        [98.0, 15.0, 4],                                   // long dash
+        [90.0, 4.0, 3], [83.0, 4.0, 3],                    // two short dashes
+        [63.0, 16.0, 4],                                   // long dash
+        [55.0, 4.0, 3], [48.0, 4.0, 3],                    // two short dashes
     ];
-    var RED_TICKS = [39.0, 41.5, 44.0];
+    var RED_TICKS = [44.0, 41.0, 38.0];
 
     var fTime;
     var fText;
@@ -242,8 +242,8 @@ class TypeFaceView extends WatchUi.WatchFace {
 
     function drawBolt(dc as Dc, x as Number, y as Number) as Void {
         dc.fillPolygon([
-            [x, y - 12], [x - 7, y + 2], [x - 2, y + 2],
-            [x - 4, y + 12], [x + 4, y - 2], [x - 1, y - 2]
+            [x, y - 10], [x - 7, y + 2], [x - 2, y + 2],
+            [x - 4, y + 10], [x + 4, y - 2], [x - 1, y - 2]
         ]);
     }
 }
