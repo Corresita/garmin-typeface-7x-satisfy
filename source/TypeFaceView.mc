@@ -1,3 +1,4 @@
+import Toybox.Application;
 import Toybox.Graphics;
 import Toybox.Lang;
 import Toybox.System;
@@ -114,12 +115,11 @@ class TypeFaceView extends WatchUi.WatchFace {
         // ---- data rows ----
         var info = ActivityMonitor.getInfo();
 
-        // RUN: this week's running distance. Garmin does not expose a per-day running
-        // distance to watch faces; the daily total from ActivityMonitor includes walking.
+        // RUN: today's running distance, see todayRunMeters()
         var runStr = "--";
-        var wr = complication(Complications.COMPLICATION_TYPE_WEEKLY_RUN_DISTANCE);
-        if (wr instanceof Lang.Number || wr instanceof Lang.Float) {
-            runStr = ((wr as Numeric).toFloat() / 1000.0).format("%.1f") + "KM";
+        var runM = todayRunMeters();
+        if (runM != null) {
+            runStr = (runM / 1000.0).format("%.1f") + "KM";
         }
 
         var hrStr = "--";
@@ -182,6 +182,27 @@ class TypeFaceView extends WatchUi.WatchFace {
             }
         }
         return null;
+    }
+
+    // Garmin only exposes this week's running distance to watch faces, not today's.
+    // Today's = weekly now - weekly at the start of today; the baseline is stored
+    // when the day changes (or when the weekly total resets on Monday).
+    function todayRunMeters() as Float? {
+        var wr = complication(Complications.COMPLICATION_TYPE_WEEKLY_RUN_DISTANCE);
+        if (!(wr instanceof Lang.Number || wr instanceof Lang.Float)) {
+            return null;
+        }
+        var weekly = (wr as Numeric).toFloat();
+        var today = Time.today().value();          // local midnight, epoch seconds
+        var day = Application.Storage.getValue("runBaseDay");
+        var base = Application.Storage.getValue("runBaseMeters");
+        var baseM = (base instanceof Lang.Float) ? base : ((base instanceof Lang.Number) ? base.toFloat() : null);
+        if (!(day instanceof Lang.Number) || day != today || baseM == null || baseM > weekly) {
+            baseM = weekly;
+            Application.Storage.setValue("runBaseDay", today);
+            Application.Storage.setValue("runBaseMeters", weekly);
+        }
+        return weekly - baseM;
     }
 
     // Garmin's closest thing to COROS "recovery": Body Battery (0-100).

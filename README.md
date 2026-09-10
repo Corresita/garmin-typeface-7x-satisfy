@@ -10,7 +10,7 @@ SATISFY × COROS APEX 4 exclusive watch faces and recreating that feel on Garmin
 ## Features
 
 - Archivo time and label, Courier Prime typewriter text, all bitmap-rendered for crisp 1-bit MIP output
-- Data rows, SATISFY style: RUN (this week's running distance), HEART RATE, RECOVERY (Body Battery), KCAL
+- Data rows, SATISFY style: RUN (today's running distance), HEART RATE, RECOVERY (Body Battery), KCAL
 - Weekday date (THU.09.10 style), battery with bolt icon
 - Segmented battery bar along the top arc (5 hollow segments, filled from the left, 20% each)
 - Dot-grid halftone band with a hill line (a marker slides along it from sunrise to sunset)
@@ -54,8 +54,10 @@ Two helper scripts (Python 3 + Pillow, `pip install Pillow`):
 
 ## Data notes
 
-- RUN is this week's running distance (Complications API). Garmin does not expose a per-day
-  running distance to watch faces, and the daily total distance includes walking
+- RUN is today's running distance. Garmin only exposes this week's running total to watch
+  faces (the daily total distance includes walking), so the face stores the weekly total at
+  the start of each day and shows the difference. If another watch face was active at
+  midnight, the baseline is taken when this face is next shown
 - HEART RATE is the live sensor value if available, otherwise the newest history sample if it is
   less than 5 minutes old (so an unworn watch shows `--`)
 - RECOVERY shows Garmin Body Battery (0-100) from the complication, sensor history as fallback.
