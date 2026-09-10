@@ -17,13 +17,13 @@ class TypeFaceView extends WatchUi.WatchFace {
     const CX      = 140;
     const CY      = 140;
     const LABEL_X = 40;          // left column (labels / date / time)
-    const COL2_X  = 176;         // right value column
+    const COL2_X  = 182;         // right value column
     const BATT_Y  = 18;
     const DATE_Y  = 42;
-    const TIME_Y  = 62;
+    const TIME_Y  = 58;
     const SAT_Y   = 86;
     const BAND_Y  = 208;         // dotted band top
-    const SHOW_RED_TICKS = true; // three red ticks at the right end of the scale
+    const SHOW_RED_TICKS = false; // three red ticks at the right end of the scale
 
     // top scale: a row of hollow segments along the arc, filled from the left
     // by battery level (each segment = 20%)
@@ -35,7 +35,7 @@ class TypeFaceView extends WatchUi.WatchFace {
 
     var ROW_Y as Array<Number> = [124, 145, 166, 187];
     var RED_TICKS as Array<Float> = [42.0, 39.0, 36.0];
-    var WEEK_CN as Array<String> = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+    var WEEK as Array<String> = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
     var LABELS as Array<String> = ["RUN", "HEART RATE", "RECOVERY", "KCAL"];
 
     var fTime as WatchUi.FontResource;
@@ -73,7 +73,7 @@ class TypeFaceView extends WatchUi.WatchFace {
 
         // ---- date ----
         var g = Gregorian.info(Time.now(), Time.FORMAT_SHORT);
-        var dateStr = WEEK_CN[(g.day_of_week as Number) - 1] + "." +
+        var dateStr = WEEK[(g.day_of_week as Number) - 1] + "." +
             (g.month as Number).format("%02d") + "." + (g.day as Number).format("%02d");
         dc.drawText(LABEL_X, DATE_Y, fText, dateStr, Graphics.TEXT_JUSTIFY_LEFT);
 
@@ -84,7 +84,7 @@ class TypeFaceView extends WatchUi.WatchFace {
             if (hh == 0) { hh = 12; }
         }
         var timeStr = hh.format("%02d") + ":" + g.min.format("%02d");
-        dc.drawText(LABEL_X - 4, TIME_Y, fTime, timeStr, Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(LABEL_X - 3, TIME_Y, fTime, timeStr, Graphics.TEXT_JUSTIFY_LEFT);
 
         // ---- right label ----
         dc.drawText(COL2_X, SAT_Y, fText, LABEL, Graphics.TEXT_JUSTIFY_LEFT);

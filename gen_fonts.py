@@ -83,13 +83,9 @@ def build(name, specs, out_prefix):
     print(f"{out_prefix}: {len(placed)} glyphs, atlas {atlas_w}x{atlas_h}, lineH {line_h}")
     return line_h
 
-bold60 = ImageFont.truetype("CourierPrime-Bold.ttf", 62)
-bold20 = ImageFont.truetype("CourierPrime-Bold.ttf", 21)
-cjk = ImageFont.truetype("NotoSansSC.ttf", 19)
-cjk.set_variation_by_axes([700])
+# time: tall digits, condensed hard so 5 glyphs fit left of the value column
+time_font = ImageFont.truetype("CourierPrime-Bold.ttf", 78)
+text_font = ImageFont.truetype("CourierPrime-Bold.ttf", 21)
 
-build("time", [(bold60, "0123456789:", 0.72)], "time")
-build("text", [
-    (bold20, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:%-+/ ", 0.88),
-    (cjk, "周一二三四五六日", 1.0),
-], "text")
+build("time", [(time_font, "0123456789:", 0.58)], "time")
+build("text", [(text_font, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:%-+/ ", 0.88)], "text")

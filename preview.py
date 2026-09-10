@@ -50,8 +50,8 @@ d = ImageDraw.Draw(img)
 # ---- v2 layout constants ----
 BATT_Y  = 18
 DATE_Y  = 42
-TIME_Y  = 62
-COL2_X  = 176
+TIME_Y  = 58
+COL2_X  = 182
 SAT_Y   = 86
 ROW_Y   = [124, 145, 166, 187]
 LABEL_X = 40
@@ -94,8 +94,6 @@ for i in range(SEG_COUNT):
         d.arc(bbox(SEG_R_IN + 1), 360 - a1, 360 - a0, fill=BLACK, width=1)
         radial(a0, SEG_R_IN, SEG_R_OUT, BLACK, 1)
         radial(a1, SEG_R_IN, SEG_R_OUT, BLACK, 1)
-for a in (42.0, 39.0, 36.0):  # red ticks, right end
-    radial(a, SEG_R_IN, SEG_R_OUT, (200, 0, 0, 255), 2)
 
 # battery
 draw_text(img, ftext, CX + 8, BATT_Y, "33")
@@ -104,8 +102,8 @@ d.polygon([(bx, by - 10), (bx - 7, by + 2), (bx - 2, by + 2), (bx - 4, by + 10),
            (bx + 4, by - 2), (bx - 1, by - 2)], fill=(0, 0, 0, 255))
 
 # date, time, label
-draw_text(img, ftext, LABEL_X, DATE_Y, "周一.07.09")
-draw_text(img, ftime, LABEL_X - 4, TIME_Y, "10:19")
+draw_text(img, ftext, LABEL_X, DATE_Y, "THU.09.10")
+draw_text(img, ftime, LABEL_X - 3, TIME_Y, "12:17")
 draw_text(img, ftext, COL2_X, SAT_Y, "SATISFY")
 
 # rows

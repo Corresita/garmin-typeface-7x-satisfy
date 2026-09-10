@@ -11,9 +11,8 @@ SATISFY × COROS APEX 4 exclusive watch faces and recreating that feel on Garmin
 
 - Heavy condensed typewriter time display (Courier Prime, bitmap-rendered for crisp 1-bit MIP output)
 - Data rows, SATISFY style: RUN (today's distance), HEART RATE, RECOVERY (Body Battery), KCAL
-- Chinese weekday date (周一.07.09 style), battery with bolt icon
-- Segmented battery bar along the top arc (5 hollow segments, filled from the left, 20% each),
-  with three red ticks at the right end
+- Weekday date (THU.09.10 style), battery with bolt icon
+- Segmented battery bar along the top arc (5 hollow segments, filled from the left, 20% each)
 - Dot-grid halftone band with hill silhouette and next sun event (sunrise / sunset) at the bottom
 
 ## Build & install
@@ -38,16 +37,12 @@ for the top bar).
 Two helper scripts (Python 3 + Pillow, `pip install Pillow`):
 
 - `gen_fonts.py` — regenerates the bitmap fonts (`resources/fonts/*.fnt` + PNG atlases)
-  from the TTFs. `CourierPrime-Bold.ttf` is bundled; `NotoSansSC.ttf` (~18 MB, only used
-  for the 8 weekday glyphs) is not — download the variable font from
-  [Google Fonts](https://fonts.google.com/noto/specimen/Noto+Sans+SC) and drop it in the
-  project root. The generated bitmap fonts are already committed, so this is only needed
-  if you change the glyph set or styling. Size, horizontal condensing, and stroke weight are parameters
-  in the last few lines. Swap in any monospace TTF.
+  from the bundled `CourierPrime-Bold.ttf`. Size, horizontal condensing, and stroke weight
+  are parameters in the last few lines. Swap in any monospace TTF.
 - `gen_svg.py` — exports `typeface-7x.svg`, an editable 280×280 vector version of the
   layout. Drag it into Figma / Sketch: every element is a named layer and the text stays
-  editable. Install `CourierPrime-Bold.ttf` and Noto Sans SC locally first so the fonts
-  match; the text is horizontally condensed to the same widths as the bitmap fonts.
+  editable. Install `CourierPrime-Bold.ttf` locally first so the font
+  matches; the text is horizontally condensed to the same widths as the bitmap fonts.
 - `preview.py` — renders a pixel-exact 280×280 PNG of the face without building or
   flashing anything. Fastest way to iterate on layout; it mirrors the layout constants
   of the Monkey C source, so port your numbers back once you're happy.
@@ -59,11 +54,11 @@ Two helper scripts (Python 3 + Pillow, `pip install Pillow`):
 - RECOVERY shows Garmin Body Battery (0-100). COROS-style recovery / training load
   numbers are not exposed to third-party watch faces by Garmin, so this is the closest match
 - The sun row needs weather synced from the phone; otherwise `--:--`
-- The red ticks on the top scale can be turned off with `SHOW_RED_TICKS` in the view
+- Optional red ticks at the right end of the top scale: `SHOW_RED_TICKS` in the view (off by default)
 
 ## License
 
-Code: [MIT](LICENSE). Fonts: Courier Prime and Noto Sans SC under the
+Code: [MIT](LICENSE). Font: Courier Prime under the
 [SIL Open Font License 1.1](OFL.txt).
 
 This is an independent fan project. Not affiliated with SATISFY, COROS, or Garmin.
