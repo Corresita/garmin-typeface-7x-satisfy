@@ -6,7 +6,7 @@ import os
 OUT = "resources/fonts"
 os.makedirs(OUT, exist_ok=True)
 
-def raster_glyph(font, ch, condense):
+def raster_glyph(font, ch, condense, slash_w=0):
     # render white on black, threshold, then condense horizontally
     a = font.getbbox(ch)
     if a is None:
@@ -21,16 +21,23 @@ def raster_glyph(font, ch, condense):
         img = img.resize((max(1, int(W * condense)), H), Image.LANCZOS)
         adv = adv * condense
     img = img.point(lambda p: 255 if p > 110 else 0)
+    if ch == "0" and slash_w > 0:
+        # slashed zero: diagonal through the counter, lower-left to upper-right
+        x0, y0, x1, y1 = img.getbbox()
+        w, h = x1 - x0, y1 - y0
+        ImageDraw.Draw(img).line(
+            [(x0 + w * 0.30, y1 - h * 0.24), (x1 - w * 0.30, y0 + h * 0.24)],
+            fill=255, width=slash_w)
     return img, adv
 
 def build(name, specs, out_prefix):
-    """specs: list of (font, chars, condense). Shared metrics from first font."""
+    """specs: list of (font, chars, condense, slash_zero_width). Shared metrics from first font."""
     glyphs = []
     max_h = 0
-    for font, chars, condense in specs:
+    for font, chars, condense, slash_w in specs:
         asc, desc = font.getmetrics()
         for ch in chars:
-            img, adv = raster_glyph(font, ch, condense)
+            img, adv = raster_glyph(font, ch, condense, slash_w)
             if img is None:
                 continue
             bbox = img.getbbox()
@@ -95,8 +102,8 @@ def archivo(size, weight):
 DIGITS = "0123456789"
 UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-build("time",  [(archivo(46, 800), DIGITS + ":", 1.0)], "time")
-build("label", [(archivo(18, 800), UPPER + " ", 1.0)], "label")
-build("bold",  [(ImageFont.truetype("CourierPrime-Bold.ttf", 21), DIGITS + ":-", 0.88)], "bold")
-build("text",  [(ImageFont.truetype("CourierPrime-Regular.ttf", 19), UPPER + DIGITS + ".:%-+/ ", 1.0)], "text")
-build("date",  [(ImageFont.truetype("CourierPrime-Regular.ttf", 20), UPPER + DIGITS + ". ", 1.0)], "date")
+build("time",  [(archivo(46, 800), DIGITS + ":", 1.0, 5)], "time")
+build("label", [(archivo(18, 800), UPPER + " ", 1.0, 0)], "label")
+build("bold",  [(ImageFont.truetype("CourierPrime-Bold.ttf", 21), DIGITS + ":-", 0.88, 2)], "bold")
+build("text",  [(ImageFont.truetype("CourierPrime-Regular.ttf", 19), UPPER + DIGITS + ".:%-+/ ", 1.0, 2)], "text")
+build("date",  [(ImageFont.truetype("CourierPrime-Regular.ttf", 20), UPPER + DIGITS + ". ", 1.0, 2)], "date")

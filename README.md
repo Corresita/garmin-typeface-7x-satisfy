@@ -39,7 +39,8 @@ Two helper scripts (Python 3 + Pillow, `pip install Pillow`):
 
 - `gen_fonts.py` — regenerates the bitmap fonts (`resources/fonts/*.fnt` + PNG atlases)
   from the bundled TTFs (`Archivo.ttf`, `CourierPrime-Regular.ttf`, `CourierPrime-Bold.ttf`).
-  Sizes, weights and horizontal condensing are parameters in the last few lines.
+  Sizes, weights, horizontal condensing and the slashed-zero stroke width are parameters in
+  the last few lines.
 - `typeface-7x_figma.svg` / `typeface-7x_figma.png` — the Figma mockup the current layout is
   measured from (the PNG uses Figma's fallback fonts, so `preview.png` is the accurate render).
 - `gen_svg.py` — exports `typeface-7x.svg`, an editable 280×280 vector version of the
