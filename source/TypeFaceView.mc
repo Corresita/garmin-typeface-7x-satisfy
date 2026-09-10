@@ -238,10 +238,22 @@ class TypeFaceView extends WatchUi.WatchFace {
     // sun row: next sun event (sunrise before dawn, sunset during the day) and the path marker
     function drawSun(dc as Dc, cc as Weather.CurrentConditions?) as Void {
         var sunStr = "--:--";
-        var frac = 0.75;   // marker position when there is no weather data
+        var now = Time.now();
+        var g = Gregorian.info(now, Time.FORMAT_SHORT);
+        // fallback marker position from the clock: 06:00 = left end, 18:00 = right end
+        var frac = ((g.hour * 60 + g.min) - 360) / 720.0;
+        if (frac < 0.0) { frac = 0.0; }
+        if (frac > 1.0) { frac = 1.0; }
+
+        // position: weather observation point, else the watch's last GPS fix
         var pos = (cc != null) ? cc.observationLocationPosition : null;
+        if (pos == null) {
+            var ai = Activity.getActivityInfo();
+            if (ai != null) {
+                pos = ai.currentLocation;
+            }
+        }
         if (pos != null && (Weather has :getSunrise) && (Weather has :getSunset)) {
-            var now = Time.now();
             var rise = Weather.getSunrise(pos, now);
             var set = Weather.getSunset(pos, now);
             var ev = rise;

@@ -56,7 +56,8 @@ Two helper scripts (Python 3 + Pillow, `pip install Pillow`):
   sensor value if available, otherwise the newest history sample
 - RECOVERY shows Garmin Body Battery (0-100). COROS-style recovery / training load
   numbers are not exposed to third-party watch faces by Garmin, so this is the closest match
-- The sun row needs weather synced from the phone; otherwise `--:--`
+- Sun times come from the weather observation point, or the watch's last GPS fix if there is no
+  weather data. With neither, the row shows `--:--` and the marker follows the clock (06:00-18:00)
 - Optional red ticks at the right end of the top scale: `SHOW_RED_TICKS` in the view (off by default)
 
 ## License
