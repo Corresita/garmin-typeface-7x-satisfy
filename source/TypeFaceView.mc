@@ -17,13 +17,15 @@ class TypeFaceView extends WatchUi.WatchFace {
     const CX      = 140;
     const CY      = 140;
     const LABEL_X = 40;          // left column (labels / date / time)
-    const COL2_X  = 177;         // right value column
+    const COL2_X  = 176;         // right value column
+    const SAT_X   = 178;         // right label
     const BATT_Y  = 22;
     const BATT_X  = 133;         // battery digits
     const DATE_X  = 48;
-    const DATE_Y  = 57;
-    const TIME_Y  = 66;
-    const SAT_Y   = 100;         // bottom-aligned with the time
+    const DATE_Y  = 56;
+    const TIME_Y  = 71;
+    const TIME_X  = 34;
+    const SAT_Y   = 97;          // bottom-aligned with the time
     const BAND_Y  = 211;         // dotted band top
     // hill line across the band; a marker dot slides along it from sunrise (x = MARK_X0)
     // to sunset (x = MARK_X1)
@@ -52,13 +54,19 @@ class TypeFaceView extends WatchUi.WatchFace {
     var LABELS as Array<String> = ["RUN", "HEART RATE", "RECOVERY", "KCAL"];
 
     var fTime as WatchUi.FontResource;
+    var fLabel as WatchUi.FontResource;
+    var fBold as WatchUi.FontResource;   // battery digits + sun time
     var fText as WatchUi.FontResource;
+    var fDate as WatchUi.FontResource;
     var bandBmp as WatchUi.BitmapResource;
 
     function initialize() {
         WatchFace.initialize();
         fTime = WatchUi.loadResource(Rez.Fonts.Time) as WatchUi.FontResource;
+        fLabel = WatchUi.loadResource(Rez.Fonts.Label) as WatchUi.FontResource;
+        fBold = WatchUi.loadResource(Rez.Fonts.Bold) as WatchUi.FontResource;
         fText = WatchUi.loadResource(Rez.Fonts.Text) as WatchUi.FontResource;
+        fDate = WatchUi.loadResource(Rez.Fonts.Date) as WatchUi.FontResource;
         bandBmp = WatchUi.loadResource(Rez.Drawables.Halftone) as WatchUi.BitmapResource;
     }
 
@@ -80,14 +88,14 @@ class TypeFaceView extends WatchUi.WatchFace {
         // ---- battery + top scale ----
         var batt = System.getSystemStats().battery;
         drawScale(dc, batt);
-        dc.drawText(BATT_X, BATT_Y, fText, batt.format("%d"), Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(BATT_X, BATT_Y, fBold, batt.format("%d"), Graphics.TEXT_JUSTIFY_LEFT);
         drawBolt(dc);
 
         // ---- date ----
         var g = Gregorian.info(Time.now(), Time.FORMAT_SHORT);
         var dateStr = WEEK[(g.day_of_week as Number) - 1] + "." +
             (g.month as Number).format("%02d") + "." + (g.day as Number).format("%02d");
-        dc.drawText(DATE_X, DATE_Y, fText, dateStr, Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(DATE_X, DATE_Y, fDate, dateStr, Graphics.TEXT_JUSTIFY_LEFT);
 
         // ---- time ----
         var hh = g.hour;
@@ -96,10 +104,10 @@ class TypeFaceView extends WatchUi.WatchFace {
             if (hh == 0) { hh = 12; }
         }
         var timeStr = hh.format("%02d") + ":" + g.min.format("%02d");
-        dc.drawText(LABEL_X - 4, TIME_Y, fTime, timeStr, Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(TIME_X, TIME_Y, fTime, timeStr, Graphics.TEXT_JUSTIFY_LEFT);
 
         // ---- right label ----
-        dc.drawText(COL2_X, SAT_Y, fText, LABEL, Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(SAT_X, SAT_Y, fLabel, LABEL, Graphics.TEXT_JUSTIFY_LEFT);
 
         // ---- data rows ----
         var info = ActivityMonitor.getInfo();
@@ -286,7 +294,7 @@ class TypeFaceView extends WatchUi.WatchFace {
         dc.drawArc(ix, iy, 8, Graphics.ARC_COUNTER_CLOCKWISE, 0, 180);
         dc.drawLine(ix - 10, iy + 1, ix + 10, iy + 1);
         dc.setPenWidth(1);
-        dc.drawText(SUN_BOX_X + 24, SUN_BOX_Y - 2, fText, sunStr, Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(SUN_BOX_X + 24, SUN_BOX_Y - 2, fBold, sunStr, Graphics.TEXT_JUSTIFY_LEFT);
     }
 
     function drawBolt(dc as Dc) as Void {

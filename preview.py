@@ -7,12 +7,12 @@ FD = "resources/fonts"
 DD = "resources/drawables"
 os.makedirs(DD, exist_ok=True)
 
-# dotted band: 25% dot grid, 280x82
+# dotted band: 2x2 dots on a 4 px grid (1 px dots on a 2 px grid read as flat grey on the MIP screen)
 band = Image.new("RGBA", (280, 72), (0, 0, 0, 0))
 px = band.load()
 for yy in range(72):
     for xx in range(280):
-        if xx % 2 == 0 and yy % 2 == 0:
+        if xx % 4 < 2 and yy % 4 < 2:
             px[xx, yy] = (0, 0, 0, 255)
 band.save(f"{DD}/halftone.png")
 
@@ -40,7 +40,10 @@ def draw_text(img, font, x, y, s, justify="left"):
         x += g["xadvance"]
 
 ftime = load_fnt("time")
+flabel = load_fnt("label")
+fbold = load_fnt("bold")
 ftext = load_fnt("text")
+fdate = load_fnt("date")
 
 W = H = 280
 CX, CY = 140, 140
@@ -51,10 +54,12 @@ d = ImageDraw.Draw(img)
 BATT_Y  = 22
 BATT_X  = 133
 DATE_X  = 48
-DATE_Y  = 57
-TIME_Y  = 66
-COL2_X  = 177
-SAT_Y   = 100
+DATE_Y  = 56
+TIME_Y  = 71
+TIME_X  = 34
+COL2_X  = 176
+SAT_X   = 178
+SAT_Y   = 97
 ROW_Y   = [122, 143, 164, 185]
 LABEL_X = 40
 BAND_Y  = 211
@@ -75,7 +80,7 @@ d.rectangle([bx, by, bx + bw - 1, by + bh - 1], fill=(255, 255, 255, 255))
 ix, iy = bx + 10, by + 12
 d.arc([ix - 8, iy - 8, ix + 8, iy + 8], 180, 360, fill=(0, 0, 0, 255), width=2)
 d.line([ix - 10, iy + 1, ix + 10, iy + 1], fill=(0, 0, 0, 255), width=2)
-draw_text(img, ftext, bx + 24, by - 2, "18:13")
+draw_text(img, fbold, bx + 24, by - 2, "18:13")
 
 # top scale: hollow segments filled from the left by battery (mirrors drawScale in TypeFaceView.mc)
 SEG_COUNT, SEG_LEN, SEG_GAP, SEG_R_OUT, SEG_R_IN = 5, 12.0, 3.5, 131, 126
@@ -101,14 +106,14 @@ for i in range(SEG_COUNT):
         radial(a1, SEG_R_IN, SEG_R_OUT, BLACK, 1)
 
 # battery: digits + outlined bolt
-draw_text(img, ftext, BATT_X, BATT_Y, "33")
+draw_text(img, fbold, BATT_X, BATT_Y, "33")
 BOLT = [(128, 26), (124, 26), (122, 35), (126, 35), (124, 41), (130, 32), (126, 32)]
 d.line(BOLT + [BOLT[0]], fill=(0, 0, 0, 255), width=1)
 
 # date, time, label
-draw_text(img, ftext, DATE_X, DATE_Y, "THU.09.10")
-draw_text(img, ftime, LABEL_X - 4, TIME_Y, "12:17")
-draw_text(img, ftext, COL2_X, SAT_Y, "SATISFY")
+draw_text(img, fdate, DATE_X, DATE_Y, "THU.09.10")
+draw_text(img, ftime, TIME_X, TIME_Y, "12:17")
+draw_text(img, flabel, SAT_X, SAT_Y, "SATISFY")
 
 # rows
 for i, (s, v) in enumerate([("RUN", "0.2KM"), ("HEART RATE", "69BPM"),

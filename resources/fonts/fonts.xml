@@ -1,4 +1,7 @@
 <fonts>
     <font id="Time" filename="time.fnt"/>
+    <font id="Label" filename="label.fnt"/>
+    <font id="Bold" filename="bold.fnt"/>
     <font id="Text" filename="text.fnt"/>
+    <font id="Date" filename="date.fnt"/>
 </fonts>

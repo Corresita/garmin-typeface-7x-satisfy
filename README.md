@@ -9,7 +9,7 @@ SATISFY × COROS APEX 4 exclusive watch faces and recreating that feel on Garmin
 
 ## Features
 
-- Heavy condensed typewriter time display (Courier Prime, bitmap-rendered for crisp 1-bit MIP output)
+- Archivo time and label, Courier Prime typewriter text, all bitmap-rendered for crisp 1-bit MIP output
 - Data rows, SATISFY style: RUN (today's distance), HEART RATE, RECOVERY (Body Battery), KCAL
 - Weekday date (THU.09.10 style), battery with bolt icon
 - Segmented battery bar along the top arc (5 hollow segments, filled from the left, 20% each)
@@ -38,14 +38,14 @@ for the top bar).
 Two helper scripts (Python 3 + Pillow, `pip install Pillow`):
 
 - `gen_fonts.py` — regenerates the bitmap fonts (`resources/fonts/*.fnt` + PNG atlases)
-  from the bundled `CourierPrime-Bold.ttf`. Size, horizontal condensing, and stroke weight
-  are parameters in the last few lines. Swap in any monospace TTF.
+  from the bundled TTFs (`Archivo.ttf`, `CourierPrime-Regular.ttf`, `CourierPrime-Bold.ttf`).
+  Sizes, weights and horizontal condensing are parameters in the last few lines.
 - `typeface-7x_figma.svg` / `typeface-7x_figma.png` — the Figma mockup the current layout is
   measured from (the PNG uses Figma's fallback fonts, so `preview.png` is the accurate render).
 - `gen_svg.py` — exports `typeface-7x.svg`, an editable 280×280 vector version of the
   layout. Drag it into Figma / Sketch: every element is a named layer and the text stays
-  editable. Install `CourierPrime-Bold.ttf` locally first so the font
-  matches; the text is horizontally condensed to the same widths as the bitmap fonts.
+  editable. Install Archivo and Courier Prime locally first so the fonts
+  match; the text is horizontally condensed to the same widths as the bitmap fonts.
 - `preview.py` — renders a pixel-exact 280×280 PNG of the face without building or
   flashing anything. Fastest way to iterate on layout; it mirrors the layout constants
   of the Monkey C source, so port your numbers back once you're happy.
@@ -62,7 +62,7 @@ Two helper scripts (Python 3 + Pillow, `pip install Pillow`):
 
 ## License
 
-Code: [MIT](LICENSE). Font: Courier Prime under the
+Code: [MIT](LICENSE). Fonts: Archivo and Courier Prime under the
 [SIL Open Font License 1.1](OFL.txt).
 
 This is an independent fan project. Not affiliated with SATISFY, COROS, or Garmin.

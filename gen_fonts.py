@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate Garmin CIQ bitmap fonts (.fnt + .png) from TTFs, 1-bit, optionally condensed."""
+"""Generate Garmin CIQ bitmap fonts (.fnt + .png) from the bundled TTFs, 1-bit."""
 from PIL import Image, ImageDraw, ImageFont
 import os
 
@@ -83,9 +83,20 @@ def build(name, specs, out_prefix):
     print(f"{out_prefix}: {len(placed)} glyphs, atlas {atlas_w}x{atlas_h}, lineH {line_h}")
     return line_h
 
-# time: tall digits, condensed hard so 5 glyphs fit left of the value column
-time_font = ImageFont.truetype("CourierPrime-Bold.ttf", 64)
-text_font = ImageFont.truetype("CourierPrime-Bold.ttf", 21)
+# Fonts measured from typeface-7x_figma.svg:
+#   time / label   Archivo wght 800 (46 px / 18 px)
+#   battery, sun time  Courier Prime Bold 21 px condensed 0.88
+#   rows               Courier Prime Regular 19 px;  date 20 px
+def archivo(size, weight):
+    f = ImageFont.truetype("Archivo.ttf", size)
+    f.set_variation_by_axes([weight, 100])
+    return f
 
-build("time", [(time_font, "0123456789:", 0.66)], "time")
-build("text", [(text_font, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:%-+/ ", 0.88)], "text")
+DIGITS = "0123456789"
+UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+build("time",  [(archivo(46, 800), DIGITS + ":", 1.0)], "time")
+build("label", [(archivo(18, 800), UPPER + " ", 1.0)], "label")
+build("bold",  [(ImageFont.truetype("CourierPrime-Bold.ttf", 21), DIGITS + ":-", 0.88)], "bold")
+build("text",  [(ImageFont.truetype("CourierPrime-Regular.ttf", 19), UPPER + DIGITS + ".:%-+/ ", 1.0)], "text")
+build("date",  [(ImageFont.truetype("CourierPrime-Regular.ttf", 20), UPPER + DIGITS + ". ", 1.0)], "date")
