@@ -23,24 +23,15 @@ class TypeFaceView extends WatchUi.WatchFace {
     const TIME_Y  = 62;
     const SAT_Y   = 86;
     const BAND_Y  = 208;         // dotted band top
-    const DASH_R  = 128;         // radius of the top scale
     const SHOW_RED_TICKS = true; // three red ticks at the right end of the scale
 
-    var ROW_Y = [124, 145, 166, 187];
-    var WEEK_CN = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
-    var LABELS = ["RUN", "HEART RATE", "RECOVERY", "KCAL"];
-
-    // top scale, left to right: [startDeg, lenDeg, penWidth]
-    // (Garmin arc degrees: 90 = 12 o'clock, counter-clockwise positive)
-    var DASHES = [
-        [138.0, 5.0, 4],                                   // short heavy dash, left end
-        [129.0, 3.0, 2], [123.5, 3.0, 2], [118.0, 3.0, 2], // three tiny dashes
-        [98.0, 15.0, 4],                                   // long dash
-        [90.0, 4.0, 3], [83.0, 4.0, 3],                    // two short dashes
-        [63.0, 16.0, 4],                                   // long dash
-        [55.0, 4.0, 3], [48.0, 4.0, 3],                    // two short dashes
-    ];
-    var RED_TICKS = [44.0, 41.0, 38.0];
+    // top scale: a row of hollow segments along the arc, filled from the left
+    // by battery level (each segment = 20%)
+    const SEG_COUNT = 5;
+    const SEG_LEN   = 14.0;      // degrees per segment
+    const SEG_GAP   = 4.0;       // degrees between segments
+    const SEG_R_OUT = 132;
+    const SEG_R_IN  = 125;
 
     var fTime;
     var fText;
@@ -72,11 +63,9 @@ class TypeFaceView extends WatchUi.WatchFace {
         drawHill(dc);
         drawSun(dc, cc);
 
-        // ---- top scale ----
-        drawScale(dc);
-
-        // ---- battery ----
+        // ---- battery + top scale ----
         var batt = System.getSystemStats().battery;
+        drawScale(dc, batt);
         dc.drawText(CX + 8, BATT_Y, fText, batt.format("%d"), Graphics.TEXT_JUSTIFY_LEFT);
         drawBolt(dc, CX - 4, BATT_Y + 15);
 
@@ -161,27 +150,43 @@ class TypeFaceView extends WatchUi.WatchFace {
 
     // ---- drawing helpers ----
 
-    function drawScale(dc as Dc) as Void {
-        for (var i = 0; i < DASHES.size(); i++) {
-            var a0 = DASHES[i][0];
-            var ln = DASHES[i][1];
-            dc.setPenWidth(DASHES[i][2].toNumber());
-            dc.drawArc(CX, CY, DASH_R, Graphics.ARC_COUNTER_CLOCKWISE, a0, a0 + ln);
+    function drawScale(dc as Dc, batt as Float) as Void {
+        var filled = (batt / 20).toNumber();
+        if (filled > SEG_COUNT) { filled = SEG_COUNT; }
+        var total = SEG_COUNT * SEG_LEN + (SEG_COUNT - 1) * SEG_GAP;
+        var left = 90.0 + total / 2;          // angle of the left end
+        var rMid = (SEG_R_OUT + SEG_R_IN) / 2;
+        for (var i = 0; i < SEG_COUNT; i++) {
+            var a1 = left - i * (SEG_LEN + SEG_GAP);
+            var a0 = a1 - SEG_LEN;
+            if (i < filled) {
+                dc.setPenWidth(SEG_R_OUT - SEG_R_IN + 1);
+                dc.drawArc(CX, CY, rMid, Graphics.ARC_COUNTER_CLOCKWISE, a0, a1);
+            } else {
+                dc.setPenWidth(1);
+                dc.drawArc(CX, CY, SEG_R_OUT, Graphics.ARC_COUNTER_CLOCKWISE, a0, a1);
+                dc.drawArc(CX, CY, SEG_R_IN, Graphics.ARC_COUNTER_CLOCKWISE, a0, a1);
+                drawRadial(dc, a0, SEG_R_IN, SEG_R_OUT);
+                drawRadial(dc, a1, SEG_R_IN, SEG_R_OUT);
+            }
         }
         if (SHOW_RED_TICKS) {
             dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
             dc.setPenWidth(2);
             for (var i = 0; i < RED_TICKS.size(); i++) {
-                var rad = Math.toRadians(RED_TICKS[i]);
-                var c = Math.cos(rad);
-                var s = Math.sin(rad);
-                var r0 = DASH_R - 4;
-                var r1 = DASH_R + 4;
-                dc.drawLine(CX + r0 * c, CY - r0 * s, CX + r1 * c, CY - r1 * s);
+                drawRadial(dc, RED_TICKS[i], SEG_R_IN, SEG_R_OUT);
             }
             dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         }
         dc.setPenWidth(1);
+    }
+
+    // short line from radius r0 to r1 at angle deg (Garmin degrees, 90 = up)
+    function drawRadial(dc as Dc, deg as Float, r0 as Number, r1 as Number) as Void {
+        var rad = Math.toRadians(deg);
+        var c = Math.cos(rad);
+        var sn = Math.sin(rad);
+        dc.drawLine(CX + r0 * c, CY - r0 * sn, CX + r1 * c, CY - r1 * sn);
     }
 
     // white hill silhouette knocked out of the dot band

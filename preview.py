@@ -72,23 +72,30 @@ d.arc([scx - 46, scy - 6, scx - 30, scy + 8], 180, 360, fill=(0, 0, 0, 255), wid
 d.line([scx - 48, scy + 7, scx - 28, scy + 7], fill=(0, 0, 0, 255), width=2)
 draw_text(img, ftext, scx - 24, scy - 15, "18:13")
 
-# top scale (mirrors DASHES in TypeFaceView.mc; Garmin deg -> PIL deg is 360-a)
-DASH_R = 128
-dashes = [
-    (138.0, 5.0, 4),
-    (129.0, 3.0, 2), (123.5, 3.0, 2), (118.0, 3.0, 2),
-    (98.0, 15.0, 4),
-    (90.0, 4.0, 3), (83.0, 4.0, 3),
-    (63.0, 16.0, 4),
-    (55.0, 4.0, 3), (48.0, 4.0, 3),
-]
-for a0, ln, pw in dashes:
-    d.arc([CX - DASH_R, CY - DASH_R, CX + DASH_R, CY + DASH_R],
-          360 - (a0 + ln), 360 - a0, fill=(0, 0, 0, 255), width=pw)
-for a in (44.0, 41.0, 38.0):  # red ticks, right end
+# top scale: hollow segments filled from the left by battery (mirrors drawScale in TypeFaceView.mc)
+SEG_COUNT, SEG_LEN, SEG_GAP, SEG_R_OUT, SEG_R_IN = 5, 14.0, 4.0, 132, 125
+BATT = 33
+def bbox(r):
+    return [CX - r, CY - r, CX + r, CY + r]
+def radial(a, r0, r1, fill, w):
     c, sn = math.cos(math.radians(a)), math.sin(math.radians(a))
-    d.line([(CX + (DASH_R - 4) * c, CY - (DASH_R - 4) * sn),
-            (CX + (DASH_R + 4) * c, CY - (DASH_R + 4) * sn)], fill=(200, 0, 0, 255), width=2)
+    d.line([(CX + r0 * c, CY - r0 * sn), (CX + r1 * c, CY - r1 * sn)], fill=fill, width=w)
+filled = min(SEG_COUNT, BATT // 20)
+total = SEG_COUNT * SEG_LEN + (SEG_COUNT - 1) * SEG_GAP
+left = 90.0 + total / 2
+BLACK = (0, 0, 0, 255)
+for i in range(SEG_COUNT):
+    a1 = left - i * (SEG_LEN + SEG_GAP)
+    a0 = a1 - SEG_LEN
+    if i < filled:   # PIL arc draws inward from bbox, Garmin centers the pen on r
+        d.arc(bbox(SEG_R_OUT + 1), 360 - a1, 360 - a0, fill=BLACK, width=SEG_R_OUT - SEG_R_IN + 1)
+    else:
+        d.arc(bbox(SEG_R_OUT + 1), 360 - a1, 360 - a0, fill=BLACK, width=1)
+        d.arc(bbox(SEG_R_IN + 1), 360 - a1, 360 - a0, fill=BLACK, width=1)
+        radial(a0, SEG_R_IN, SEG_R_OUT, BLACK, 1)
+        radial(a1, SEG_R_IN, SEG_R_OUT, BLACK, 1)
+for a in (42.0, 39.0, 36.0):  # red ticks, right end
+    radial(a, SEG_R_IN, SEG_R_OUT, (200, 0, 0, 255), 2)
 
 # battery
 draw_text(img, ftext, CX + 8, BATT_Y, "33")

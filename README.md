@@ -12,7 +12,8 @@ SATISFY × COROS APEX 4 exclusive watch faces and recreating that feel on Garmin
 - Heavy condensed typewriter time display (Courier Prime, bitmap-rendered for crisp 1-bit MIP output)
 - Data rows, SATISFY style: RUN (today's distance), HEART RATE, RECOVERY (Body Battery), KCAL
 - Chinese weekday date (周一.07.09 style), battery with bolt icon
-- Distressed dashed scale along the top arc, with three red ticks at the right end
+- Segmented battery bar along the top arc (5 hollow segments, filled from the left, 20% each),
+  with three red ticks at the right end
 - Dot-grid halftone band with hill silhouette and next sun event (sunrise / sunset) at the bottom
 
 ## Build & install
@@ -31,8 +32,8 @@ Other resolutions need the layout constants adjusted.
 ## Customization
 
 All layout lives in `source/TypeFaceView.mc` as constants at the top of the class
-(coordinates, row positions, the `LABEL` text in the right column, the `DASHES` list
-for the top scale).
+(coordinates, row positions, the `LABEL` text in the right column, the `SEG_*` constants
+for the top bar).
 
 Two helper scripts (Python 3 + Pillow, `pip install Pillow`):
 
