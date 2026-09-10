@@ -25,7 +25,7 @@ class TypeFaceView extends WatchUi.WatchFace {
     const BATT_X  = 133;         // battery digits
     const DATE_X  = 48;
     const DATE_Y  = 56;
-    const TIME_Y  = 69;
+    const TIME_Y  = 67;
     const TIME_X  = 28;
     const SAT_Y   = 106;         // bottom-aligned with the time
     const BAND_Y  = 214;         // dotted band top

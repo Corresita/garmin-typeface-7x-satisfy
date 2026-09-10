@@ -61,7 +61,7 @@ def raster_glyph(font, ch, condense, slash_w=0, closed_four=False):
             fill=255, width=slash_w)
     return img, adv
 
-def build(name, specs, out_prefix):
+def build(name, specs, out_prefix, tabular=False):
     """specs: list of (font, chars, condense, slash_zero_width[, closed_four]).
     Shared metrics from first font."""
     glyphs = []
@@ -83,6 +83,16 @@ def build(name, specs, out_prefix):
             yoff = bbox[1] - 4
             glyphs.append((ch, g, g.width, g.height, xoff, yoff, int(round(adv))))
             max_h = max(max_h, bbox[3] - 4)
+    if tabular:
+        digits = [g for g in glyphs if g[0].isdigit()]
+        adv_max = max(g[6] for g in digits)
+        fixed = []
+        for ch, g, w, h, xo, yo, adv in glyphs:
+            if ch.isdigit() and adv < adv_max:
+                xo += (adv_max - adv) // 2
+                adv = adv_max
+            fixed.append((ch, g, w, h, xo, yo, adv))
+        glyphs = fixed
     line_h = max_h + 6
     base = line_h - 2
     # row packing
@@ -125,7 +135,7 @@ def build(name, specs, out_prefix):
     return line_h
 
 # Fonts measured from typeface-7x_figma.svg:
-#   time           Archivo wght 900, wdth 79, 59 px
+#   time           Public Sans wght 900, 56 px, condensed 0.79, tabular digits
 #   label          Archivo wght 800, 18 px
 #   battery, sun time  Courier Prime Bold 21 px condensed 0.88
 #   rows, date         Courier Prime Regular 20 px
@@ -137,7 +147,9 @@ def archivo(size, weight, width=100):
 DIGITS = "0123456789"
 UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-build("time",  [(archivo(59, 900, 79), DIGITS + ":", 1.0, 0, True)], "time")
+public_sans = ImageFont.truetype("PublicSans.ttf", 56)
+public_sans.set_variation_by_axes([900])
+build("time",  [(public_sans, DIGITS + ":", 0.79, 0, False)], "time", tabular=True)
 build("label", [(archivo(18, 800), UPPER + " ", 1.0, 0)], "label")
 build("bold",  [(ImageFont.truetype("CourierPrime-Bold.ttf", 21), DIGITS + ":-", 0.88, 2)], "bold")
 build("text",  [(ImageFont.truetype("CourierPrime-Regular.ttf", 20), UPPER + DIGITS + ".:%-+/ ", 1.0, 2)], "text")

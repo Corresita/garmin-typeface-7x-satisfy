@@ -9,7 +9,7 @@ SATISFY × COROS APEX 4 exclusive watch faces and recreating that feel on Garmin
 
 ## Features
 
-- Archivo time and label, Courier Prime typewriter text, all bitmap-rendered for crisp 1-bit MIP output
+- Public Sans time, Archivo label, Courier Prime typewriter text, all bitmap-rendered for crisp 1-bit MIP output
 - Data rows, SATISFY style: RUN (today's running distance), HEART RATE, RECOVERY (Body Battery), KCAL
 - Weekday date (THU.09.10 style), battery with bolt icon
 - Segmented battery bar along the top arc (5 hollow segments, filled from the left, 20% each)
@@ -39,9 +39,9 @@ for the top bar).
 Two helper scripts (Python 3 + Pillow, `pip install Pillow`):
 
 - `gen_fonts.py` — regenerates the bitmap fonts (`resources/fonts/*.fnt` + PNG atlases)
-  from the bundled TTFs (`Archivo.ttf`, `CourierPrime-Regular.ttf`, `CourierPrime-Bold.ttf`).
+  from the bundled TTFs (`PublicSans.ttf`, `Archivo.ttf`, `CourierPrime-Regular.ttf`, `CourierPrime-Bold.ttf`).
   Sizes, weights, horizontal condensing and the slashed-zero stroke width are parameters in
-  the last few lines. The time font's `4` is post-processed to a closed form (Archivo's is open).
+  the last few lines. Time digits are made tabular (equal width) so the clock never shifts.
 - `typeface-7x_figma.svg` / `typeface-7x_figma.png` — the Figma mockup the current layout is
   measured from (the PNG uses Figma's fallback fonts, so `preview.png` is the accurate render).
 - `gen_svg.py` — exports `typeface-7x.svg`, an editable 280×280 vector version of the
@@ -70,7 +70,7 @@ Two helper scripts (Python 3 + Pillow, `pip install Pillow`):
 
 ## License
 
-Code: [MIT](LICENSE). Fonts: Archivo and Courier Prime under the
+Code: [MIT](LICENSE). Fonts: Public Sans, Archivo and Courier Prime under the
 [SIL Open Font License 1.1](OFL.txt).
 
 This is an independent fan project. Not affiliated with SATISFY, COROS, or Garmin.
