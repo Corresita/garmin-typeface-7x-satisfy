@@ -13,8 +13,8 @@ SATISFY × COROS APEX 4 exclusive watch faces and recreating that feel on Garmin
 - Data rows, SATISFY style: RUN (today's distance), HEART RATE, RECOVERY (Body Battery), KCAL
 - Weekday date (THU.09.10 style), battery with bolt icon
 - Segmented battery bar along the top arc (5 hollow segments, filled from the left, 20% each)
-- Dot-grid halftone band with a sun-path arc (marker moves from sunrise to sunset) and the
-  next sun event time at the bottom
+- Dot-grid halftone band with a hill line (a marker slides along it from sunrise to sunset)
+  and the next sun event time at the bottom
 
 ## Build & install
 
@@ -40,6 +40,7 @@ Two helper scripts (Python 3 + Pillow, `pip install Pillow`):
 - `gen_fonts.py` — regenerates the bitmap fonts (`resources/fonts/*.fnt` + PNG atlases)
   from the bundled `CourierPrime-Bold.ttf`. Size, horizontal condensing, and stroke weight
   are parameters in the last few lines. Swap in any monospace TTF.
+- `typeface-7x_figma.svg` — the Figma mockup the current layout is measured from.
 - `gen_svg.py` — exports `typeface-7x.svg`, an editable 280×280 vector version of the
   layout. Drag it into Figma / Sketch: every element is a named layer and the text stays
   editable. Install `CourierPrime-Bold.ttf` locally first so the font

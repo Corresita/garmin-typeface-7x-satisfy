@@ -57,26 +57,25 @@ COL2_X  = 177
 SAT_Y   = 100
 ROW_Y   = [122, 143, 164, 185]
 LABEL_X = 40
-BAND_Y  = 208
+BAND_Y  = 211
 
-# band + sun path arc with marker
+# band + hill line with sun marker
 img.paste(band, (0, BAND_Y), band)
-ARC_CX, ARC_CY, ARC_R, ARC_A0, ARC_A1 = 146, 384, 131, 62.0, 118.0
-SUN_BOX = (88, 206, 104, 27)
-FRAC = 0.75
-d.arc([ARC_CX - ARC_R, ARC_CY - ARC_R, ARC_CX + ARC_R, ARC_CY + ARC_R],
-      360 - ARC_A1, 360 - ARC_A0, fill=(0, 0, 0, 255), width=2)
-a = math.radians(ARC_A1 - FRAC * (ARC_A1 - ARC_A0))
-mx, my = ARC_CX + ARC_R * math.cos(a), ARC_CY - ARC_R * math.sin(a)
-d.ellipse([mx - 4, my - 4, mx + 4, my + 4], fill=(255, 255, 255, 255), outline=(0, 0, 0, 255), width=1)
+HILL_DX, MARK_X0, MARK_X1, FRAC = 18, 60, 200, 0.75
+def hill(x):
+    x -= HILL_DX
+    return 273 - 24 * math.exp(-((x - 112) / 58.0) ** 2) - 12 * math.exp(-((x - 268) / 46.0) ** 2)
+d.line([(x, hill(x)) for x in range(0, 281, 2)], fill=(0, 0, 0, 255), width=2)
+mx = MARK_X0 + FRAC * (MARK_X1 - MARK_X0); my = hill(mx)
+d.ellipse([mx - 3, my - 3, mx + 3, my + 3], fill=(255, 255, 255, 255), outline=(0, 0, 0, 255), width=2)
 
 # sun time box + icon + text
-bx, by, bw, bh = SUN_BOX
+bx, by, bw, bh = 91, 222, 83, 19
 d.rectangle([bx, by, bx + bw - 1, by + bh - 1], fill=(255, 255, 255, 255))
-ix, iy = bx + 14, by + 20
+ix, iy = bx + 10, by + 12
 d.arc([ix - 8, iy - 8, ix + 8, iy + 8], 180, 360, fill=(0, 0, 0, 255), width=2)
 d.line([ix - 10, iy + 1, ix + 10, iy + 1], fill=(0, 0, 0, 255), width=2)
-draw_text(img, ftext, bx + 28, by - 1, "18:13")
+draw_text(img, ftext, bx + 24, by - 2, "18:13")
 
 # top scale: hollow segments filled from the left by battery (mirrors drawScale in TypeFaceView.mc)
 SEG_COUNT, SEG_LEN, SEG_GAP, SEG_R_OUT, SEG_R_IN = 5, 12.0, 3.5, 131, 126

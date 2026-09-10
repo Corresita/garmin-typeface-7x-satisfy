@@ -24,17 +24,16 @@ class TypeFaceView extends WatchUi.WatchFace {
     const DATE_Y  = 57;
     const TIME_Y  = 66;
     const SAT_Y   = 100;         // bottom-aligned with the time
-    const BAND_Y  = 208;         // dotted band top
-    // sun path: circular arc across the band, a marker dot moves along it during the day
-    const ARC_CX  = 146;
-    const ARC_CY  = 384;
-    const ARC_R   = 131;
-    const ARC_A0  = 62.0;        // right end (degrees, 90 = top of the arc)
-    const ARC_A1  = 118.0;       // left end
-    const SUN_BOX_X = 88;        // white box behind the sun time
-    const SUN_BOX_Y = 206;
-    const SUN_BOX_W = 104;
-    const SUN_BOX_H = 27;
+    const BAND_Y  = 211;         // dotted band top
+    // hill line across the band; a marker dot slides along it from sunrise (x = MARK_X0)
+    // to sunset (x = MARK_X1)
+    const HILL_DX = 18;          // hill shape shifted right, per the mockup
+    const MARK_X0 = 60;
+    const MARK_X1 = 200;
+    const SUN_BOX_X = 91;        // white box behind the sun time
+    const SUN_BOX_Y = 222;
+    const SUN_BOX_W = 83;
+    const SUN_BOX_H = 19;
     const SHOW_RED_TICKS = false; // three red ticks at the right end of the scale
 
     // top scale: a row of hollow segments along the arc, filled from the left
@@ -212,20 +211,28 @@ class TypeFaceView extends WatchUi.WatchFace {
         dc.drawLine(CX + r0 * c, CY - r0 * sn, CX + r1 * c, CY - r1 * sn);
     }
 
-    // sun path arc with a marker at `frac` (0 = sunrise end, 1 = sunset end)
+    // hill line with a marker at `frac` (0 = sunrise, 1 = sunset)
     function drawSunPath(dc as Dc, frac as Float) as Void {
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(2);
-        dc.drawArc(ARC_CX, ARC_CY, ARC_R, Graphics.ARC_COUNTER_CLOCKWISE, ARC_A0, ARC_A1);
-        var a = ARC_A1 - frac * (ARC_A1 - ARC_A0);
-        var rad = Math.toRadians(a);
-        var mx = ARC_CX + ARC_R * Math.cos(rad);
-        var my = ARC_CY - ARC_R * Math.sin(rad);
+        for (var x = 0; x < 278; x += 2) {
+            dc.drawLine(x, hillY(x), x + 2, hillY(x + 2));
+        }
+        var mx = (MARK_X0 + frac * (MARK_X1 - MARK_X0)).toNumber();
+        var my = hillY(mx);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(mx, my, 4);
+        dc.fillCircle(mx, my, 3);
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
+        dc.drawCircle(mx, my, 3);
         dc.setPenWidth(1);
-        dc.drawCircle(mx, my, 4);
+    }
+
+    function hillY(x as Number) as Number {
+        var a = (x - HILL_DX - 112) / 58.0;
+        var b = (x - HILL_DX - 268) / 46.0;
+        var y = 273.0 - 24.0 * Math.pow(2.718281828, -(a * a))
+                      - 12.0 * Math.pow(2.718281828, -(b * b));
+        return y.toNumber();
     }
 
     // sun row: next sun event (sunrise before dawn, sunset during the day) and the path marker
@@ -262,12 +269,12 @@ class TypeFaceView extends WatchUi.WatchFace {
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(2);
         // sun icon: half dome on a horizon line
-        var ix = SUN_BOX_X + 14;
-        var iy = SUN_BOX_Y + 20;
+        var ix = SUN_BOX_X + 10;
+        var iy = SUN_BOX_Y + 12;
         dc.drawArc(ix, iy, 8, Graphics.ARC_COUNTER_CLOCKWISE, 0, 180);
         dc.drawLine(ix - 10, iy + 1, ix + 10, iy + 1);
         dc.setPenWidth(1);
-        dc.drawText(SUN_BOX_X + 28, SUN_BOX_Y - 1, fText, sunStr, Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(SUN_BOX_X + 24, SUN_BOX_Y - 2, fText, sunStr, Graphics.TEXT_JUSTIFY_LEFT);
     }
 
     function drawBolt(dc as Dc) as Void {
