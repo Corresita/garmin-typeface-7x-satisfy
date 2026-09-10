@@ -26,7 +26,7 @@ class TypeFaceView extends WatchUi.WatchFace {
     const DATE_X  = 48;
     const DATE_Y  = 56;
     const TIME_Y  = 67;
-    const TIME_X  = 26;
+    const TIME_X  = 22;
     const SAT_Y   = 106;         // bottom-aligned with the time
     const BAND_Y  = 214;         // dotted band top
     // hill line across the band; a marker dot slides along it from sunrise (x = MARK_X0)

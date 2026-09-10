@@ -12,7 +12,7 @@ import math
 CX = CY = 140
 BATT_Y, DATE_Y, TIME_Y, SAT_Y = 22, 56, 67, 106
 BATT_X, DATE_X = 133, 48
-LABEL_X, COL2_X, SAT_X, TIME_X = 34, 176, 178, 26
+LABEL_X, COL2_X, SAT_X, TIME_X = 34, 176, 178, 22
 ROW_Y = [125, 146, 167, 188]
 BAND_Y = 214
 SEG_COUNT, SEG_LEN, SEG_END, SEG_GAP, SEG_R_OUT, SEG_R_IN = 5, 12.0, 14.0, 3.5, 131, 126
@@ -23,11 +23,11 @@ BATT = 33
 TEXT_BASE = 5 + 11    # Courier Prime Regular 20 (rows)
 DATE_BASE = 5 + 11    # Courier Prime Regular 20
 BOLD_BASE = 4 + 13    # Courier Prime Bold 21, condensed 0.88 (battery, sun time)
-TIME_BASE = 13 + 42   # Public Sans 900, 56, condensed 0.82
+TIME_BASE = 13 + 42   # Public Sans 900, 56, condensed 0.84
 LABEL_BASE = 4 + 12   # Archivo 800, 18
 TEXT_SX = 1.0
 BOLD_SX = 11 / 13
-TIME_SX = 0.82
+TIME_SX = 0.84
 
 def pt(a, r):
     return CX + r * math.cos(math.radians(a)), CY - r * math.sin(math.radians(a))

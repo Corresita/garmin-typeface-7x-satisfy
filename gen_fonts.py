@@ -135,7 +135,7 @@ def build(name, specs, out_prefix, tabular=False):
     return line_h
 
 # Fonts measured from typeface-7x_figma.svg:
-#   time           Public Sans wght 900, 56 px, condensed 0.82, tabular digits
+#   time           Public Sans wght 900, 56 px, condensed 0.84, tabular digits
 #   label          Archivo wght 800, 18 px
 #   battery, sun time  Courier Prime Bold 21 px condensed 0.88
 #   rows, date         Courier Prime Regular 20 px
@@ -149,7 +149,7 @@ UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 public_sans = ImageFont.truetype("PublicSans.ttf", 56)
 public_sans.set_variation_by_axes([900])
-build("time",  [(public_sans, DIGITS + ":", 0.82, 0, False)], "time", tabular=True)
+build("time",  [(public_sans, DIGITS + ":", 0.84, 0, False)], "time", tabular=True)
 build("label", [(archivo(18, 800), UPPER + " ", 1.0, 0)], "label")
 build("bold",  [(ImageFont.truetype("CourierPrime-Bold.ttf", 21), DIGITS + ":-", 0.88, 2)], "bold")
 build("text",  [(ImageFont.truetype("CourierPrime-Regular.ttf", 20), UPPER + DIGITS + ".:%-+/ ", 1.0, 2)], "text")
