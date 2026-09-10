@@ -40,7 +40,8 @@ Two helper scripts (Python 3 + Pillow, `pip install Pillow`):
 - `gen_fonts.py` — regenerates the bitmap fonts (`resources/fonts/*.fnt` + PNG atlases)
   from the bundled `CourierPrime-Bold.ttf`. Size, horizontal condensing, and stroke weight
   are parameters in the last few lines. Swap in any monospace TTF.
-- `typeface-7x_figma.svg` — the Figma mockup the current layout is measured from.
+- `typeface-7x_figma.svg` / `typeface-7x_figma.png` — the Figma mockup the current layout is
+  measured from (the PNG uses Figma's fallback fonts, so `preview.png` is the accurate render).
 - `gen_svg.py` — exports `typeface-7x.svg`, an editable 280×280 vector version of the
   layout. Drag it into Figma / Sketch: every element is a named layer and the text stays
   editable. Install `CourierPrime-Bold.ttf` locally first so the font
