@@ -25,9 +25,9 @@ class TypeFaceView extends WatchUi.WatchFace {
     const BATT_X  = 133;         // battery digits
     const DATE_X  = 48;
     const DATE_Y  = 56;
-    const TIME_Y  = 76;
-    const TIME_X  = 28;
-    const SAT_Y   = 109;         // bottom-aligned with the time
+    const TIME_Y  = 74;
+    const TIME_X  = 23;
+    const SAT_Y   = 104;         // bottom-aligned with the time
     const BAND_Y  = 214;         // dotted band top
     // hill line across the band; a marker dot slides along it from sunrise (x = MARK_X0)
     // to sunset (x = MARK_X1)
