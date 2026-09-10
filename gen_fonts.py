@@ -6,7 +6,36 @@ import os
 OUT = "resources/fonts"
 os.makedirs(OUT, exist_ok=True)
 
-def raster_glyph(font, ch, condense, slash_w=0):
+def close_four(img, keep=0.4):
+    """Archivo's 4 has an open top: a thin white gap runs between the diagonal and the stem
+    all the way down to the crossbar. Fill the upper part of that gap so the 4 reads closed;
+    the lowest `keep` fraction of it stays open as the counter."""
+    px = img.load()
+    x0, y0, x1, y1 = img.getbbox()
+    rows = []
+    for y in range(y0, y1):
+        runs = []
+        x = x0
+        while x < x1:
+            if px[x, y]:
+                start = x
+                while x < x1 and px[x, y]:
+                    x += 1
+                runs.append((start, x))
+            else:
+                x += 1
+        if len(runs) == 2:
+            rows.append((y, runs[0][1], runs[1][0]))
+        elif rows:
+            break            # reached the crossbar
+    fill = int(round(len(rows) * (1 - keep)))
+    for y, a, b in rows[:fill]:
+        for x in range(a, b):
+            px[x, y] = 255
+    return img
+
+
+def raster_glyph(font, ch, condense, slash_w=0, closed_four=False):
     # render white on black, threshold, then condense horizontally
     a = font.getbbox(ch)
     if a is None:
@@ -21,6 +50,8 @@ def raster_glyph(font, ch, condense, slash_w=0):
         img = img.resize((max(1, int(W * condense)), H), Image.LANCZOS)
         adv = adv * condense
     img = img.point(lambda p: 255 if p > 110 else 0)
+    if ch == "4" and closed_four:
+        img = close_four(img)
     if ch == "0" and slash_w > 0:
         # slashed zero: diagonal through the counter, lower-left to upper-right
         x0, y0, x1, y1 = img.getbbox()
@@ -31,13 +62,16 @@ def raster_glyph(font, ch, condense, slash_w=0):
     return img, adv
 
 def build(name, specs, out_prefix):
-    """specs: list of (font, chars, condense, slash_zero_width). Shared metrics from first font."""
+    """specs: list of (font, chars, condense, slash_zero_width[, closed_four]).
+    Shared metrics from first font."""
     glyphs = []
     max_h = 0
-    for font, chars, condense, slash_w in specs:
+    for spec in specs:
+        font, chars, condense, slash_w = spec[:4]
+        closed_four = spec[4] if len(spec) > 4 else False
         asc, desc = font.getmetrics()
         for ch in chars:
-            img, adv = raster_glyph(font, ch, condense, slash_w)
+            img, adv = raster_glyph(font, ch, condense, slash_w, closed_four)
             if img is None:
                 continue
             bbox = img.getbbox()
@@ -103,7 +137,7 @@ def archivo(size, weight, width=100):
 DIGITS = "0123456789"
 UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-build("time",  [(archivo(59, 900, 82), DIGITS + ":", 1.0, 0)], "time")
+build("time",  [(archivo(59, 900, 82), DIGITS + ":", 1.0, 0, True)], "time")
 build("label", [(archivo(18, 800), UPPER + " ", 1.0, 0)], "label")
 build("bold",  [(ImageFont.truetype("CourierPrime-Bold.ttf", 21), DIGITS + ":-", 0.88, 2)], "bold")
 build("text",  [(ImageFont.truetype("CourierPrime-Regular.ttf", 20), UPPER + DIGITS + ".:%-+/ ", 1.0, 2)], "text")
