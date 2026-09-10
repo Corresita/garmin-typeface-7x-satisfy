@@ -1,7 +1,9 @@
 # TypeFace 7X
 
-A typewriter-style watch face for the Garmin Fenix 7X / 7X Pro (280×280 MIP display),
-inspired by the SATISFY × COROS APEX 4 exclusive watch faces.
+**A SATISFY-inspired typewriter watch face for Garmin.**
+
+Built for the Fenix 7X / 7X Pro (280×280 MIP display), studying the look of the
+SATISFY × COROS APEX 4 exclusive watch faces and recreating that feel on Garmin hardware.
 
 ![preview](preview.png)
 
