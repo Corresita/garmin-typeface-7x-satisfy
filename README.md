@@ -44,6 +44,10 @@ Two helper scripts (Python 3 + Pillow, `pip install Pillow`):
   project root. The generated bitmap fonts are already committed, so this is only needed
   if you change the glyph set or styling. Size, horizontal condensing, and stroke weight are parameters
   in the last few lines. Swap in any monospace TTF.
+- `gen_svg.py` — exports `typeface-7x.svg`, an editable 280×280 vector version of the
+  layout. Drag it into Figma / Sketch: every element is a named layer and the text stays
+  editable. Install `CourierPrime-Bold.ttf` and Noto Sans SC locally first so the fonts
+  match; the text is horizontally condensed to the same widths as the bitmap fonts.
 - `preview.py` — renders a pixel-exact 280×280 PNG of the face without building or
   flashing anything. Fastest way to iterate on layout; it mirrors the layout constants
   of the Monkey C source, so port your numbers back once you're happy.

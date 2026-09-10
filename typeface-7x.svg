@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280" viewBox="0 0 280 280">
+  <clipPath id="screen"><circle cx="140" cy="140" r="140"/></clipPath>
+  <g id="TypeFace 7X" clip-path="url(#screen)">
+  <circle id="background" cx="140" cy="140" r="140" fill="#fff"/>
+  <pattern id="dots" width="2" height="2" patternUnits="userSpaceOnUse"><rect width="1" height="1" fill="#000"/></pattern>
+  <rect id="halftone band" x="0" y="208" width="280" height="72" fill="url(#dots)"/>
+  <polygon id="hill fill" points="0,281 0,271.42 4,271.25 8,271.04 12,270.77 16,270.45 20,270.06 24,269.60 28,269.05 32,268.42 36,267.69 40,266.86 44,265.93 48,264.90 52,263.77 56,262.55 60,261.26 64,259.90 68,258.50 72,257.08 76,255.67 80,254.30 84,252.99 88,251.78 92,250.69 96,249.76 100,249.01 104,248.45 108,248.11 112,248.00 116,248.11 120,248.45 124,249.01 128,249.76 132,250.69 136,251.77 140,252.98 144,254.29 148,255.66 152,257.06 156,258.47 160,259.85 164,261.18 168,262.45 172,263.62 176,264.68 180,265.62 184,266.43 188,267.11 192,267.64 196,268.02 200,268.25 204,268.33 208,268.26 212,268.05 216,267.69 220,267.21 224,266.62 228,265.93 232,265.16 236,264.36 240,263.53 244,262.72 248,261.97 252,261.30 256,260.74 260,260.32 264,260.07 268,259.98 272,260.08 276,260.35 280,260.78 280,281" fill="#fff"/>
+  <polyline id="hill line" points="0,271.42 4,271.25 8,271.04 12,270.77 16,270.45 20,270.06 24,269.60 28,269.05 32,268.42 36,267.69 40,266.86 44,265.93 48,264.90 52,263.77 56,262.55 60,261.26 64,259.90 68,258.50 72,257.08 76,255.67 80,254.30 84,252.99 88,251.78 92,250.69 96,249.76 100,249.01 104,248.45 108,248.11 112,248.00 116,248.11 120,248.45 124,249.01 128,249.76 132,250.69 136,251.77 140,252.98 144,254.29 148,255.66 152,257.06 156,258.47 160,259.85 164,261.18 168,262.45 172,263.62 176,264.68 180,265.62 184,266.43 188,267.11 192,267.64 196,268.02 200,268.25 204,268.33 208,268.26 212,268.05 216,267.69 220,267.21 224,266.62 228,265.93 232,265.16 236,264.36 240,263.53 244,262.72 248,261.97 252,261.30 256,260.74 260,260.32 264,260.07 268,259.98 272,260.08 276,260.35 280,260.78" fill="none" stroke="#000" stroke-width="2"/>
+  <rect id="sun knockout" x="88" y="206" width="104" height="27" fill="#fff"/>
+  <path id="sun icon" d="M94,226 A8,8 0 0 1 110,226" fill="none" stroke="#000" stroke-width="2"/>
+  <line id="sun horizon" x1="92" y1="227" x2="112" y2="227" stroke="#000" stroke-width="2"/>
+  <text id="sun time" transform="translate(116,222) scale(0.8461538461538461,1)" font-family="Courier Prime" font-weight="700" font-size="21" text-anchor="start" fill="#000">18:13</text>
+  <path id="segment 1" d="M49.98,43.46 A132,132 0 0 1 76.01,24.55 L79.40,30.67 A125,125 0 0 0 54.75,48.58 Z" fill="#000" stroke="#000" stroke-width="1"/>
+  <path id="segment 2" d="M84.21,20.37 A132,132 0 0 1 114.81,10.43 L116.15,17.30 A125,125 0 0 0 87.17,26.71 Z" fill="none" stroke="#000" stroke-width="1"/>
+  <path id="segment 3" d="M123.91,8.98 A132,132 0 0 1 156.09,8.98 L155.23,15.93 A125,125 0 0 0 124.77,15.93 Z" fill="none" stroke="#000" stroke-width="1"/>
+  <path id="segment 4" d="M165.19,10.43 A132,132 0 0 1 195.79,20.37 L192.83,26.71 A125,125 0 0 0 163.85,17.30 Z" fill="none" stroke="#000" stroke-width="1"/>
+  <path id="segment 5" d="M203.99,24.55 A132,132 0 0 1 230.02,43.46 L225.25,48.58 A125,125 0 0 0 200.60,30.67 Z" fill="none" stroke="#000" stroke-width="1"/>
+  <line id="red tick 1" x1="232.89" y1="56.36" x2="238.10" y2="51.67" stroke="#e00" stroke-width="2"/>
+  <line id="red tick 2" x1="237.14" y1="61.33" x2="242.58" y2="56.93" stroke="#e00" stroke-width="2"/>
+  <line id="red tick 3" x1="241.13" y1="66.53" x2="246.79" y2="62.41" stroke="#e00" stroke-width="2"/>
+  <text id="battery" transform="translate(148,35) scale(0.8461538461538461,1)" font-family="Courier Prime" font-weight="700" font-size="21" text-anchor="start" fill="#000">33</text>
+  <polygon id="bolt" points="136,23 129,35 134,35 132,43 140,31 135,31" fill="#000"/>
+  <g id="date" transform="translate(40,59)"><text font-family="Noto Sans SC" font-weight="700" font-size="19" fill="#000">周一</text><text x="38" transform="scale(0.8462,1)" font-family="Courier Prime" font-weight="700" font-size="21" fill="#000">.07.09</text></g>
+  <text id="time" transform="translate(36,113) scale(0.6486486486486487,1)" font-family="Courier Prime" font-weight="700" font-size="62" text-anchor="start" fill="#000">10:19</text>
+  <text id="label" transform="translate(176,103) scale(0.8461538461538461,1)" font-family="Courier Prime" font-weight="700" font-size="21" text-anchor="start" fill="#000">SATISFY</text>
+  <text id="row 1 label" transform="translate(40,141) scale(0.8461538461538461,1)" font-family="Courier Prime" font-weight="700" font-size="21" text-anchor="start" fill="#000">RUN</text>
+  <text id="row 1 value" transform="translate(176,141) scale(0.8461538461538461,1)" font-family="Courier Prime" font-weight="700" font-size="21" text-anchor="start" fill="#000">0.2KM</text>
+  <text id="row 2 label" transform="translate(40,162) scale(0.8461538461538461,1)" font-family="Courier Prime" font-weight="700" font-size="21" text-anchor="start" fill="#000">HEART RATE</text>
+  <text id="row 2 value" transform="translate(176,162) scale(0.8461538461538461,1)" font-family="Courier Prime" font-weight="700" font-size="21" text-anchor="start" fill="#000">69BPM</text>
+  <text id="row 3 label" transform="translate(40,183) scale(0.8461538461538461,1)" font-family="Courier Prime" font-weight="700" font-size="21" text-anchor="start" fill="#000">RECOVERY</text>
+  <text id="row 3 value" transform="translate(176,183) scale(0.8461538461538461,1)" font-family="Courier Prime" font-weight="700" font-size="21" text-anchor="start" fill="#000">79%</text>
+  <text id="row 4 label" transform="translate(40,204) scale(0.8461538461538461,1)" font-family="Courier Prime" font-weight="700" font-size="21" text-anchor="start" fill="#000">KCAL</text>
+  <text id="row 4 value" transform="translate(176,204) scale(0.8461538461538461,1)" font-family="Courier Prime" font-weight="700" font-size="21" text-anchor="start" fill="#000">863</text>
+  </g>
+</svg>
