@@ -1,0 +1,95 @@
+#!/usr/bin/env python3
+"""Generate Garmin CIQ bitmap fonts (.fnt + .png) from TTFs, 1-bit, optionally condensed."""
+from PIL import Image, ImageDraw, ImageFont
+import os
+
+OUT = "resources/fonts"
+os.makedirs(OUT, exist_ok=True)
+
+def raster_glyph(font, ch, condense):
+    # render white on black, threshold, then condense horizontally
+    a = font.getbbox(ch)
+    if a is None:
+        return None, 0
+    adv = font.getlength(ch)
+    W = int(adv) + 8
+    H = int(font.size * 1.6) + 8
+    img = Image.new("L", (W, H), 0)
+    d = ImageDraw.Draw(img)
+    d.text((4, 4), ch, font=font, fill=255)
+    if condense != 1.0:
+        img = img.resize((max(1, int(W * condense)), H), Image.LANCZOS)
+        adv = adv * condense
+    img = img.point(lambda p: 255 if p > 110 else 0)
+    return img, adv
+
+def build(name, specs, out_prefix):
+    """specs: list of (font, chars, condense). Shared metrics from first font."""
+    glyphs = []
+    max_h = 0
+    for font, chars, condense in specs:
+        asc, desc = font.getmetrics()
+        for ch in chars:
+            img, adv = raster_glyph(font, ch, condense)
+            if img is None:
+                continue
+            bbox = img.getbbox()
+            if bbox is None:  # space
+                glyphs.append((ch, None, 0, 0, 0, 0, int(round(adv))))
+                continue
+            g = img.crop(bbox)
+            xoff = bbox[0] - int(4 * condense)
+            yoff = bbox[1] - 4
+            glyphs.append((ch, g, g.width, g.height, xoff, yoff, int(round(adv))))
+            max_h = max(max_h, bbox[3] - 4)
+    line_h = max_h + 6
+    base = line_h - 2
+    # row packing
+    atlas_w = 512
+    x, y, row_h = 1, 1, 0
+    placed = []
+    for ch, g, w, h, xo, yo, adv in glyphs:
+        if g is not None and x + w + 1 > atlas_w:
+            x = 1
+            y += row_h + 1
+            row_h = 0
+        placed.append((ch, g, x, y, w, h, xo, yo, adv))
+        if g is not None:
+            x += w + 1
+            row_h = max(row_h, h)
+    atlas_h = y + row_h + 1
+    atlas = Image.new("RGBA", (atlas_w, atlas_h), (0, 0, 0, 0))
+    for ch, g, gx, gy, w, h, xo, yo, adv in placed:
+        if g is None:
+            continue
+        rgba = Image.new("RGBA", g.size, (255, 255, 255, 255))
+        rgba.putalpha(g)
+        atlas.paste(rgba, (gx, gy))
+    png = f"{out_prefix}.png"
+    atlas.save(os.path.join(OUT, png))
+    lines = [
+        f'info face="{name}" size={line_h} bold=1 italic=0 charset="" unicode=1 stretchH=100 smooth=0 aa=0 padding=0,0,0,0 spacing=1,1 outline=0',
+        f'common lineHeight={line_h} base={base} scaleW={atlas_w} scaleH={atlas_h} pages=1 packed=0 alphaChnl=1 redChnl=0 greenChnl=0 blueChnl=0',
+        f'page id=0 file="{png}"',
+        f'chars count={len(placed)}',
+    ]
+    for ch, g, gx, gy, w, h, xo, yo, adv in placed:
+        lines.append(
+            f"char id={ord(ch)} x={gx} y={gy} width={w} height={h} "
+            f"xoffset={xo} yoffset={max(0, yo)} xadvance={adv} page=0 chnl=15"
+        )
+    with open(os.path.join(OUT, f"{out_prefix}.fnt"), "w") as f:
+        f.write("\n".join(lines) + "\n")
+    print(f"{out_prefix}: {len(placed)} glyphs, atlas {atlas_w}x{atlas_h}, lineH {line_h}")
+    return line_h
+
+bold60 = ImageFont.truetype("CourierPrime-Bold.ttf", 62)
+bold20 = ImageFont.truetype("CourierPrime-Bold.ttf", 21)
+cjk = ImageFont.truetype("NotoSansSC.ttf", 19)
+cjk.set_variation_by_axes([700])
+
+build("time", [(bold60, "0123456789:", 0.72)], "time")
+build("text", [
+    (bold20, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:%-+/ ", 0.88),
+    (cjk, "周一二三四五六日", 1.0),
+], "text")
