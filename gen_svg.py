@@ -10,7 +10,7 @@ match the device. Layout constants mirror TypeFaceView.mc / preview.py.
 import math
 
 CX = CY = 140
-BATT_Y, DATE_Y, TIME_Y, SAT_Y = 22, 56, 76, 104
+BATT_Y, DATE_Y, TIME_Y, SAT_Y = 22, 56, 76, 109
 BATT_X, DATE_X = 133, 48
 LABEL_X, COL2_X, SAT_X, TIME_X = 34, 176, 178, 28
 ROW_Y = [125, 146, 167, 188]
@@ -23,7 +23,7 @@ BATT = 33
 TEXT_BASE = 5 + 11    # Courier Prime Regular 20 (rows)
 DATE_BASE = 5 + 11    # Courier Prime Regular 20
 BOLD_BASE = 4 + 13    # Courier Prime Bold 21, condensed 0.88 (battery, sun time)
-TIME_BASE = 10 + 35   # Archivo 800, 49
+TIME_BASE = 10 + 39   # Archivo 900 wdth 90, 54
 LABEL_BASE = 4 + 12   # Archivo 800, 18
 TEXT_SX = 1.0
 BOLD_SX = 11 / 13
@@ -42,9 +42,10 @@ def seg_path(a1, a0, ro, ri):
     return (f"M{xo1:.2f},{yo1:.2f} A{ro},{ro} 0 0 1 {xo0:.2f},{yo0:.2f} "
             f"L{xi0:.2f},{yi0:.2f} A{ri},{ri} 0 0 0 {xi1:.2f},{yi1:.2f} Z")
 
-def text(id_, x, y, s, size, sx, family="Courier Prime", weight=400, anchor="start"):
+def text(id_, x, y, s, size, sx, family="Courier Prime", weight=400, anchor="start", stretch=None):
+    st = f' font-stretch="{stretch}"' if stretch else ""
     return (f'  <text id="{id_}" transform="translate({x},{y}) scale({sx},1)" '
-            f'font-family="{family}" font-weight="{weight}" font-size="{size}" '
+            f'font-family="{family}" font-weight="{weight}" font-size="{size}"{st} '
             f'text-anchor="{anchor}" fill="#000">{s}</text>')
 
 L = ['<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280" viewBox="0 0 280 280">',
@@ -95,7 +96,7 @@ L.append('  <polygon id="bolt" points="' + " ".join(f"{x},{y}" for x, y in BOLT)
 
 # date / time / label / rows
 L.append(text("date", DATE_X, DATE_Y + DATE_BASE, "MON.09.10", 20, 1.0))
-L.append(text("time", TIME_X, TIME_Y + TIME_BASE, "18:13", 49, TIME_SX, family="Archivo", weight=800))
+L.append(text("time", TIME_X, TIME_Y + TIME_BASE, "18:13", 54, TIME_SX, family="Archivo", weight=900, stretch="90%"))
 L.append(text("label", SAT_X, SAT_Y + LABEL_BASE, "SATISFY", 18, 1.0, family="Archivo", weight=800))
 for i, (k, v) in enumerate([("RUN", "0.2KM"), ("HEART RATE", "69BPM"), ("RECOVERY", "79%"), ("KCAL", "863")]):
     L.append(text(f"row {i+1} label", LABEL_X, ROW_Y[i] + TEXT_BASE, k, 20, TEXT_SX))
