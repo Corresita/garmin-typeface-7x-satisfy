@@ -35,7 +35,7 @@ def close_four(img, keep=0.4):
     return img
 
 
-def raster_glyph(font, ch, condense, slash_w=0, closed_four=False):
+def raster_glyph(font, ch, condense, slash_w=0, closed_four=False, threshold=110):
     # render white on black, threshold, then condense horizontally
     a = font.getbbox(ch)
     if a is None:
@@ -49,7 +49,7 @@ def raster_glyph(font, ch, condense, slash_w=0, closed_four=False):
     if condense != 1.0:
         img = img.resize((max(1, int(W * condense)), H), Image.LANCZOS)
         adv = adv * condense
-    img = img.point(lambda p: 255 if p > 110 else 0)
+    img = img.point(lambda p: 255 if p > threshold else 0)
     if ch == "4" and closed_four:
         img = close_four(img)
     if ch == "0" and slash_w > 0:
@@ -62,16 +62,18 @@ def raster_glyph(font, ch, condense, slash_w=0, closed_four=False):
     return img, adv
 
 def build(name, specs, out_prefix, tabular=False):
-    """specs: list of (font, chars, condense, slash_zero_width[, closed_four]).
+    """specs: list of (font, chars, condense, slash_zero_width[, closed_four[, threshold]]).
+    threshold: grey level above which a pixel is ink (lower = slightly heavier strokes).
     Shared metrics from first font."""
     glyphs = []
     max_h = 0
     for spec in specs:
         font, chars, condense, slash_w = spec[:4]
         closed_four = spec[4] if len(spec) > 4 else False
+        threshold = spec[5] if len(spec) > 5 else 110
         asc, desc = font.getmetrics()
         for ch in chars:
-            img, adv = raster_glyph(font, ch, condense, slash_w, closed_four)
+            img, adv = raster_glyph(font, ch, condense, slash_w, closed_four, threshold)
             if img is None:
                 continue
             bbox = img.getbbox()
@@ -149,7 +151,7 @@ UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 public_sans = ImageFont.truetype("PublicSans.ttf", 56)
 public_sans.set_variation_by_axes([900])
-build("time",  [(public_sans, DIGITS + ":", 0.84, 0, False)], "time", tabular=True)
+build("time",  [(public_sans, DIGITS + ":", 0.84, 0, False, 70)], "time", tabular=True)  # threshold 70: ~3% heavier
 build("label", [(archivo(18, 800), UPPER + " ", 1.0, 0)], "label")
 build("bold",  [(ImageFont.truetype("CourierPrime-Bold.ttf", 21), DIGITS + ":-", 0.88, 2)], "bold")
 build("text",  [(ImageFont.truetype("CourierPrime-Regular.ttf", 20), UPPER + DIGITS + ".:%-+/ ", 1.0, 2)], "text")
