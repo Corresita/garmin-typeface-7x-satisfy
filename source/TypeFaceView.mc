@@ -33,18 +33,23 @@ class TypeFaceView extends WatchUi.WatchFace {
     const SEG_R_OUT = 132;
     const SEG_R_IN  = 125;
 
-    var fTime;
-    var fText;
-    var bandBmp;
+    var ROW_Y as Array<Number> = [124, 145, 166, 187];
+    var RED_TICKS as Array<Float> = [42.0, 39.0, 36.0];
+    var WEEK_CN as Array<String> = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+    var LABELS as Array<String> = ["RUN", "HEART RATE", "RECOVERY", "KCAL"];
+
+    var fTime as WatchUi.FontResource;
+    var fText as WatchUi.FontResource;
+    var bandBmp as WatchUi.BitmapResource;
 
     function initialize() {
         WatchFace.initialize();
+        fTime = WatchUi.loadResource(Rez.Fonts.Time) as WatchUi.FontResource;
+        fText = WatchUi.loadResource(Rez.Fonts.Text) as WatchUi.FontResource;
+        bandBmp = WatchUi.loadResource(Rez.Drawables.Halftone) as WatchUi.BitmapResource;
     }
 
     function onLayout(dc as Dc) as Void {
-        fTime = WatchUi.loadResource(Rez.Fonts.Time);
-        fText = WatchUi.loadResource(Rez.Fonts.Text);
-        bandBmp = WatchUi.loadResource(Rez.Drawables.Halftone);
     }
 
     function onUpdate(dc as Dc) as Void {
@@ -53,10 +58,7 @@ class TypeFaceView extends WatchUi.WatchFace {
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
 
         // ---- weather (for sun times) ----
-        var cc = null;
-        if (Toybox has :Weather) {
-            cc = Weather.getCurrentConditions();
-        }
+        var cc = (Toybox has :Weather) ? Weather.getCurrentConditions() : null;
 
         // ---- bottom: dotted band, hill silhouette, sun time ----
         dc.drawBitmap(0, BAND_Y, bandBmp);
@@ -71,8 +73,8 @@ class TypeFaceView extends WatchUi.WatchFace {
 
         // ---- date ----
         var g = Gregorian.info(Time.now(), Time.FORMAT_SHORT);
-        var dateStr = WEEK_CN[g.day_of_week - 1] + "." +
-            g.month.format("%02d") + "." + g.day.format("%02d");
+        var dateStr = WEEK_CN[(g.day_of_week as Number) - 1] + "." +
+            (g.month as Number).format("%02d") + "." + (g.day as Number).format("%02d");
         dc.drawText(LABEL_X, DATE_Y, fText, dateStr, Graphics.TEXT_JUSTIFY_LEFT);
 
         // ---- time ----
@@ -91,8 +93,9 @@ class TypeFaceView extends WatchUi.WatchFace {
         var info = ActivityMonitor.getInfo();
 
         var runStr = "--";
-        if (info.distance != null) {
-            runStr = (info.distance / 100000.0).format("%.1f") + "KM";
+        var dist = info.distance;
+        if (dist != null) {
+            runStr = (dist / 100000.0).format("%.1f") + "KM";
         }
 
         var hrStr = "--";
@@ -108,8 +111,9 @@ class TypeFaceView extends WatchUi.WatchFace {
         }
 
         var kcalStr = "--";
-        if (info.calories != null) {
-            kcalStr = info.calories.format("%d");
+        var cal = info.calories;
+        if (cal != null) {
+            kcalStr = cal.format("%d");
         }
 
         var values = [runStr, hrStr, recStr, kcalStr];
@@ -124,8 +128,11 @@ class TypeFaceView extends WatchUi.WatchFace {
     // live HR if a sensor is running, otherwise the newest history sample
     function currentHeartRate() as Number? {
         var ai = Activity.getActivityInfo();
-        if (ai != null && ai.currentHeartRate != null) {
-            return ai.currentHeartRate;
+        if (ai != null) {
+            var live = ai.currentHeartRate;
+            if (live != null) {
+                return live;
+            }
         }
         var it = ActivityMonitor.getHeartRateHistory(1, true);
         var s = it.next();
@@ -141,8 +148,11 @@ class TypeFaceView extends WatchUi.WatchFace {
             var it = Toybox.SensorHistory.getBodyBatteryHistory(
                 {:period => 1, :order => SensorHistory.ORDER_NEWEST_FIRST});
             var s = it.next();
-            if (s != null && s.data != null) {
-                return s.data.toNumber();
+            if (s != null) {
+                var v = s.data;
+                if (v != null) {
+                    return v.toNumber();
+                }
             }
         }
         return null;
@@ -191,13 +201,13 @@ class TypeFaceView extends WatchUi.WatchFace {
 
     // white hill silhouette knocked out of the dot band
     function drawHill(dc as Dc) as Void {
-        var pts = new [73];
-        pts[0] = [0, 281];
+        var pts = [] as Array<[Numeric, Numeric]>;
+        pts.add([0, 281]);
         for (var i = 0; i < 71; i++) {
             var x = i * 4;
-            pts[i + 1] = [x, hillY(x)];
+            pts.add([x, hillY(x)]);
         }
-        pts[72] = [280, 281];
+        pts.add([280, 281]);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(pts);
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
@@ -217,12 +227,11 @@ class TypeFaceView extends WatchUi.WatchFace {
     }
 
     // next sun event: sunrise before dawn, sunset during the day
-    function drawSun(dc as Dc, cc) as Void {
+    function drawSun(dc as Dc, cc as Weather.CurrentConditions?) as Void {
         var sunStr = "--:--";
-        if (cc != null && cc.observationLocationPosition != null
-            && (Weather has :getSunrise) && (Weather has :getSunset)) {
+        var pos = (cc != null) ? cc.observationLocationPosition : null;
+        if (pos != null && (Weather has :getSunrise) && (Weather has :getSunset)) {
             var now = Time.now();
-            var pos = cc.observationLocationPosition;
             var ev = Weather.getSunrise(pos, now);
             if (ev != null && ev.lessThan(now)) {
                 var ss = Weather.getSunset(pos, now);
