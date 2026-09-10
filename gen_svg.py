@@ -23,7 +23,7 @@ BATT = 33
 TEXT_BASE = 5 + 11    # Courier Prime Regular 20 (rows)
 DATE_BASE = 5 + 11    # Courier Prime Regular 20
 BOLD_BASE = 4 + 13    # Courier Prime Bold 21, condensed 0.88 (battery, sun time)
-TIME_BASE = 11 + 42   # Archivo 900 wdth 82, 59
+TIME_BASE = 11 + 42   # Archivo 900 wdth 79, 59
 LABEL_BASE = 4 + 12   # Archivo 800, 18
 TEXT_SX = 1.0
 BOLD_SX = 11 / 13
@@ -96,7 +96,7 @@ L.append('  <polygon id="bolt" points="' + " ".join(f"{x},{y}" for x, y in BOLT)
 
 # date / time / label / rows
 L.append(text("date", DATE_X, DATE_Y + DATE_BASE, "MON.09.10", 20, 1.0))
-L.append(text("time", TIME_X, TIME_Y + TIME_BASE, "18:13", 59, TIME_SX, family="Archivo", weight=900, stretch="82%"))
+L.append(text("time", TIME_X, TIME_Y + TIME_BASE, "18:13", 59, TIME_SX, family="Archivo", weight=900, stretch="79%"))
 L.append(text("label", SAT_X, SAT_Y + LABEL_BASE, "SATISFY", 18, 1.0, family="Archivo", weight=800))
 for i, (k, v) in enumerate([("RUN", "0.2KM"), ("HEART RATE", "69BPM"), ("RECOVERY", "79%"), ("KCAL", "863")]):
     L.append(text(f"row {i+1} label", LABEL_X, ROW_Y[i] + TEXT_BASE, k, 20, TEXT_SX))
