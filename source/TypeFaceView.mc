@@ -2,16 +2,18 @@ import Toybox.Graphics;
 import Toybox.Lang;
 import Toybox.System;
 import Toybox.WatchUi;
+import Toybox.Activity;
 import Toybox.ActivityMonitor;
 import Toybox.Time;
 import Toybox.Time.Gregorian;
 import Toybox.Math;
 using Toybox.Weather;
+using Toybox.SensorHistory;
 
 class TypeFaceView extends WatchUi.WatchFace {
 
     // ---- layout constants (280x280) ----
-    const LABEL   = "TYPEFACE";  // change to whatever you like
+    const LABEL   = "SATISFY";   // right-column label
     const CX      = 140;
     const CY      = 140;
     const LABEL_X = 40;          // left column (labels / date / time)
@@ -21,11 +23,24 @@ class TypeFaceView extends WatchUi.WatchFace {
     const TIME_Y  = 62;
     const SAT_Y   = 86;
     const BAND_Y  = 208;         // dotted band top
+    const DASH_R  = 128;         // radius of the top scale
+    const SHOW_RED_TICKS = true; // three red ticks at the right end of the scale
 
     var ROW_Y = [124, 145, 166, 187];
     var WEEK_CN = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
-    // irregular top dashes: [startDeg, lenDeg], a couple doubled
-    var DASHES = [[48, 5], [60, 14], [80, 9], [95, 16], [117, 11], [132, 6]];
+    var LABELS = ["RUN", "HEART RATE", "RECOVERY", "KCAL"];
+
+    // top scale, left to right: [startDeg, lenDeg, penWidth]
+    // (Garmin arc degrees: 90 = 12 o'clock, counter-clockwise positive)
+    var DASHES = [
+        [136.0, 5.0, 4],                                   // short heavy dash, left end
+        [120.5, 3.0, 2], [116.0, 3.0, 2], [111.5, 3.0, 2], // three tiny dashes
+        [93.0, 15.0, 4],                                   // long dash
+        [86.0, 4.0, 3], [81.0, 3.5, 3],                    // two short dashes
+        [62.0, 16.0, 4],                                   // long dash
+        [53.0, 4.0, 3], [48.0, 3.0, 3],                    // two short dashes
+    ];
+    var RED_TICKS = [39.0, 41.5, 44.0];
 
     var fTime;
     var fText;
@@ -46,28 +61,19 @@ class TypeFaceView extends WatchUi.WatchFace {
         dc.clear();
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
 
-        // ---- weather ----
+        // ---- weather (for sun times) ----
         var cc = null;
         if (Toybox has :Weather) {
             cc = Weather.getCurrentConditions();
         }
 
-        // ---- bottom: dotted band, hill silhouette, sunrise ----
+        // ---- bottom: dotted band, hill silhouette, sun time ----
         dc.drawBitmap(0, BAND_Y, bandBmp);
         drawHill(dc);
-        drawSunrise(dc, cc);
+        drawSun(dc, cc);
 
-        // ---- top irregular dashes ----
-        dc.setPenWidth(3);
-        for (var i = 0; i < DASHES.size(); i++) {
-            var a0 = DASHES[i][0];
-            var ln = DASHES[i][1];
-            dc.drawArc(CX, CY, 132, Graphics.ARC_COUNTER_CLOCKWISE, a0, a0 + ln);
-            if (i == 1 || i == 3) {
-                dc.drawArc(CX, CY, 126, Graphics.ARC_COUNTER_CLOCKWISE, a0 + 2, a0 + ln - 2);
-            }
-        }
-        dc.setPenWidth(1);
+        // ---- top scale ----
+        drawScale(dc);
 
         // ---- battery ----
         var batt = System.getSystemStats().battery;
@@ -93,39 +99,89 @@ class TypeFaceView extends WatchUi.WatchFace {
         dc.drawText(COL2_X, SAT_Y, fText, LABEL, Graphics.TEXT_JUSTIFY_LEFT);
 
         // ---- data rows ----
-        var tempStr = "--";
-        var rainStr = "--";
-        var humStr = "--";
-        if (cc != null) {
-            if (cc.temperature != null) {
-                var t = cc.temperature;
-                var unit = "°C";
-                if (System.getDeviceSettings().temperatureUnits == System.UNIT_STATUTE) {
-                    t = t * 9.0 / 5.0 + 32;
-                    unit = "°F";
-                }
-                tempStr = t.format("%d") + unit;
-            }
-            if (cc.precipitationChance != null) {
-                rainStr = cc.precipitationChance.format("%d") + "%";
-            }
-            if (cc.relativeHumidity != null) {
-                humStr = cc.relativeHumidity.format("%d") + "%";
-            }
-        }
-
-        var actStr = "--";
         var info = ActivityMonitor.getInfo();
-        if (info.activeMinutesDay != null) {
-            actStr = info.activeMinutesDay.total.format("%d") + "MIN";
+
+        var runStr = "--";
+        if (info.distance != null) {
+            runStr = (info.distance / 100000.0).format("%.1f") + "KM";
         }
 
-        var labels = ["TEMPERATURE", "RAIN CHANCE", "HUMIDITY", "ACTIVE"];
-        var values = [tempStr, rainStr, humStr, actStr];
+        var hrStr = "--";
+        var hr = currentHeartRate();
+        if (hr != null) {
+            hrStr = hr.format("%d") + "BPM";
+        }
+
+        var recStr = "--";
+        var bb = bodyBattery();
+        if (bb != null) {
+            recStr = bb.format("%d") + "%";
+        }
+
+        var kcalStr = "--";
+        if (info.calories != null) {
+            kcalStr = info.calories.format("%d");
+        }
+
+        var values = [runStr, hrStr, recStr, kcalStr];
         for (var i = 0; i < 4; i++) {
-            dc.drawText(LABEL_X, ROW_Y[i], fText, labels[i], Graphics.TEXT_JUSTIFY_LEFT);
+            dc.drawText(LABEL_X, ROW_Y[i], fText, LABELS[i], Graphics.TEXT_JUSTIFY_LEFT);
             dc.drawText(COL2_X, ROW_Y[i], fText, values[i], Graphics.TEXT_JUSTIFY_LEFT);
         }
+    }
+
+    // ---- data helpers ----
+
+    // live HR if a sensor is running, otherwise the newest history sample
+    function currentHeartRate() as Number? {
+        var ai = Activity.getActivityInfo();
+        if (ai != null && ai.currentHeartRate != null) {
+            return ai.currentHeartRate;
+        }
+        var it = ActivityMonitor.getHeartRateHistory(1, true);
+        var s = it.next();
+        if (s != null && s.heartRate != ActivityMonitor.INVALID_HR_SAMPLE) {
+            return s.heartRate;
+        }
+        return null;
+    }
+
+    // Garmin's closest thing to COROS "recovery": Body Battery (0-100)
+    function bodyBattery() as Number? {
+        if ((Toybox has :SensorHistory) && (Toybox.SensorHistory has :getBodyBatteryHistory)) {
+            var it = Toybox.SensorHistory.getBodyBatteryHistory(
+                {:period => 1, :order => SensorHistory.ORDER_NEWEST_FIRST});
+            var s = it.next();
+            if (s != null && s.data != null) {
+                return s.data.toNumber();
+            }
+        }
+        return null;
+    }
+
+    // ---- drawing helpers ----
+
+    function drawScale(dc as Dc) as Void {
+        for (var i = 0; i < DASHES.size(); i++) {
+            var a0 = DASHES[i][0];
+            var ln = DASHES[i][1];
+            dc.setPenWidth(DASHES[i][2].toNumber());
+            dc.drawArc(CX, CY, DASH_R, Graphics.ARC_COUNTER_CLOCKWISE, a0, a0 + ln);
+        }
+        if (SHOW_RED_TICKS) {
+            dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
+            dc.setPenWidth(2);
+            for (var i = 0; i < RED_TICKS.size(); i++) {
+                var rad = Math.toRadians(RED_TICKS[i]);
+                var c = Math.cos(rad);
+                var s = Math.sin(rad);
+                var r0 = DASH_R - 4;
+                var r1 = DASH_R + 4;
+                dc.drawLine(CX + r0 * c, CY - r0 * s, CX + r1 * c, CY - r1 * s);
+            }
+            dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
+        }
+        dc.setPenWidth(1);
     }
 
     // white hill silhouette knocked out of the dot band
@@ -155,14 +211,21 @@ class TypeFaceView extends WatchUi.WatchFace {
         return y.toNumber();
     }
 
-    function drawSunrise(dc as Dc, cc) as Void {
-        var srStr = "--:--";
+    // next sun event: sunrise before dawn, sunset during the day
+    function drawSun(dc as Dc, cc) as Void {
+        var sunStr = "--:--";
         if (cc != null && cc.observationLocationPosition != null
-            && (Weather has :getSunrise)) {
-            var sr = Weather.getSunrise(cc.observationLocationPosition, Time.now());
-            if (sr != null) {
-                var gi = Gregorian.info(sr, Time.FORMAT_SHORT);
-                srStr = gi.hour.format("%02d") + ":" + gi.min.format("%02d");
+            && (Weather has :getSunrise) && (Weather has :getSunset)) {
+            var now = Time.now();
+            var pos = cc.observationLocationPosition;
+            var ev = Weather.getSunrise(pos, now);
+            if (ev != null && ev.lessThan(now)) {
+                var ss = Weather.getSunset(pos, now);
+                if (ss != null) { ev = ss; }
+            }
+            if (ev != null) {
+                var gi = Gregorian.info(ev, Time.FORMAT_SHORT);
+                sunStr = gi.hour.format("%02d") + ":" + gi.min.format("%02d");
             }
         }
         var scy = BAND_Y + 12;
@@ -170,11 +233,11 @@ class TypeFaceView extends WatchUi.WatchFace {
         dc.fillRectangle(CX - 52, scy - 14, 104, 27);
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(2);
-        // rising-sun icon: half circle + horizon line
+        // sun icon: half circle + horizon line
         dc.drawArc(CX - 38, scy + 6, 8, Graphics.ARC_COUNTER_CLOCKWISE, 0, 180);
         dc.drawLine(CX - 48, scy + 7, CX - 28, scy + 7);
         dc.setPenWidth(1);
-        dc.drawText(CX - 24, scy - 15, fText, srStr, Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(CX - 24, scy - 15, fText, sunStr, Graphics.TEXT_JUSTIFY_LEFT);
     }
 
     function drawBolt(dc as Dc, x as Number, y as Number) as Void {

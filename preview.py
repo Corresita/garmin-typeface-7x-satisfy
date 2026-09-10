@@ -70,16 +70,25 @@ scx, scy = 140, BAND_Y + 12
 d.rectangle([scx - 52, scy - 14, scx + 52, scy + 12], fill=(255, 255, 255, 255))
 d.arc([scx - 46, scy - 6, scx - 30, scy + 8], 180, 360, fill=(0, 0, 0, 255), width=2)
 d.line([scx - 48, scy + 7, scx - 28, scy + 7], fill=(0, 0, 0, 255), width=2)
-draw_text(img, ftext, scx - 24, scy - 15, "05:35")
+draw_text(img, ftext, scx - 24, scy - 15, "18:13")
 
-# top dashes: irregular lengths, two doubled
-dashes = [(48, 5), (60, 14), (80, 9), (95, 16), (117, 11), (132, 6)]
-for i, (a0, ln) in enumerate(dashes):
-    d.arc([CX - 132, CY - 132, CX + 132, CY + 132], 180 + a0, 180 + a0 + ln,
-          fill=(0, 0, 0, 255), width=3)
-    if i in (1, 3):
-        d.arc([CX - 126, CY - 126, CX + 126, CY + 126], 180 + a0 + 2, 180 + a0 + ln - 2,
-              fill=(0, 0, 0, 255), width=3)
+# top scale (mirrors DASHES in TypeFaceView.mc; Garmin deg -> PIL deg is 360-a)
+DASH_R = 128
+dashes = [
+    (136.0, 5.0, 4),
+    (120.5, 3.0, 2), (116.0, 3.0, 2), (111.5, 3.0, 2),
+    (93.0, 15.0, 4),
+    (86.0, 4.0, 3), (81.0, 3.5, 3),
+    (62.0, 16.0, 4),
+    (53.0, 4.0, 3), (48.0, 3.0, 3),
+]
+for a0, ln, pw in dashes:
+    d.arc([CX - DASH_R, CY - DASH_R, CX + DASH_R, CY + DASH_R],
+          360 - (a0 + ln), 360 - a0, fill=(0, 0, 0, 255), width=pw)
+for a in (39.0, 41.5, 44.0):  # red ticks, right end
+    c, sn = math.cos(math.radians(a)), math.sin(math.radians(a))
+    d.line([(CX + (DASH_R - 4) * c, CY - (DASH_R - 4) * sn),
+            (CX + (DASH_R + 4) * c, CY - (DASH_R + 4) * sn)], fill=(200, 0, 0, 255), width=2)
 
 # battery
 draw_text(img, ftext, CX + 8, BATT_Y, "33")
@@ -89,12 +98,12 @@ d.polygon([(bx, by - 12), (bx - 7, by + 2), (bx - 2, by + 2), (bx - 4, by + 12),
 
 # date, time, label
 draw_text(img, ftext, LABEL_X, DATE_Y, "周一.07.09")
-draw_text(img, ftime, LABEL_X - 4, TIME_Y, "21:42")
-draw_text(img, ftext, COL2_X, SAT_Y, "TYPEFACE")
+draw_text(img, ftime, LABEL_X - 4, TIME_Y, "10:19")
+draw_text(img, ftext, COL2_X, SAT_Y, "SATISFY")
 
 # rows
-for i, (s, v) in enumerate([("TEMPERATURE", "27°C"), ("RAIN CHANCE", "0%"),
-                            ("HUMIDITY", "84%"), ("ACTIVE", "0MIN")]):
+for i, (s, v) in enumerate([("RUN", "0.2KM"), ("HEART RATE", "69BPM"),
+                            ("RECOVERY", "79%"), ("KCAL", "863")]):
     draw_text(img, ftext, LABEL_X, ROW_Y[i], s)
     draw_text(img, ftext, COL2_X, ROW_Y[i], v)
 

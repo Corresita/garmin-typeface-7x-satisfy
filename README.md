@@ -10,10 +10,10 @@ SATISFY × COROS APEX 4 exclusive watch faces and recreating that feel on Garmin
 ## Features
 
 - Heavy condensed typewriter time display (Courier Prime, bitmap-rendered for crisp 1-bit MIP output)
-- Environment data rows: temperature, rain chance, humidity (Garmin Weather API) and daily active minutes
+- Data rows, SATISFY style: RUN (today's distance), HEART RATE, RECOVERY (Body Battery), KCAL
 - Chinese weekday date (周一.07.09 style), battery with bolt icon
-- Distressed dashed scale along the top arc
-- Dot-grid halftone band with hill silhouette and sunrise time at the bottom
+- Distressed dashed scale along the top arc, with three red ticks at the right end
+- Dot-grid halftone band with hill silhouette and next sun event (sunrise / sunset) at the bottom
 
 ## Build & install
 
@@ -21,7 +21,7 @@ SATISFY × COROS APEX 4 exclusive watch faces and recreating that feel on Garmin
 2. Run `Monkey C: Install SDK` (installs the Connect IQ SDK and device files) and
    `Monkey C: Generate a Developer Key` (first time only)
 3. Open this folder, press **F5** and pick `fenix7xpro` to run in the simulator
-   - Weather rows show `--` until you feed data via *Simulation → Weather*
+   - The sun time shows `--:--` until you feed data via *Simulation → Weather*
 4. `Monkey C: Build for Device` → copy the generated `.prg` to `GARMIN/Apps/`
    on the watch in USB mass-storage mode
 
@@ -31,7 +31,8 @@ Other resolutions need the layout constants adjusted.
 ## Customization
 
 All layout lives in `source/TypeFaceView.mc` as constants at the top of the class
-(coordinates, row positions, the `LABEL` text in the right column).
+(coordinates, row positions, the `LABEL` text in the right column, the `DASHES` list
+for the top scale).
 
 Two helper scripts (Python 3 + Pillow, `pip install Pillow`):
 
@@ -48,9 +49,12 @@ Two helper scripts (Python 3 + Pillow, `pip install Pillow`):
 
 ## Data notes
 
-- Weather rows require the watch to have synced weather via the phone; otherwise `--`
-- RECOVERY-style metrics (training load, recovery time) are not exposed to
-  third-party watch faces by Garmin, which is why this face sticks to weather + activity
+- RUN is today's total distance from the activity monitor; HEART RATE is the live
+  sensor value if available, otherwise the newest history sample
+- RECOVERY shows Garmin Body Battery (0-100). COROS-style recovery / training load
+  numbers are not exposed to third-party watch faces by Garmin, so this is the closest match
+- The sun row needs weather synced from the phone; otherwise `--:--`
+- The red ticks on the top scale can be turned off with `SHOW_RED_TICKS` in the view
 
 ## License
 
