@@ -357,19 +357,19 @@ class TypeFaceView extends WatchUi.WatchFace {
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(2);
         // sun icon: half dome on a horizon line
-        var ix = SUN_BOX_X + 10;
+        var ix = SUN_BOX_X + 12;   // icon + time centred in the box (2 px margin each side)
         var iy = SUN_BOX_Y + 15;
         dc.drawArc(ix, iy, 8, Graphics.ARC_COUNTER_CLOCKWISE, 0, 180);
         dc.drawLine(ix - 10, iy + 1, ix + 10, iy + 1);
         // three short rays; the diagonals are two 1 px lines side by side (a clean 2 px stair)
-        dc.drawLine(ix, iy - 13, ix, iy - 10);
+        dc.drawLine(ix, iy - 14, ix, iy - 10);
         dc.setPenWidth(1);
-        dc.drawLine(ix - 10, iy - 12, ix - 7, iy - 9);
-        dc.drawLine(ix - 9, iy - 12, ix - 6, iy - 9);
-        dc.drawLine(ix + 10, iy - 12, ix + 7, iy - 9);
-        dc.drawLine(ix + 9, iy - 12, ix + 6, iy - 9);
+        dc.drawLine(ix - 9, iy - 11, ix - 7, iy - 9);
+        dc.drawLine(ix - 8, iy - 11, ix - 6, iy - 9);
+        dc.drawLine(ix + 9, iy - 11, ix + 7, iy - 9);
+        dc.drawLine(ix + 8, iy - 11, ix + 6, iy - 9);
         dc.setPenWidth(1);
-        dc.drawText(SUN_BOX_X + 24, SUN_BOX_Y + 1, fBold, sunStr, Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(SUN_BOX_X + 26, SUN_BOX_Y + 1, fBold, sunStr, Graphics.TEXT_JUSTIFY_LEFT);
     }
 
     function drawBolt(dc as Dc) as Void {
