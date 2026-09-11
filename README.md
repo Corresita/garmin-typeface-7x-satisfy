@@ -14,7 +14,7 @@ SATISFY × COROS APEX 4 exclusive watch faces and recreating that feel on Garmin
 - Weekday date (THU.09.10 style), battery with bolt icon
 - Segmented battery bar along the top arc (5 hollow segments, filled from the left, 20% each)
 - Dot-grid halftone band with a hill line (a marker slides along it from sunrise to sunset)
-  and the next sun event time at the bottom
+  and the next sun event time at the bottom; the sun icon has rays before sunrise, none before sunset
 
 ## Build & install
 

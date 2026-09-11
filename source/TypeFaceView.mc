@@ -299,6 +299,7 @@ class TypeFaceView extends WatchUi.WatchFace {
     // sun row: next sun event (sunrise before dawn, sunset during the day) and the path marker
     function drawSun(dc as Dc, cc as Weather.CurrentConditions?) as Void {
         var sunStr = "--:--";
+        var isRise = true;   // rays are drawn for a sunrise, not for a sunset
         var now = Time.now();
         var g = Gregorian.info(now, Time.FORMAT_SHORT);
         // fallback marker position from the clock: 06:00 = left end, 18:00 = right end
@@ -324,6 +325,7 @@ class TypeFaceView extends WatchUi.WatchFace {
                 frac = 0.0;
             } else if (nowS < setS) {
                 evS = setS;
+                isRise = false;
                 frac = (setS > riseS) ? (nowS - riseS).toFloat() / (setS - riseS) : 0.5;
             } else {
                 frac = 1.0;
@@ -338,6 +340,7 @@ class TypeFaceView extends WatchUi.WatchFace {
                     frac = 0.0;
                 } else if (now.lessThan(set)) {
                     ev = set;
+                    isRise = false;
                     var day = set.subtract(rise).value().toFloat();
                     frac = (day > 0) ? now.subtract(rise).value().toFloat() / day : 0.5;
                 } else {
@@ -361,13 +364,15 @@ class TypeFaceView extends WatchUi.WatchFace {
         var iy = SUN_BOX_Y + 15;
         dc.drawArc(ix, iy, 8, Graphics.ARC_COUNTER_CLOCKWISE, 0, 180);
         dc.drawLine(ix - 10, iy + 1, ix + 10, iy + 1);
-        // three short rays; the diagonals are two 1 px lines side by side (a clean 2 px stair)
-        dc.drawLine(ix, iy - 13, ix, iy - 10);
-        dc.setPenWidth(1);
-        dc.drawLine(ix - 9, iy - 11, ix - 7, iy - 9);
-        dc.drawLine(ix - 8, iy - 11, ix - 6, iy - 9);
-        dc.drawLine(ix + 9, iy - 11, ix + 7, iy - 9);
-        dc.drawLine(ix + 8, iy - 11, ix + 6, iy - 9);
+        if (isRise) {
+            // three short rays; the diagonals are two 1 px lines side by side (a clean 2 px stair)
+            dc.drawLine(ix, iy - 13, ix, iy - 10);
+            dc.setPenWidth(1);
+            dc.drawLine(ix - 9, iy - 11, ix - 7, iy - 9);
+            dc.drawLine(ix - 8, iy - 11, ix - 6, iy - 9);
+            dc.drawLine(ix + 9, iy - 11, ix + 7, iy - 9);
+            dc.drawLine(ix + 8, iy - 11, ix + 6, iy - 9);
+        }
         dc.setPenWidth(1);
         dc.drawText(SUN_BOX_X + 26, SUN_BOX_Y + 1, fBold, sunStr, Graphics.TEXT_JUSTIFY_LEFT);
     }
