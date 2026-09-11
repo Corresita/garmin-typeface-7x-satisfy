@@ -361,10 +361,12 @@ class TypeFaceView extends WatchUi.WatchFace {
         var iy = SUN_BOX_Y + 15;
         dc.drawArc(ix, iy, 8, Graphics.ARC_COUNTER_CLOCKWISE, 0, 180);
         dc.drawLine(ix - 10, iy + 1, ix + 10, iy + 1);
-        // three rays
-        dc.drawLine(ix - 8, iy - 10, ix - 6, iy - 8);
-        dc.drawLine(ix, iy - 12, ix, iy - 9);
-        dc.drawLine(ix + 8, iy - 10, ix + 6, iy - 8);
+        // three rays (diagonals drawn twice, 1 px apart, so they read as 2 px thick)
+        dc.drawLine(ix - 10, iy - 12, ix - 7, iy - 9);
+        dc.drawLine(ix - 9, iy - 12, ix - 6, iy - 9);
+        dc.drawLine(ix, iy - 14, ix, iy - 10);
+        dc.drawLine(ix + 10, iy - 12, ix + 7, iy - 9);
+        dc.drawLine(ix + 9, iy - 12, ix + 6, iy - 9);
         dc.setPenWidth(1);
         dc.drawText(SUN_BOX_X + 24, SUN_BOX_Y + 1, fBold, sunStr, Graphics.TEXT_JUSTIFY_LEFT);
     }
