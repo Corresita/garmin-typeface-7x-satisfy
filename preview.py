@@ -61,7 +61,7 @@ COL2_X  = 176
 SAT_X   = 178
 SAT_Y   = 106
 ROW_Y   = [125, 146, 167, 188]
-LABEL_X = 34
+LABEL_X = 24
 BAND_Y  = 214
 
 # band + hill line with sun marker

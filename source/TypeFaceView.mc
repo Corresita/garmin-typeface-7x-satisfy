@@ -18,7 +18,7 @@ class TypeFaceView extends WatchUi.WatchFace {
     const LABEL   = "SATISFY";   // right-column label
     const CX      = 140;
     const CY      = 140;
-    const LABEL_X = 34;          // left column (data rows)
+    const LABEL_X = 24;          // left column (data rows)
     const COL2_X  = 176;         // right value column
     const SAT_X   = 178;         // right label
     const BATT_Y  = 22;

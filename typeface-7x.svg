@@ -23,13 +23,13 @@
   <text id="date" transform="translate(48,72) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">MON.09.10</text>
   <text id="time" transform="translate(22,122) scale(0.89,1)" font-family="Public Sans" font-weight="900" font-size="56" text-anchor="start" fill="#000">18:13</text>
   <text id="label" transform="translate(178,122) scale(1.0,1)" font-family="Archivo" font-weight="800" font-size="18" text-anchor="start" fill="#000">SATISFY</text>
-  <text id="row 1 label" transform="translate(34,141) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">RUN</text>
+  <text id="row 1 label" transform="translate(24,141) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">RUN</text>
   <text id="row 1 value" transform="translate(176,141) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">0.2KM</text>
-  <text id="row 2 label" transform="translate(34,162) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">HEART RATE</text>
+  <text id="row 2 label" transform="translate(24,162) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">HEART RATE</text>
   <text id="row 2 value" transform="translate(176,162) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">69BPM</text>
-  <text id="row 3 label" transform="translate(34,183) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">RECOVERY</text>
+  <text id="row 3 label" transform="translate(24,183) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">RECOVERY</text>
   <text id="row 3 value" transform="translate(176,183) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">79%</text>
-  <text id="row 4 label" transform="translate(34,204) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">KCAL</text>
+  <text id="row 4 label" transform="translate(24,204) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">KCAL</text>
   <text id="row 4 value" transform="translate(176,204) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">863</text>
   </g>
 </svg>
