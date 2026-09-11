@@ -68,12 +68,14 @@ mx = MARK_X0 + FRAC * (MARK_X1 - MARK_X0)
 L.append(f'  <circle id="sun marker" cx="{mx:.1f}" cy="{hill(mx):.2f}" r="3" fill="#fff" stroke="#000" stroke-width="2"/>')
 
 # sun row knockout + icon + time
-bx, by, bw, bh = 91, 222, 83, 19
+bx, by, bw, bh = 91, 219, 83, 22
 L.append(f'  <rect id="sun knockout" x="{bx}" y="{by}" width="{bw}" height="{bh}" fill="#fff"/>')
-ix, iy = bx + 10, by + 12
+ix, iy = bx + 10, by + 15
 L.append(f'  <path id="sun icon" d="M{ix-8},{iy} A8,8 0 0 1 {ix+8},{iy}" fill="none" stroke="#000" stroke-width="2"/>')
 L.append(f'  <line id="sun horizon" x1="{ix-10}" y1="{iy+1}" x2="{ix+10}" y2="{iy+1}" stroke="#000" stroke-width="2"/>')
-L.append(text("sun time", bx + 24, by - 2 + BOLD_BASE, "18:13", 21, BOLD_SX, weight=700))
+for n, (x0, y0, x1, y1) in enumerate(((ix - 8, iy - 10, ix - 6, iy - 8), (ix, iy - 12, ix, iy - 9), (ix + 8, iy - 10, ix + 6, iy - 8))):
+    L.append(f'  <line id="sun ray {n+1}" x1="{x0}" y1="{y0}" x2="{x1}" y2="{y1}" stroke="#000" stroke-width="2"/>')
+L.append(text("sun time", bx + 24, by + 1 + BOLD_BASE, "18:13", 21, BOLD_SX, weight=700))
 
 # top segmented bar
 filled = min(SEG_COUNT, BATT // 20)

@@ -35,9 +35,9 @@ class TypeFaceView extends WatchUi.WatchFace {
     const MARK_X0 = 60;
     const MARK_X1 = 200;
     const SUN_BOX_X = 91;        // white box behind the sun time
-    const SUN_BOX_Y = 222;
+    const SUN_BOX_Y = 219;
     const SUN_BOX_W = 83;
-    const SUN_BOX_H = 19;
+    const SUN_BOX_H = 22;
     const SHOW_RED_TICKS = false; // three red ticks at the right end of the scale
 
     // top scale: a row of hollow segments along the arc, filled from the left
@@ -358,11 +358,15 @@ class TypeFaceView extends WatchUi.WatchFace {
         dc.setPenWidth(2);
         // sun icon: half dome on a horizon line
         var ix = SUN_BOX_X + 10;
-        var iy = SUN_BOX_Y + 12;
+        var iy = SUN_BOX_Y + 15;
         dc.drawArc(ix, iy, 8, Graphics.ARC_COUNTER_CLOCKWISE, 0, 180);
         dc.drawLine(ix - 10, iy + 1, ix + 10, iy + 1);
+        // three rays
+        dc.drawLine(ix - 8, iy - 10, ix - 6, iy - 8);
+        dc.drawLine(ix, iy - 12, ix, iy - 9);
+        dc.drawLine(ix + 8, iy - 10, ix + 6, iy - 8);
         dc.setPenWidth(1);
-        dc.drawText(SUN_BOX_X + 24, SUN_BOX_Y - 2, fBold, sunStr, Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(SUN_BOX_X + 24, SUN_BOX_Y + 1, fBold, sunStr, Graphics.TEXT_JUSTIFY_LEFT);
     }
 
     function drawBolt(dc as Dc) as Void {

@@ -75,12 +75,14 @@ mx = MARK_X0 + FRAC * (MARK_X1 - MARK_X0); my = hill(mx)
 d.ellipse([mx - 3, my - 3, mx + 3, my + 3], fill=(255, 255, 255, 255), outline=(0, 0, 0, 255), width=2)
 
 # sun time box + icon + text
-bx, by, bw, bh = 91, 222, 83, 19
+bx, by, bw, bh = 91, 219, 83, 22
 d.rectangle([bx, by, bx + bw - 1, by + bh - 1], fill=(255, 255, 255, 255))
-ix, iy = bx + 10, by + 12
+ix, iy = bx + 10, by + 15
 d.arc([ix - 8, iy - 8, ix + 8, iy + 8], 180, 360, fill=(0, 0, 0, 255), width=2)
 d.line([ix - 10, iy + 1, ix + 10, iy + 1], fill=(0, 0, 0, 255), width=2)
-draw_text(img, fbold, bx + 24, by - 2, "18:13")
+for (x0, y0, x1, y1) in ((ix - 8, iy - 10, ix - 6, iy - 8), (ix, iy - 12, ix, iy - 9), (ix + 8, iy - 10, ix + 6, iy - 8)):
+    d.line([x0, y0, x1, y1], fill=(0, 0, 0, 255), width=2)
+draw_text(img, fbold, bx + 24, by + 1, "18:13")
 
 # top scale: hollow segments filled from the left by battery (mirrors drawScale in TypeFaceView.mc)
 SEG_COUNT, SEG_LEN, SEG_END, SEG_GAP, SEG_R_OUT, SEG_R_IN = 5, 12.0, 14.0, 3.5, 131, 126
