@@ -80,9 +80,10 @@ d.rectangle([bx, by, bx + bw - 1, by + bh - 1], fill=(255, 255, 255, 255))
 ix, iy = bx + 10, by + 15
 d.arc([ix - 8, iy - 8, ix + 8, iy + 8], 180, 360, fill=(0, 0, 0, 255), width=2)
 d.line([ix - 10, iy + 1, ix + 10, iy + 1], fill=(0, 0, 0, 255), width=2)
-for (x0, y0, x1, y1) in ((ix - 10, iy - 12, ix - 7, iy - 9), (ix - 9, iy - 12, ix - 6, iy - 9), (ix, iy - 14, ix, iy - 10),
+d.line([ix, iy - 13, ix, iy - 10], fill=(0, 0, 0, 255), width=2)
+for (x0, y0, x1, y1) in ((ix - 10, iy - 12, ix - 7, iy - 9), (ix - 9, iy - 12, ix - 6, iy - 9),
                          (ix + 10, iy - 12, ix + 7, iy - 9), (ix + 9, iy - 12, ix + 6, iy - 9)):
-    d.line([x0, y0, x1, y1], fill=(0, 0, 0, 255), width=2)
+    d.line([x0, y0, x1, y1], fill=(0, 0, 0, 255), width=1)
 draw_text(img, fbold, bx + 24, by + 1, "18:13")
 
 # top scale: hollow segments filled from the left by battery (mirrors drawScale in TypeFaceView.mc)

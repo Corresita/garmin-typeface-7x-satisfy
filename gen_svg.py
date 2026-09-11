@@ -73,7 +73,7 @@ L.append(f'  <rect id="sun knockout" x="{bx}" y="{by}" width="{bw}" height="{bh}
 ix, iy = bx + 10, by + 15
 L.append(f'  <path id="sun icon" d="M{ix-8},{iy} A8,8 0 0 1 {ix+8},{iy}" fill="none" stroke="#000" stroke-width="2"/>')
 L.append(f'  <line id="sun horizon" x1="{ix-10}" y1="{iy+1}" x2="{ix+10}" y2="{iy+1}" stroke="#000" stroke-width="2"/>')
-for n, (x0, y0, x1, y1) in enumerate(((ix - 9.5, iy - 12, ix - 6.5, iy - 9), (ix, iy - 14, ix, iy - 10), (ix + 9.5, iy - 12, ix + 6.5, iy - 9))):
+for n, (x0, y0, x1, y1) in enumerate(((ix - 9.5, iy - 12, ix - 6.5, iy - 9), (ix, iy - 13, ix, iy - 10), (ix + 9.5, iy - 12, ix + 6.5, iy - 9))):
     L.append(f'  <line id="sun ray {n+1}" x1="{x0}" y1="{y0}" x2="{x1}" y2="{y1}" stroke="#000" stroke-width="2"/>')
 L.append(text("sun time", bx + 24, by + 1 + BOLD_BASE, "18:13", 21, BOLD_SX, weight=700))
 
