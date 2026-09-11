@@ -362,7 +362,7 @@ class TypeFaceView extends WatchUi.WatchFace {
         dc.drawArc(ix, iy, 8, Graphics.ARC_COUNTER_CLOCKWISE, 0, 180);
         dc.drawLine(ix - 10, iy + 1, ix + 10, iy + 1);
         // three short rays; the diagonals are two 1 px lines side by side (a clean 2 px stair)
-        dc.drawLine(ix, iy - 14, ix, iy - 10);
+        dc.drawLine(ix, iy - 13, ix, iy - 10);
         dc.setPenWidth(1);
         dc.drawLine(ix - 9, iy - 11, ix - 7, iy - 9);
         dc.drawLine(ix - 8, iy - 11, ix - 6, iy - 9);

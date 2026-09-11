@@ -10,7 +10,7 @@
   <path id="sun icon" d="M95,234 A8,8 0 0 1 111,234" fill="none" stroke="#000" stroke-width="2"/>
   <line id="sun horizon" x1="93" y1="235" x2="113" y2="235" stroke="#000" stroke-width="2"/>
   <line id="sun ray 1" x1="94.5" y1="223" x2="96.5" y2="225" stroke="#000" stroke-width="2"/>
-  <line id="sun ray 2" x1="103" y1="220" x2="103" y2="224" stroke="#000" stroke-width="2"/>
+  <line id="sun ray 2" x1="103" y1="221" x2="103" y2="224" stroke="#000" stroke-width="2"/>
   <line id="sun ray 3" x1="111.5" y1="223" x2="109.5" y2="225" stroke="#000" stroke-width="2"/>
   <text id="sun time" transform="translate(117,237) scale(0.8461538461538461,1)" font-family="Courier Prime" font-weight="700" font-size="21" text-anchor="start" fill="#000">18:13</text>
   <path id="segment 1" d="M57.56,38.19 A131,131 0 0 1 84.64,21.27 L86.75,25.81 A126,126 0 0 0 60.71,42.08 Z" fill="#000" stroke="#000" stroke-width="1"/>
