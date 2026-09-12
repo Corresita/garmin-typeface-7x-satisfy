@@ -14,7 +14,7 @@ BATT_Y, DATE_Y, TIME_Y, SAT_Y = 21, 51, 61, 98
 BATT_X, DATE_X = 130, 35
 LABEL_X, COL2_X, SAT_X, TIME_X = 23, 191, 191, 20
 ROW_Y = [121, 140, 159, 178]
-BAND_Y = 201
+BAND_Y = 203
 SEG_COUNT, SEG_LEN, SEG_END, SEG_GAP, SEG_R_OUT, SEG_R_IN = 5, 13.7, 13.7, 2.0, 133, 130
 BATT = 33
 
@@ -56,7 +56,7 @@ L = ['<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280" viewBox="
 # halftone band (dot grid) + hill
 L.append('  <pattern id="dots" width="4" height="4" patternUnits="userSpaceOnUse">'
          '<rect width="2" height="2" fill="#000"/></pattern>')
-L.append(f'  <rect id="halftone band" x="0" y="{BAND_Y}" width="280" height="72" fill="url(#dots)"/>')
+L.append(f'  <rect id="halftone band" x="0" y="{BAND_Y}" width="280" height="80" fill="url(#dots)"/>')
 # hill line + sun marker
 MARK_X0, MARK_X1, FRAC = 70, 210, 0.75
 def hill(x):

@@ -8,9 +8,9 @@ DD = "resources/drawables"
 os.makedirs(DD, exist_ok=True)
 
 # dotted band: 2x2 dots on a 4 px grid (1 px dots on a 2 px grid read as flat grey on the MIP screen)
-band = Image.new("RGBA", (280, 72), (0, 0, 0, 0))
+band = Image.new("RGBA", (280, 80), (0, 0, 0, 0))
 px = band.load()
-for yy in range(72):
+for yy in range(80):
     for xx in range(280):
         if xx % 4 < 2 and yy % 4 < 2:
             px[xx, yy] = (0, 0, 0, 255)
@@ -62,7 +62,7 @@ SAT_X   = 191
 SAT_Y   = 98
 ROW_Y   = [121, 140, 159, 178]
 LABEL_X = 23
-BAND_Y  = 201
+BAND_Y  = 203
 
 # band + hill line with sun marker
 img.paste(band, (0, BAND_Y), band)

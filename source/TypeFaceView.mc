@@ -28,7 +28,7 @@ class TypeFaceView extends WatchUi.WatchFace {
     const TIME_Y  = 61;
     const TIME_X  = 20;
     const SAT_Y   = 98;
-    const BAND_Y  = 201;         // dotted band top
+    const BAND_Y  = 203;         // dotted band top
     // hill line across the band; a marker dot slides along it from sunrise (x = MARK_X0)
     // to sunset (x = MARK_X1)
     const MARK_X0 = 70;
