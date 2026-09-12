@@ -34,7 +34,7 @@ class TypeFaceView extends WatchUi.WatchFace {
     const MARK_X0 = 70;
     const MARK_X1 = 210;
     const SUN_BOX_X = 97;        // white box behind the sun time
-    const SUN_BOX_Y = 205;
+    const SUN_BOX_Y = 206;
     const SUN_BOX_W = 85;
     const SUN_BOX_H = 22;
     const SHOW_RED_TICKS = false; // three red ticks at the right end of the scale
@@ -290,7 +290,7 @@ class TypeFaceView extends WatchUi.WatchFace {
     function hillY(x as Number) as Number {
         var a = (x - 142) / 53.0;
         var b = (x - 298) / 43.0;
-        var y = 268.5 - 34.0 * Math.pow(2.718281828, -(a * a))
+        var y = 269.5 - 34.0 * Math.pow(2.718281828, -(a * a))
                       - 17.5 * Math.pow(2.718281828, -(b * b));
         return y.toNumber();
     }

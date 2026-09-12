@@ -60,14 +60,14 @@ L.append(f'  <rect id="halftone band" x="0" y="{BAND_Y}" width="280" height="80"
 # hill line + sun marker
 MARK_X0, MARK_X1, FRAC = 70, 210, 0.75
 def hill(x):
-    return 268.5 - 34 * math.exp(-((x - 142) / 53.0) ** 2) - 17.5 * math.exp(-((x - 298) / 43.0) ** 2)
+    return 269.5 - 34 * math.exp(-((x - 142) / 53.0) ** 2) - 17.5 * math.exp(-((x - 298) / 43.0) ** 2)
 pts = " ".join(f"{x},{hill(x):.2f}" for x in range(0, 281, 2))
 L.append(f'  <polyline id="hill line" points="{pts}" fill="none" stroke="#000" stroke-width="2"/>')
 mx = MARK_X0 + FRAC * (MARK_X1 - MARK_X0)
 L.append(f'  <circle id="sun marker" cx="{mx:.1f}" cy="{hill(mx):.2f}" r="3" fill="#fff" stroke="#000" stroke-width="2"/>')
 
 # sun row knockout + icon + time
-bx, by, bw, bh = 97, 205, 85, 22
+bx, by, bw, bh = 97, 206, 85, 22
 L.append(f'  <rect id="sun knockout" x="{bx}" y="{by}" width="{bw}" height="{bh}" fill="#fff"/>')
 ix, iy = bx + 13, by + 12
 L.append(f'  <path id="sun dome" d="M{ix-6},{iy} A6,6 0 0 1 {ix+6},{iy}" fill="none" stroke="#000" stroke-width="2"/>')

@@ -68,13 +68,13 @@ BAND_Y  = 203
 img.paste(band, (0, BAND_Y), band)
 MARK_X0, MARK_X1, FRAC = 70, 210, 0.75
 def hill(x):
-    return 268.5 - 34 * math.exp(-((x - 142) / 53.0) ** 2) - 17.5 * math.exp(-((x - 298) / 43.0) ** 2)
+    return 269.5 - 34 * math.exp(-((x - 142) / 53.0) ** 2) - 17.5 * math.exp(-((x - 298) / 43.0) ** 2)
 d.line([(x, hill(x)) for x in range(0, 281, 2)], fill=(0, 0, 0, 255), width=2)
 mx = MARK_X0 + FRAC * (MARK_X1 - MARK_X0); my = hill(mx)
 d.ellipse([mx - 3, my - 3, mx + 3, my + 3], fill=(255, 255, 255, 255), outline=(0, 0, 0, 255), width=2)
 
 # sun time box + icon + text
-bx, by, bw, bh = 97, 205, 85, 22
+bx, by, bw, bh = 97, 206, 85, 22
 d.rectangle([bx, by, bx + bw - 1, by + bh - 1], fill=(255, 255, 255, 255))
 ix, iy = bx + 13, by + 12
 K = (0, 0, 0, 255)
