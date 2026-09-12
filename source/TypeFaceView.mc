@@ -18,40 +18,39 @@ class TypeFaceView extends WatchUi.WatchFace {
     const LABEL   = "SATISFY";   // right-column label
     const CX      = 140;
     const CY      = 140;
-    const LABEL_X = 24;          // left column (data rows)
-    const COL2_X  = 176;         // right value column
-    const SAT_X   = 178;         // right label
-    const BATT_Y  = 22;
-    const BATT_X  = 133;         // battery digits
-    const DATE_X  = 48;
-    const DATE_Y  = 56;
-    const TIME_Y  = 67;
-    const TIME_X  = 22;
-    const SAT_Y   = 106;         // bottom-aligned with the time
-    const BAND_Y  = 214;         // dotted band top
+    const LABEL_X = 23;          // left column (data rows)
+    const COL2_X  = 191;         // right value column
+    const SAT_X   = 191;         // right label
+    const BATT_Y  = 21;
+    const BATT_X  = 130;         // battery digits
+    const DATE_X  = 35;
+    const DATE_Y  = 51;
+    const TIME_Y  = 61;
+    const TIME_X  = 20;
+    const SAT_Y   = 98;
+    const BAND_Y  = 201;         // dotted band top
     // hill line across the band; a marker dot slides along it from sunrise (x = MARK_X0)
     // to sunset (x = MARK_X1)
-    const HILL_DX = 19;          // hill shape shifted right, per the mockup
-    const MARK_X0 = 60;
-    const MARK_X1 = 200;
-    const SUN_BOX_X = 91;        // white box behind the sun time
-    const SUN_BOX_Y = 219;
-    const SUN_BOX_W = 83;
+    const MARK_X0 = 70;
+    const MARK_X1 = 210;
+    const SUN_BOX_X = 97;        // white box behind the sun time
+    const SUN_BOX_Y = 205;
+    const SUN_BOX_W = 85;
     const SUN_BOX_H = 22;
     const SHOW_RED_TICKS = false; // three red ticks at the right end of the scale
 
     // top scale: a row of hollow segments along the arc, filled from the left
     // by battery level (each segment = 20%)
     const SEG_COUNT = 5;
-    const SEG_LEN   = 12.0;      // degrees per inner segment (the two end segments are longer)
-    const SEG_END   = 14.0;
-    const SEG_GAP   = 3.5;       // degrees between segments
-    const SEG_R_OUT = 131;
-    const SEG_R_IN  = 126;
+    const SEG_LEN   = 13.7;      // degrees per segment
+    const SEG_END   = 13.7;
+    const SEG_GAP   = 2.0;       // degrees between segments
+    const SEG_R_OUT = 133;
+    const SEG_R_IN  = 130;
 
-    var ROW_Y as Array<Number> = [125, 146, 167, 188];
+    var ROW_Y as Array<Number> = [121, 140, 159, 178];
     // outlined lightning bolt, absolute coordinates from the mockup
-    var BOLT as Array<[Numeric, Numeric]> = [[128, 26], [124, 26], [122, 35], [126, 35], [124, 41], [130, 32], [126, 32]];
+    var BOLT as Array<[Numeric, Numeric]> = [[128, 26], [120, 26], [120, 32], [122, 32], [121, 39], [128, 31], [125, 31]];
     var RED_TICKS as Array<Float> = [42.0, 39.0, 36.0];
     var WEEK as Array<String> = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
     var LABELS as Array<String> = ["RUN", "HEART RATE", "RECOVERY", "KCAL"];
@@ -289,10 +288,10 @@ class TypeFaceView extends WatchUi.WatchFace {
     }
 
     function hillY(x as Number) as Number {
-        var a = (x - HILL_DX - 112) / 58.0;
-        var b = (x - HILL_DX - 268) / 46.0;
-        var y = 273.0 - 24.0 * Math.pow(2.718281828, -(a * a))
-                      - 12.0 * Math.pow(2.718281828, -(b * b));
+        var a = (x - 142) / 53.0;
+        var b = (x - 298) / 43.0;
+        var y = 268.5 - 34.0 * Math.pow(2.718281828, -(a * a))
+                      - 17.5 * Math.pow(2.718281828, -(b * b));
         return y.toNumber();
     }
 
@@ -359,22 +358,23 @@ class TypeFaceView extends WatchUi.WatchFace {
         dc.fillRectangle(SUN_BOX_X, SUN_BOX_Y, SUN_BOX_W, SUN_BOX_H);
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(2);
-        // sun icon: half dome on a horizon line
-        var ix = SUN_BOX_X + 12;   // icon + time centred in the box (2 px margin each side)
-        var iy = SUN_BOX_Y + 15;
-        dc.drawArc(ix, iy, 8, Graphics.ARC_COUNTER_CLOCKWISE, 0, 180);
-        dc.drawLine(ix - 10, iy + 1, ix + 10, iy + 1);
+        // sun icon: dome on the horizon, short ticks at its equator, a gapped horizon line
+        // below with the sun's underside showing through the gap; rays only for a sunrise
+        var ix = SUN_BOX_X + 13;
+        var iy = SUN_BOX_Y + 12;
+        dc.drawArc(ix, iy, 6, Graphics.ARC_COUNTER_CLOCKWISE, 0, 180);
+        dc.drawLine(ix - 9, iy, ix - 6, iy);
+        dc.drawLine(ix + 6, iy, ix + 9, iy);
+        dc.drawLine(ix - 8, iy + 3, ix - 3, iy + 3);
+        dc.drawLine(ix + 3, iy + 3, ix + 8, iy + 3);
+        dc.drawArc(ix, iy + 3, 3, Graphics.ARC_COUNTER_CLOCKWISE, 180, 360);
         if (isRise) {
-            // three short rays; the diagonals are two 1 px lines side by side (a clean 2 px stair)
-            dc.drawLine(ix, iy - 13, ix, iy - 10);
-            dc.setPenWidth(1);
-            dc.drawLine(ix - 9, iy - 11, ix - 7, iy - 9);
-            dc.drawLine(ix - 8, iy - 11, ix - 6, iy - 9);
-            dc.drawLine(ix + 9, iy - 11, ix + 7, iy - 9);
-            dc.drawLine(ix + 8, iy - 11, ix + 6, iy - 9);
+            dc.drawLine(ix - 6, iy - 7, ix - 4, iy - 5);
+            dc.drawLine(ix, iy - 10, ix, iy - 7);
+            dc.drawLine(ix + 6, iy - 8, ix + 5, iy - 5);
         }
         dc.setPenWidth(1);
-        dc.drawText(SUN_BOX_X + 26, SUN_BOX_Y + 1, fBold, sunStr, Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(SUN_BOX_X + 25, SUN_BOX_Y + 1, fBold, sunStr, Graphics.TEXT_JUSTIFY_LEFT);
     }
 
     function drawBolt(dc as Dc) as Void {

@@ -42,8 +42,8 @@ Two helper scripts (Python 3 + Pillow, `pip install Pillow`):
   from the bundled TTFs (`PublicSans.ttf`, `Archivo.ttf`, `CourierPrime-Regular.ttf`, `CourierPrime-Bold.ttf`).
   Sizes, weights, horizontal condensing and the slashed-zero stroke width are parameters in
   the last few lines. Time digits are made tabular (equal width) so the clock never shifts.
-- `typeface-7x_figma.svg` / `typeface-7x_figma.png` — the Figma mockup the current layout is
-  measured from (the PNG uses Figma's fallback fonts, so `preview.png` is the accurate render).
+- `typeface-7x_figma01.svg` — the Figma mockup the current layout is measured from
+  (`typeface-7x_figma.svg` / `.png` are the earlier iteration; `preview.png` is the accurate render).
 - `gen_svg.py` — exports `typeface-7x.svg`, an editable 280×280 vector version of the
   layout. Drag it into Figma / Sketch: every element is a named layer and the text stays
   editable. Install Archivo and Courier Prime locally first so the fonts

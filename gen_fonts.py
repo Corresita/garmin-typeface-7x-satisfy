@@ -142,7 +142,7 @@ def build(name, specs, out_prefix, tabular=False, tracking=0):
 
 # Fonts measured from typeface-7x_figma.svg:
 #   time           Public Sans wght 900, 56 px, condensed 0.89, tabular digits, tracking -2
-#   label          Archivo wght 800, 18 px
+#   label          Archivo wght 800, 16.5 px
 #   battery, sun time  Courier Prime Bold 21 px condensed 0.88
 #   rows, date         Courier Prime Regular 20 px
 def archivo(size, weight, width=100):
@@ -156,7 +156,7 @@ UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 public_sans = ImageFont.truetype("PublicSans.ttf", 56)
 public_sans.set_variation_by_axes([900])
 build("time",  [(public_sans, DIGITS + ":", 0.89, 0, False, 70)], "time", tabular=True, tracking=-2)  # threshold 70: ~3% heavier
-build("label", [(archivo(18, 800), UPPER + " ", 1.0, 0)], "label")
+build("label", [(archivo(16.5, 800), UPPER + " ", 1.0, 0)], "label")
 build("bold",  [(ImageFont.truetype("CourierPrime-Bold.ttf", 21), DIGITS + ":-", 0.88, 2)], "bold")
 build("text",  [(ImageFont.truetype("CourierPrime-Regular.ttf", 20), UPPER + DIGITS + ".:%-+/ ", 1.0, 2)], "text")
 build("date",  [(ImageFont.truetype("CourierPrime-Regular.ttf", 20), UPPER + DIGITS + ". ", 1.0, 2)], "date")

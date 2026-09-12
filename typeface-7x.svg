@@ -3,33 +3,37 @@
   <g id="TypeFace 7X" clip-path="url(#screen)">
   <circle id="background" cx="140" cy="140" r="140" fill="#fff"/>
   <pattern id="dots" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="2" height="2" fill="#000"/></pattern>
-  <rect id="halftone band" x="0" y="214" width="280" height="72" fill="url(#dots)"/>
-  <polyline id="hill line" points="0,272.85 2,272.83 4,272.80 6,272.77 8,272.73 10,272.69 12,272.64 14,272.59 16,272.53 18,272.46 20,272.38 22,272.30 24,272.20 26,272.09 28,271.98 30,271.84 32,271.70 34,271.54 36,271.36 38,271.17 40,270.95 42,270.72 44,270.47 46,270.20 48,269.90 50,269.59 52,269.25 54,268.88 56,268.49 58,268.08 60,267.64 62,267.17 64,266.68 66,266.16 68,265.62 70,265.06 72,264.47 74,263.86 76,263.23 78,262.59 80,261.92 82,261.24 84,260.55 86,259.85 88,259.15 90,258.44 92,257.73 94,257.02 96,256.33 98,255.64 100,254.96 102,254.31 104,253.68 106,253.07 108,252.49 110,251.95 112,251.44 114,250.98 116,250.55 118,250.18 120,249.85 122,249.57 124,249.35 126,249.18 128,249.06 130,249.01 132,249.01 134,249.06 136,249.18 138,249.35 140,249.57 142,249.85 144,250.18 146,250.55 148,250.97 150,251.44 152,251.95 154,252.49 156,253.07 158,253.67 160,254.30 162,254.96 164,255.63 166,256.31 168,257.01 170,257.71 172,258.42 174,259.12 176,259.82 178,260.51 180,261.19 182,261.86 184,262.51 186,263.14 188,263.75 190,264.33 192,264.89 194,265.42 196,265.93 198,266.40 200,266.84 202,267.24 204,267.61 206,267.95 208,268.25 210,268.52 212,268.75 214,268.94 216,269.09 218,269.21 220,269.28 222,269.32 224,269.33 226,269.29 228,269.22 230,269.11 232,268.97 234,268.79 236,268.58 238,268.34 240,268.07 242,267.78 244,267.45 246,267.11 248,266.74 250,266.36 252,265.96 254,265.56 256,265.15 258,264.74 260,264.33 262,263.92 264,263.53 266,263.15 268,262.79 270,262.46 272,262.15 274,261.87 276,261.62 278,261.41 280,261.24" fill="none" stroke="#000" stroke-width="2"/>
-  <circle id="sun marker" cx="165.0" cy="255.97" r="3" fill="#fff" stroke="#000" stroke-width="2"/>
-  <rect id="sun knockout" x="91" y="219" width="83" height="22" fill="#fff"/>
-  <path id="sun icon" d="M95,234 A8,8 0 0 1 111,234" fill="none" stroke="#000" stroke-width="2"/>
-  <line id="sun horizon" x1="93" y1="235" x2="113" y2="235" stroke="#000" stroke-width="2"/>
-  <line id="sun ray 1" x1="94.5" y1="223" x2="96.5" y2="225" stroke="#000" stroke-width="2"/>
-  <line id="sun ray 2" x1="103" y1="221" x2="103" y2="224" stroke="#000" stroke-width="2"/>
-  <line id="sun ray 3" x1="111.5" y1="223" x2="109.5" y2="225" stroke="#000" stroke-width="2"/>
-  <text id="sun time" transform="translate(117,237) scale(0.8461538461538461,1)" font-family="Courier Prime" font-weight="700" font-size="21" text-anchor="start" fill="#000">18:13</text>
-  <path id="segment 1" d="M57.56,38.19 A131,131 0 0 1 84.64,21.27 L86.75,25.81 A126,126 0 0 0 60.71,42.08 Z" fill="#000" stroke="#000" stroke-width="1"/>
-  <path id="segment 2" d="M91.99,18.12 A131,131 0 0 1 118.38,10.80 L119.20,15.73 A126,126 0 0 0 93.82,22.77 Z" fill="none" stroke="#000" stroke-width="1"/>
-  <path id="segment 3" d="M126.31,9.72 A131,131 0 0 1 153.69,9.72 L153.17,14.69 A126,126 0 0 0 126.83,14.69 Z" fill="none" stroke="#000" stroke-width="1"/>
-  <path id="segment 4" d="M161.62,10.80 A131,131 0 0 1 188.01,18.12 L186.18,22.77 A126,126 0 0 0 160.80,15.73 Z" fill="none" stroke="#000" stroke-width="1"/>
-  <path id="segment 5" d="M195.36,21.27 A131,131 0 0 1 222.44,38.19 L219.29,42.08 A126,126 0 0 0 193.25,25.81 Z" fill="none" stroke="#000" stroke-width="1"/>
-  <text id="battery" transform="translate(133,39) scale(0.8461538461538461,1)" font-family="Courier Prime" font-weight="700" font-size="21" text-anchor="start" fill="#000">33</text>
-  <polygon id="bolt" points="128,26 124,26 122,35 126,35 124,41 130,32 126,32" fill="none" stroke="#000" stroke-width="1"/>
-  <text id="date" transform="translate(48,72) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">MON.09.10</text>
-  <text id="time" transform="translate(22,122) scale(0.89,1)" font-family="Public Sans" font-weight="900" font-size="56" text-anchor="start" fill="#000">18:13</text>
-  <text id="label" transform="translate(178,122) scale(1.0,1)" font-family="Archivo" font-weight="800" font-size="18" text-anchor="start" fill="#000">SATISFY</text>
-  <text id="row 1 label" transform="translate(24,141) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">RUN</text>
-  <text id="row 1 value" transform="translate(176,141) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">0.2KM</text>
-  <text id="row 2 label" transform="translate(24,162) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">HEART RATE</text>
-  <text id="row 2 value" transform="translate(176,162) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">69BPM</text>
-  <text id="row 3 label" transform="translate(24,183) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">RECOVERY</text>
-  <text id="row 3 value" transform="translate(176,183) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">79%</text>
-  <text id="row 4 label" transform="translate(24,204) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">KCAL</text>
-  <text id="row 4 value" transform="translate(176,204) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">863</text>
+  <rect id="halftone band" x="0" y="201" width="280" height="72" fill="url(#dots)"/>
+  <polyline id="hill line" points="0,268.47 2,268.47 4,268.46 6,268.45 8,268.44 10,268.43 12,268.42 14,268.40 16,268.38 18,268.36 20,268.33 22,268.30 24,268.26 26,268.22 28,268.17 30,268.11 32,268.04 34,267.97 36,267.88 38,267.78 40,267.66 42,267.53 44,267.39 46,267.22 48,267.04 50,266.83 52,266.60 54,266.34 56,266.06 58,265.74 60,265.40 62,265.02 64,264.60 66,264.15 68,263.66 70,263.13 72,262.56 74,261.95 76,261.29 78,260.59 80,259.85 82,259.06 84,258.23 86,257.37 88,256.46 90,255.52 92,254.54 94,253.53 96,252.49 98,251.43 100,250.36 102,249.26 104,248.17 106,247.07 108,245.97 110,244.89 112,243.82 114,242.78 116,241.77 118,240.80 120,239.88 122,239.01 124,238.20 126,237.46 128,236.79 130,236.20 132,235.69 134,235.27 136,234.93 138,234.69 140,234.55 142,234.50 144,234.55 146,234.69 148,234.93 150,235.27 152,235.69 154,236.20 156,236.79 158,237.46 160,238.20 162,239.01 164,239.88 166,240.80 168,241.77 170,242.78 172,243.82 174,244.88 176,245.96 178,247.06 180,248.16 182,249.25 184,250.34 186,251.41 188,252.47 190,253.50 192,254.50 194,255.47 196,256.40 198,257.29 200,258.14 202,258.94 204,259.70 206,260.41 208,261.07 210,261.68 212,262.24 214,262.74 216,263.20 218,263.60 220,263.95 222,264.25 224,264.49 226,264.68 228,264.82 230,264.91 232,264.94 234,264.92 236,264.85 238,264.72 240,264.55 242,264.32 244,264.05 246,263.72 248,263.35 250,262.93 252,262.47 254,261.97 256,261.43 258,260.85 260,260.25 262,259.62 264,258.96 266,258.30 268,257.62 270,256.95 272,256.28 274,255.62 276,254.97 278,254.36 280,253.77" fill="none" stroke="#000" stroke-width="2"/>
+  <circle id="sun marker" cx="175.0" cy="245.42" r="3" fill="#fff" stroke="#000" stroke-width="2"/>
+  <rect id="sun knockout" x="97" y="205" width="85" height="22" fill="#fff"/>
+  <path id="sun dome" d="M104,217 A6,6 0 0 1 116,217" fill="none" stroke="#000" stroke-width="2"/>
+  <line id="sun tick l" x1="101" y1="217" x2="104" y2="217" stroke="#000" stroke-width="2"/>
+  <line id="sun tick r" x1="116" y1="217" x2="119" y2="217" stroke="#000" stroke-width="2"/>
+  <line id="sun horizon l" x1="102" y1="220" x2="107" y2="220" stroke="#000" stroke-width="2"/>
+  <line id="sun horizon r" x1="113" y1="220" x2="118" y2="220" stroke="#000" stroke-width="2"/>
+  <path id="sun underside" d="M107,220 A3,3 0 0 0 113,220" fill="none" stroke="#000" stroke-width="2"/>
+  <line id="sun ray 1 (sunrise only)" x1="104" y1="210" x2="106" y2="212" stroke="#000" stroke-width="2"/>
+  <line id="sun ray 2 (sunrise only)" x1="110" y1="207" x2="110" y2="210" stroke="#000" stroke-width="2"/>
+  <line id="sun ray 3 (sunrise only)" x1="116" y1="209" x2="115" y2="212" stroke="#000" stroke-width="2"/>
+  <text id="sun time" transform="translate(122,223) scale(0.8461538461538461,1)" font-family="Courier Prime" font-weight="700" font-size="21" text-anchor="start" fill="#000">18:13</text>
+  <path id="segment 1" d="M57.66,35.55 A133,133 0 0 1 84.74,19.02 L85.99,21.75 A130,130 0 0 0 59.52,37.91 Z" fill="#000" stroke="#000" stroke-width="1"/>
+  <path id="segment 2" d="M89.00,17.17 A133,133 0 0 1 119.54,8.58 L120.00,11.55 A130,130 0 0 0 90.15,19.94 Z" fill="none" stroke="#000" stroke-width="1"/>
+  <path id="segment 3" d="M124.14,7.95 A133,133 0 0 1 155.86,7.95 L155.51,10.93 A130,130 0 0 0 124.49,10.93 Z" fill="none" stroke="#000" stroke-width="1"/>
+  <path id="segment 4" d="M160.46,8.58 A133,133 0 0 1 191.00,17.17 L189.85,19.94 A130,130 0 0 0 160.00,11.55 Z" fill="none" stroke="#000" stroke-width="1"/>
+  <path id="segment 5" d="M195.26,19.02 A133,133 0 0 1 222.34,35.55 L220.48,37.91 A130,130 0 0 0 194.01,21.75 Z" fill="none" stroke="#000" stroke-width="1"/>
+  <text id="battery" transform="translate(130,38) scale(0.8461538461538461,1)" font-family="Courier Prime" font-weight="700" font-size="21" text-anchor="start" fill="#000">33</text>
+  <polygon id="bolt" points="128,26 120,26 120,32 122,32 121,39 128,31 125,31" fill="none" stroke="#000" stroke-width="1"/>
+  <text id="date" transform="translate(35,67) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">MON.09.10</text>
+  <text id="time" transform="translate(20,116) scale(0.89,1)" font-family="Public Sans" font-weight="900" font-size="56" text-anchor="start" fill="#000">18:13</text>
+  <text id="label" transform="translate(191,113) scale(1.0,1)" font-family="Archivo" font-weight="800" font-size="16.5" text-anchor="start" fill="#000">SATISFY</text>
+  <text id="row 1 label" transform="translate(23,137) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">RUN</text>
+  <text id="row 1 value" transform="translate(191,137) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">0.2KM</text>
+  <text id="row 2 label" transform="translate(23,156) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">HEART RATE</text>
+  <text id="row 2 value" transform="translate(191,156) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">69BPM</text>
+  <text id="row 3 label" transform="translate(23,175) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">RECOVERY</text>
+  <text id="row 3 value" transform="translate(191,175) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">79%</text>
+  <text id="row 4 label" transform="translate(23,194) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">KCAL</text>
+  <text id="row 4 value" transform="translate(191,194) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">863</text>
   </g>
 </svg>

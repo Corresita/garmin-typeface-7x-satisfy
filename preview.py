@@ -51,45 +51,46 @@ img = Image.new("RGBA", (W, H), (255, 255, 255, 255))
 d = ImageDraw.Draw(img)
 
 # ---- v2 layout constants ----
-BATT_Y  = 22
-BATT_X  = 133
-DATE_X  = 48
-DATE_Y  = 56
-TIME_Y  = 67
-TIME_X  = 22
-COL2_X  = 176
-SAT_X   = 178
-SAT_Y   = 106
-ROW_Y   = [125, 146, 167, 188]
-LABEL_X = 24
-BAND_Y  = 214
+BATT_Y  = 21
+BATT_X  = 130
+DATE_X  = 35
+DATE_Y  = 51
+TIME_Y  = 61
+TIME_X  = 20
+COL2_X  = 191
+SAT_X   = 191
+SAT_Y   = 98
+ROW_Y   = [121, 140, 159, 178]
+LABEL_X = 23
+BAND_Y  = 201
 
 # band + hill line with sun marker
 img.paste(band, (0, BAND_Y), band)
-HILL_DX, MARK_X0, MARK_X1, FRAC = 19, 60, 200, 0.75
+MARK_X0, MARK_X1, FRAC = 70, 210, 0.75
 def hill(x):
-    x -= HILL_DX
-    return 273 - 24 * math.exp(-((x - 112) / 58.0) ** 2) - 12 * math.exp(-((x - 268) / 46.0) ** 2)
+    return 268.5 - 34 * math.exp(-((x - 142) / 53.0) ** 2) - 17.5 * math.exp(-((x - 298) / 43.0) ** 2)
 d.line([(x, hill(x)) for x in range(0, 281, 2)], fill=(0, 0, 0, 255), width=2)
 mx = MARK_X0 + FRAC * (MARK_X1 - MARK_X0); my = hill(mx)
 d.ellipse([mx - 3, my - 3, mx + 3, my + 3], fill=(255, 255, 255, 255), outline=(0, 0, 0, 255), width=2)
 
 # sun time box + icon + text
-bx, by, bw, bh = 91, 219, 83, 22
+bx, by, bw, bh = 97, 205, 85, 22
 d.rectangle([bx, by, bx + bw - 1, by + bh - 1], fill=(255, 255, 255, 255))
-ix, iy = bx + 12, by + 15
-d.arc([ix - 8, iy - 8, ix + 8, iy + 8], 180, 360, fill=(0, 0, 0, 255), width=2)
-d.line([ix - 10, iy + 1, ix + 10, iy + 1], fill=(0, 0, 0, 255), width=2)
+ix, iy = bx + 13, by + 12
+K = (0, 0, 0, 255)
+d.arc([ix - 6, iy - 6, ix + 6, iy + 6], 180, 360, fill=K, width=2)          # dome
+d.line([ix - 9, iy, ix - 6, iy], fill=K, width=2); d.line([ix + 6, iy, ix + 9, iy], fill=K, width=2)
+d.line([ix - 8, iy + 3, ix - 3, iy + 3], fill=K, width=2); d.line([ix + 3, iy + 3, ix + 8, iy + 3], fill=K, width=2)
+d.arc([ix - 3, iy, ix + 3, iy + 6], 0, 180, fill=K, width=2)                # underside through the gap
 SUNRISE = False   # rays only for a sunrise; the sample time 18:13 is a sunset
 if SUNRISE:
-    d.line([ix, iy - 13, ix, iy - 10], fill=(0, 0, 0, 255), width=2)
-    for (x0, y0, x1, y1) in ((ix - 9, iy - 11, ix - 7, iy - 9), (ix - 8, iy - 11, ix - 6, iy - 9),
-                             (ix + 9, iy - 11, ix + 7, iy - 9), (ix + 8, iy - 11, ix + 6, iy - 9)):
-        d.line([x0, y0, x1, y1], fill=(0, 0, 0, 255), width=1)
-draw_text(img, fbold, bx + 26, by + 1, "18:13")
+    d.line([ix - 6, iy - 7, ix - 4, iy - 5], fill=K, width=2)
+    d.line([ix, iy - 10, ix, iy - 7], fill=K, width=2)
+    d.line([ix + 6, iy - 8, ix + 5, iy - 5], fill=K, width=2)
+draw_text(img, fbold, bx + 25, by + 1, "18:13")
 
 # top scale: hollow segments filled from the left by battery (mirrors drawScale in TypeFaceView.mc)
-SEG_COUNT, SEG_LEN, SEG_END, SEG_GAP, SEG_R_OUT, SEG_R_IN = 5, 12.0, 14.0, 3.5, 131, 126
+SEG_COUNT, SEG_LEN, SEG_END, SEG_GAP, SEG_R_OUT, SEG_R_IN = 5, 13.7, 13.7, 2.0, 133, 130
 BATT = 33
 def bbox(r):
     return [CX - r, CY - r, CX + r, CY + r]
@@ -116,7 +117,7 @@ for i in range(SEG_COUNT):
 
 # battery: digits + outlined bolt
 draw_text(img, fbold, BATT_X, BATT_Y, "33")
-BOLT = [(128, 26), (124, 26), (122, 35), (126, 35), (124, 41), (130, 32), (126, 32)]
+BOLT = [(128, 26), (120, 26), (120, 32), (122, 32), (121, 39), (128, 31), (125, 31)]
 d.line(BOLT + [BOLT[0]], fill=(0, 0, 0, 255), width=1)
 
 # date, time, label

@@ -10,12 +10,12 @@ match the device. Layout constants mirror TypeFaceView.mc / preview.py.
 import math
 
 CX = CY = 140
-BATT_Y, DATE_Y, TIME_Y, SAT_Y = 22, 56, 67, 106
-BATT_X, DATE_X = 133, 48
-LABEL_X, COL2_X, SAT_X, TIME_X = 24, 176, 178, 22
-ROW_Y = [125, 146, 167, 188]
-BAND_Y = 214
-SEG_COUNT, SEG_LEN, SEG_END, SEG_GAP, SEG_R_OUT, SEG_R_IN = 5, 12.0, 14.0, 3.5, 131, 126
+BATT_Y, DATE_Y, TIME_Y, SAT_Y = 21, 51, 61, 98
+BATT_X, DATE_X = 130, 35
+LABEL_X, COL2_X, SAT_X, TIME_X = 23, 191, 191, 20
+ROW_Y = [121, 140, 159, 178]
+BAND_Y = 201
+SEG_COUNT, SEG_LEN, SEG_END, SEG_GAP, SEG_R_OUT, SEG_R_IN = 5, 13.7, 13.7, 2.0, 133, 130
 BATT = 33
 
 # from the .fnt files: text glyphs sit at yoffset 4, cap height 13, xadvance 11 (TTF 13);
@@ -24,7 +24,7 @@ TEXT_BASE = 5 + 11    # Courier Prime Regular 20 (rows)
 DATE_BASE = 5 + 11    # Courier Prime Regular 20
 BOLD_BASE = 4 + 13    # Courier Prime Bold 21, condensed 0.88 (battery, sun time)
 TIME_BASE = 13 + 42   # Public Sans 900, 56, condensed 0.89
-LABEL_BASE = 4 + 12   # Archivo 800, 18
+LABEL_BASE = 3 + 12   # Archivo 800, 16.5
 TEXT_SX = 1.0
 BOLD_SX = 11 / 13
 TIME_SX = 0.89
@@ -58,24 +58,27 @@ L.append('  <pattern id="dots" width="4" height="4" patternUnits="userSpaceOnUse
          '<rect width="2" height="2" fill="#000"/></pattern>')
 L.append(f'  <rect id="halftone band" x="0" y="{BAND_Y}" width="280" height="72" fill="url(#dots)"/>')
 # hill line + sun marker
-HILL_DX, MARK_X0, MARK_X1, FRAC = 19, 60, 200, 0.75
+MARK_X0, MARK_X1, FRAC = 70, 210, 0.75
 def hill(x):
-    x -= HILL_DX
-    return 273 - 24 * math.exp(-((x - 112) / 58.0) ** 2) - 12 * math.exp(-((x - 268) / 46.0) ** 2)
+    return 268.5 - 34 * math.exp(-((x - 142) / 53.0) ** 2) - 17.5 * math.exp(-((x - 298) / 43.0) ** 2)
 pts = " ".join(f"{x},{hill(x):.2f}" for x in range(0, 281, 2))
 L.append(f'  <polyline id="hill line" points="{pts}" fill="none" stroke="#000" stroke-width="2"/>')
 mx = MARK_X0 + FRAC * (MARK_X1 - MARK_X0)
 L.append(f'  <circle id="sun marker" cx="{mx:.1f}" cy="{hill(mx):.2f}" r="3" fill="#fff" stroke="#000" stroke-width="2"/>')
 
 # sun row knockout + icon + time
-bx, by, bw, bh = 91, 219, 83, 22
+bx, by, bw, bh = 97, 205, 85, 22
 L.append(f'  <rect id="sun knockout" x="{bx}" y="{by}" width="{bw}" height="{bh}" fill="#fff"/>')
-ix, iy = bx + 12, by + 15
-L.append(f'  <path id="sun icon" d="M{ix-8},{iy} A8,8 0 0 1 {ix+8},{iy}" fill="none" stroke="#000" stroke-width="2"/>')
-L.append(f'  <line id="sun horizon" x1="{ix-10}" y1="{iy+1}" x2="{ix+10}" y2="{iy+1}" stroke="#000" stroke-width="2"/>')
-for n, (x0, y0, x1, y1) in enumerate(((ix - 8.5, iy - 11, ix - 6.5, iy - 9), (ix, iy - 13, ix, iy - 10), (ix + 8.5, iy - 11, ix + 6.5, iy - 9))):
-    L.append(f'  <line id="sun ray {n+1}" x1="{x0}" y1="{y0}" x2="{x1}" y2="{y1}" stroke="#000" stroke-width="2"/>')
-L.append(text("sun time", bx + 26, by + 1 + BOLD_BASE, "18:13", 21, BOLD_SX, weight=700))
+ix, iy = bx + 13, by + 12
+L.append(f'  <path id="sun dome" d="M{ix-6},{iy} A6,6 0 0 1 {ix+6},{iy}" fill="none" stroke="#000" stroke-width="2"/>')
+L.append(f'  <line id="sun tick l" x1="{ix-9}" y1="{iy}" x2="{ix-6}" y2="{iy}" stroke="#000" stroke-width="2"/>')
+L.append(f'  <line id="sun tick r" x1="{ix+6}" y1="{iy}" x2="{ix+9}" y2="{iy}" stroke="#000" stroke-width="2"/>')
+L.append(f'  <line id="sun horizon l" x1="{ix-8}" y1="{iy+3}" x2="{ix-3}" y2="{iy+3}" stroke="#000" stroke-width="2"/>')
+L.append(f'  <line id="sun horizon r" x1="{ix+3}" y1="{iy+3}" x2="{ix+8}" y2="{iy+3}" stroke="#000" stroke-width="2"/>')
+L.append(f'  <path id="sun underside" d="M{ix-3},{iy+3} A3,3 0 0 0 {ix+3},{iy+3}" fill="none" stroke="#000" stroke-width="2"/>')
+for n, (x0, y0, x1, y1) in enumerate(((ix - 6, iy - 7, ix - 4, iy - 5), (ix, iy - 10, ix, iy - 7), (ix + 6, iy - 8, ix + 5, iy - 5))):
+    L.append(f'  <line id="sun ray {n+1} (sunrise only)" x1="{x0}" y1="{y0}" x2="{x1}" y2="{y1}" stroke="#000" stroke-width="2"/>')
+L.append(text("sun time", bx + 25, by + 1 + BOLD_BASE, "18:13", 21, BOLD_SX, weight=700))
 
 # top segmented bar
 filled = min(SEG_COUNT, BATT // 20)
@@ -93,13 +96,13 @@ for i in range(SEG_COUNT):
 
 # battery: digits + outlined bolt
 L.append(text("battery", BATT_X, BATT_Y + BOLD_BASE, str(BATT), 21, BOLD_SX, weight=700))
-BOLT = [(128, 26), (124, 26), (122, 35), (126, 35), (124, 41), (130, 32), (126, 32)]
+BOLT = [(128, 26), (120, 26), (120, 32), (122, 32), (121, 39), (128, 31), (125, 31)]
 L.append('  <polygon id="bolt" points="' + " ".join(f"{x},{y}" for x, y in BOLT) + '" fill="none" stroke="#000" stroke-width="1"/>')
 
 # date / time / label / rows
 L.append(text("date", DATE_X, DATE_Y + DATE_BASE, "MON.09.10", 20, 1.0))
 L.append(text("time", TIME_X, TIME_Y + TIME_BASE, "18:13", 56, TIME_SX, family="Public Sans", weight=900))
-L.append(text("label", SAT_X, SAT_Y + LABEL_BASE, "SATISFY", 18, 1.0, family="Archivo", weight=800))
+L.append(text("label", SAT_X, SAT_Y + LABEL_BASE, "SATISFY", 16.5, 1.0, family="Archivo", weight=800))
 for i, (k, v) in enumerate([("RUN", "0.2KM"), ("HEART RATE", "69BPM"), ("RECOVERY", "79%"), ("KCAL", "863")]):
     L.append(text(f"row {i+1} label", LABEL_X, ROW_Y[i] + TEXT_BASE, k, 20, TEXT_SX))
     L.append(text(f"row {i+1} value", COL2_X, ROW_Y[i] + TEXT_BASE, v, 20, TEXT_SX))
