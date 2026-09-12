@@ -51,7 +51,7 @@ img = Image.new("RGBA", (W, H), (255, 255, 255, 255))
 d = ImageDraw.Draw(img)
 
 # ---- v2 layout constants ----
-BATT_Y  = 21
+BATT_Y  = 19
 BATT_X  = 130
 DATE_X  = 35
 DATE_Y  = 51
@@ -117,7 +117,7 @@ for i in range(SEG_COUNT):
 
 # battery: digits + outlined bolt
 draw_text(img, fbold, BATT_X, BATT_Y, "33")
-BOLT = [(128, 26), (120, 26), (120, 32), (122, 32), (121, 39), (128, 31), (125, 31)]
+BOLT = [(128, 24), (120, 24), (120, 30), (122, 30), (121, 37), (128, 29), (125, 29)]
 d.line(BOLT + [BOLT[0]], fill=(0, 0, 0, 255), width=1)
 
 # date, time, label

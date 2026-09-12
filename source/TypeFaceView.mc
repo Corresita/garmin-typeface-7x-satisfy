@@ -21,7 +21,7 @@ class TypeFaceView extends WatchUi.WatchFace {
     const LABEL_X = 23;          // left column (data rows)
     const COL2_X  = 191;         // right value column
     const SAT_X   = 191;         // right label
-    const BATT_Y  = 21;
+    const BATT_Y  = 19;
     const BATT_X  = 130;         // battery digits
     const DATE_X  = 35;
     const DATE_Y  = 51;
@@ -50,7 +50,7 @@ class TypeFaceView extends WatchUi.WatchFace {
 
     var ROW_Y as Array<Number> = [121, 140, 159, 178];
     // outlined lightning bolt, absolute coordinates from the mockup
-    var BOLT as Array<[Numeric, Numeric]> = [[128, 26], [120, 26], [120, 32], [122, 32], [121, 39], [128, 31], [125, 31]];
+    var BOLT as Array<[Numeric, Numeric]> = [[128, 24], [120, 24], [120, 30], [122, 30], [121, 37], [128, 29], [125, 29]];
     var RED_TICKS as Array<Float> = [42.0, 39.0, 36.0];
     var WEEK as Array<String> = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
     var LABELS as Array<String> = ["RUN", "HEART RATE", "RECOVERY", "KCAL"];

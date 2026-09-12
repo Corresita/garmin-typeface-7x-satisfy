@@ -10,7 +10,7 @@ match the device. Layout constants mirror TypeFaceView.mc / preview.py.
 import math
 
 CX = CY = 140
-BATT_Y, DATE_Y, TIME_Y, SAT_Y = 21, 51, 61, 98
+BATT_Y, DATE_Y, TIME_Y, SAT_Y = 19, 51, 61, 98
 BATT_X, DATE_X = 130, 35
 LABEL_X, COL2_X, SAT_X, TIME_X = 23, 191, 191, 20
 ROW_Y = [121, 140, 159, 178]
@@ -96,7 +96,7 @@ for i in range(SEG_COUNT):
 
 # battery: digits + outlined bolt
 L.append(text("battery", BATT_X, BATT_Y + BOLD_BASE, str(BATT), 21, BOLD_SX, weight=700))
-BOLT = [(128, 26), (120, 26), (120, 32), (122, 32), (121, 39), (128, 31), (125, 31)]
+BOLT = [(128, 24), (120, 24), (120, 30), (122, 30), (121, 37), (128, 29), (125, 29)]
 L.append('  <polygon id="bolt" points="' + " ".join(f"{x},{y}" for x, y in BOLT) + '" fill="none" stroke="#000" stroke-width="1"/>')
 
 # date / time / label / rows

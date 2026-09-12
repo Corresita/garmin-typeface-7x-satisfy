@@ -22,8 +22,8 @@
   <path id="segment 3" d="M124.14,7.95 A133,133 0 0 1 155.86,7.95 L155.51,10.93 A130,130 0 0 0 124.49,10.93 Z" fill="none" stroke="#000" stroke-width="1"/>
   <path id="segment 4" d="M160.46,8.58 A133,133 0 0 1 191.00,17.17 L189.85,19.94 A130,130 0 0 0 160.00,11.55 Z" fill="none" stroke="#000" stroke-width="1"/>
   <path id="segment 5" d="M195.26,19.02 A133,133 0 0 1 222.34,35.55 L220.48,37.91 A130,130 0 0 0 194.01,21.75 Z" fill="none" stroke="#000" stroke-width="1"/>
-  <text id="battery" transform="translate(130,38) scale(0.8461538461538461,1)" font-family="Courier Prime" font-weight="700" font-size="21" text-anchor="start" fill="#000">33</text>
-  <polygon id="bolt" points="128,26 120,26 120,32 122,32 121,39 128,31 125,31" fill="none" stroke="#000" stroke-width="1"/>
+  <text id="battery" transform="translate(130,36) scale(0.8461538461538461,1)" font-family="Courier Prime" font-weight="700" font-size="21" text-anchor="start" fill="#000">33</text>
+  <polygon id="bolt" points="128,24 120,24 120,30 122,30 121,37 128,29 125,29" fill="none" stroke="#000" stroke-width="1"/>
   <text id="date" transform="translate(35,67) scale(1.0,1)" font-family="Courier Prime" font-weight="400" font-size="20" text-anchor="start" fill="#000">MON.09.10</text>
   <text id="time" transform="translate(20,116) scale(0.89,1)" font-family="Public Sans" font-weight="900" font-size="56" text-anchor="start" fill="#000">18:13</text>
   <text id="label" transform="translate(191,113) scale(1.0,1)" font-family="Archivo" font-weight="800" font-size="16.5" text-anchor="start" fill="#000">SATISFY</text>
